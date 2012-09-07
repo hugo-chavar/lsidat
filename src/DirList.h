@@ -15,14 +15,26 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <string>
+#include <list>
 
 using namespace std;
 
 class DirList {
+private:
+	list <string> archivos;
+	list <string>::iterator iterador;
+	unsigned cantidad;
+	unsigned _posicionActual;
+	string directorio;
 public:
 	DirList();
 	~DirList();
-	bool create(string);
+	bool crearDesdeDirectorio(string);
+	bool haySiguiente();
+	string siguiente();
+	string siguienteLargo();
+	bool seek(unsigned);
+	unsigned posicionActual();
 
 };
 
