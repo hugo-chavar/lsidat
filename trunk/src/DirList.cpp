@@ -10,7 +10,7 @@ using namespace std;
 
 DirList::DirList() {
 	// TODO Auto-generated constructor stub
-	cantidad = 0;
+	_cantidad = 0;
 	_posicionActual=0;
 
 }
@@ -43,7 +43,7 @@ bool DirList::crearDesdeDirectorio(string dir) {
 			continue;
 		filename = dirp->d_name;
 		archivos.push_back(filename);
-		cantidad++;
+		_cantidad++;
 
 		//por ahora solo muestro los nombres de archivos completos
 		cout << filepath << endl;
@@ -82,11 +82,11 @@ string DirList::siguienteLargo(){
 
 }
 bool DirList::haySiguiente(){
-	return (_posicionActual<cantidad);
+	return (_posicionActual<_cantidad);
 }
 
 bool DirList::seek(unsigned pos){
-	bool status = (pos<cantidad);
+	bool status = (pos<_cantidad);
 	if(status){
 		_posicionActual=pos;
 		iterador = archivos.begin();
@@ -95,6 +95,10 @@ bool DirList::seek(unsigned pos){
 		}
 	}
 	return status;
+}
+
+unsigned DirList::getCantidad() const {
+	return _cantidad;
 }
 
 unsigned DirList::posicionActual(){

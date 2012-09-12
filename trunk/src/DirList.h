@@ -23,7 +23,7 @@ class DirList {
 private:
 	list <string> archivos;
 	list <string>::iterator iterador;
-	unsigned cantidad;
+	unsigned _cantidad;
 	unsigned _posicionActual;
 	string directorio;
 public:
@@ -35,6 +35,7 @@ public:
 	string siguienteLargo();
 	bool seek(unsigned);
 	unsigned posicionActual();
+	unsigned getCantidad() const;
 
 };
 
