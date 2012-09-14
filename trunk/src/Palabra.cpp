@@ -47,9 +47,22 @@ void Palabra::agregarNodo(unsigned doc, unsigned cantidad) {
 void Palabra::crearDesdeString(string  s){
 	vector <string> v;
 	split(v,s,",");
+	string aux;
 
-	for (size_t n = 0; n < v.size(); n++)
-	    cout << "\"" << trim(v[ n ]) << "\"\n";
+	unsigned doc,cant;
+	this->contenido = v[ 0 ];
+
+	for (size_t n = 1; n < v.size(); n+=2){
+		aux = trim_copy(v[ n ]);
+		doc = atoi(aux.c_str());
+		aux = trim_copy(v[ n+1 ]);
+		cant = atoi(aux.c_str());
+		this->agregarNodo(doc,cant);
+		//cout << "\" Doc: " << trim_copy(v[ n ]) <<" cant: "<<trim_copy(v[ n+1 ])<< "\"\n";
+		//cout << "\" Doc: " << doc <<" cant: "<<cant<< "\"\n";
+		//trim(v[ n ])
+	}
+
 	cout << endl;
 
 }

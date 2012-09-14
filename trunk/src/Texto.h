@@ -10,6 +10,8 @@
 
 #include <cstddef>
 #include <string>
+#include <sstream>
+#include <stdlib.h>
 
 struct split {
 	enum empties_t {
@@ -43,5 +45,18 @@ std::string& trim_right_inplace(std::string& s, const std::string& delimiters);
 std::string& trim_left_inplace(std::string& s, const std::string& delimiters);
 
 std::string& trim(std::string& s,const std::string& delimiters = " \f\n\r\t\v");
+
+inline std::string trim_right_copy(
+  const std::string& s,
+  const std::string& delimiters );
+
+inline std::string trim_left_copy(
+  const std::string& s,
+  const std::string& delimiters );
+
+std::string trim_copy(
+  const std::string& s,
+  const std::string& delimiters = " \f\n\r\t\v" );
+
 
 #endif /* TEXTO_H_ */

@@ -68,7 +68,7 @@ int main() {
 	} else {
 		cout << "Hubieron problemas al abrir la carpeta." << endl;
 	}
-	string a ="string, a, hacer,split, jaja";
+	string a ="string, 1, 4,6, 133";
 	pal.crearDesdeString(a);
 
 	return 0;
