@@ -9,7 +9,9 @@
 #define PALABRA_H_
 
 #include "InfoPalabra.h"
+#include "Texto.h"
 #include <list>
+#include <vector>
 
 using namespace std;
 
@@ -25,6 +27,7 @@ public:
 	void agregarAparicion(unsigned doc);
 	InfoPalabra* buscarDoc(unsigned doc);
 	void agregarNodo(unsigned doc, unsigned cantidad);
+	void crearDesdeString(string  s);
 
 };
 
