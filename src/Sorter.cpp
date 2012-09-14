@@ -46,9 +46,3 @@ void Sorter::agregarArchivoALista(string filepath){
 }
 
 
-
-
-/*void Sorter::sort(string palabra){
-	cout <<"No Hay problema con la palabra"<<palabra<<endl;
-}*/
-

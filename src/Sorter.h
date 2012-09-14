@@ -22,7 +22,6 @@ public:
 	Sorter();
 	~Sorter();
 	void agregarPalabra(string palabra,int doc);
-	//void ordenarVector(); //Dependera de si se ordena a medida que se ingresa o al final
 	string archivarVector();
 	list<string> getListaArchivos();
 	bool completo();
