@@ -20,13 +20,16 @@ class Palabra {
 private:
 	string contenido;
 	list<InfoPalabra> informacion;
+	unsigned cantidad;
+	void agregarNodo(unsigned doc, unsigned cantidad);
+	InfoPalabra* buscarDoc(unsigned doc);
 
 public:
 	Palabra(string cont);
 	~Palabra();
 	void agregarAparicion(unsigned doc);
-	InfoPalabra* buscarDoc(unsigned doc);
-	void agregarNodo(unsigned doc, unsigned cantidad);
+	list<InfoPalabra> getInformacion();
+	string getContenido();
 	void crearDesdeString(string  s);
 
 };

@@ -12,9 +12,24 @@ Palabra::Palabra(string cont) {
 	this->contenido = cont;
 }
 
+//Esta trayendo problemas
 Palabra::~Palabra() {
-	// TODO Auto-generated destructor stub
+	while (this->informacion.size()>0)
+	{
+		InfoPalabra * ptro=&(this->informacion.front());
+		this->informacion.pop_front();
+		delete ptro;
+		cout<<"libere"<<endl;
+	}
 }
+
+list<InfoPalabra> Palabra::getInformacion(){
+	return (this->informacion);
+}
+
+string Palabra::getContenido(){
+	return (this->contenido);
+	}
 
 void Palabra::agregarAparicion(unsigned doc) {
 
@@ -22,22 +37,24 @@ void Palabra::agregarAparicion(unsigned doc) {
 	if (nodo)
 		nodo->incrementarCantidad();
 	else {
-		//this->informacion.push_back(*(new InfoPalabra(doc,1)));
 		this->agregarNodo(doc, 1);
 	}
 }
 
 InfoPalabra* Palabra::buscarDoc(unsigned doc) {
-	list<InfoPalabra>::iterator it = this->informacion.begin();
-	bool encontrado = false;
-	while ((&(*it)) && (!encontrado)) {
-		if (it->getDocumento() == doc) {
-			encontrado = true;
-		} else {
-			advance(it, 1);
+	if((informacion.size()>0)){
+		list<InfoPalabra>::iterator it = this->informacion.begin();
+		unsigned i =0;
+		while (i<informacion.size()) {
+			if (it->getDocumento() == doc) {
+				return(&(*it));//encontrado
+			} else {
+				advance(it, 1);
+			}
+			i++;
 		}
 	}
-	return (&(*it));
+	return (0);//No fue encontrado
 }
 
 void Palabra::agregarNodo(unsigned doc, unsigned cantidad) {
