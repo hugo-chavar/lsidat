@@ -22,6 +22,8 @@
 
 
 #include <fstream>
+#include <sstream>
+#include <vector>
 
 enum tipoTag
 {
@@ -105,12 +107,6 @@ public:
 
 /**
  * Pre: -
- * Post: Quita los espacios del comienzo y el final de una palabra.
- */
-  std::string Trim(std::string palabra);
-
-/**
- * Pre: -
  * Post: Determina si el Tag tiene contenido.
  */
   bool esContenidoDeTag(std::string &palabra);
@@ -118,6 +114,7 @@ public:
   void cerrar();
   bool abrir(const std::string& path);
   std::string leerLinea();
+
 };
 
 #endif

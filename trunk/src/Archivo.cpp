@@ -1,4 +1,5 @@
 #include "Archivo.h"
+#include "Texto.h"
 
 using namespace std;
 
@@ -151,34 +152,11 @@ void Archivo::irAlFinal()
 
 /**
  * Pre: -
- * Post: Quita los espacios del comienzo y el final de una palabra.
- */
-string Archivo::Trim(std::string palabra)
-{
-    int primerChar=0;
-    string palabra_sin_espacios;
-    while (palabra[primerChar]==' ')
-        primerChar++;
-    if (palabra[primerChar]!='\0')
-       {
-            while(palabra[palabra.length()-1]==' ')
-            {
-                palabra.resize(palabra.length()-1);
-            }
-            palabra_sin_espacios = palabra.substr(primerChar,palabra.length());
-       }
-    else
-        palabra_sin_espacios = "";
-    return palabra_sin_espacios;
-}
-
-/**
- * Pre: -
  * Post: Determina si el Tag tiene contenido.
  */
 bool Archivo::esContenidoDeTag(std::string &palabra)
 {
-    palabra = this->Trim(palabra);
+    palabra = trim(palabra);
     return (palabra!="");
 }
 

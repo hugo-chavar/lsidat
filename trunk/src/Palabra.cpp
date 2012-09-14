@@ -43,3 +43,13 @@ InfoPalabra* Palabra::buscarDoc(unsigned doc) {
 void Palabra::agregarNodo(unsigned doc, unsigned cantidad) {
 	this->informacion.push_back(*(new InfoPalabra(doc, cantidad)));
 }
+
+void Palabra::crearDesdeString(string  s){
+	vector <string> v;
+	split(v,s,",");
+
+	for (size_t n = 0; n < v.size(); n++)
+	    cout << "\"" << trim(v[ n ]) << "\"\n";
+	cout << endl;
+
+}

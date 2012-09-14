@@ -9,6 +9,8 @@
 #include <iostream>
 #include "DirList.h"
 #include "Archivo.h"
+#include "Palabra.h"
+#include "Archivo.h"
 
 using namespace std;
 
@@ -17,6 +19,7 @@ int main() {
 	DirList dl;
 	unsigned unaPos;
 	bool abrioOk;
+	Palabra pal("");
 
 
 	cout <<"Indique el directorio: " << flush;
@@ -42,7 +45,7 @@ int main() {
 			archivoActual.leerHastaCaracter(caracterFin,unTexto);
 			caracterFin = '.';
 			archivoActual.leerHastaCaracter(caracterFin,unTexto);
-			unTexto = archivoActual.Trim(unTexto);//TODO este trim puede ser responsabilidad de otra clase..
+			unTexto = trim(unTexto);//TODO este trim puede ser responsabilidad de otra clase..
 			cout << "Se abrio bien el archivo y se leyo este txt: "<<unTexto << endl;
 
 		} else {
@@ -56,7 +59,7 @@ int main() {
 			archivoActual2.leerHastaCaracter(caracterFin,unTexto);
 			caracterFin = '.';
 			archivoActual2.leerHastaCaracter(caracterFin,unTexto);
-			unTexto = archivoActual2.Trim(unTexto);//TODO este trim puede ser responsabilidad de otra clase..
+			unTexto = trim(unTexto);//TODO este trim puede ser responsabilidad de otra clase..
 			cout << "Se abrio bien el archivo y se leyo este txt: "<<unTexto << endl;
 
 		} else {
@@ -65,6 +68,8 @@ int main() {
 	} else {
 		cout << "Hubieron problemas al abrir la carpeta." << endl;
 	}
+	string a ="string, a, hacer,split, jaja";
+	pal.crearDesdeString(a);
 
 	return 0;
 }
