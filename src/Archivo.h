@@ -117,6 +117,7 @@ public:
 
   void cerrar();
   bool abrir(const std::string& path);
+  std::string leerLinea();
 };
 
 #endif

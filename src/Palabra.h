@@ -24,6 +24,7 @@ public:
 	~Palabra();
 	void agregarAparicion(unsigned doc);
 	InfoPalabra* buscarDoc(unsigned doc);
+	void agregarNodo(unsigned doc, unsigned cantidad);
 
 };
 

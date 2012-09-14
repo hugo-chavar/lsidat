@@ -187,3 +187,11 @@ void Archivo::cerrar(){
 		elArchivo.close();
 	}
 }
+
+string Archivo::leerLinea(){
+	string s;
+	getline(elArchivo,s);
+	return s;
+}
+
+
