@@ -80,3 +80,4 @@ void Palabra::crearDesdeString(string s) {
 	cout << endl;
 
 }
+
