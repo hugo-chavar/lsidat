@@ -11,6 +11,10 @@ InfoPalabra::InfoPalabra(unsigned doc,unsigned cant) {
 	this->documento = doc;
 	this->cantidad = cant;
 }
+InfoPalabra::InfoPalabra(const InfoPalabra& ip){
+	documento = ip.documento;
+	cantidad = ip.cantidad;
+}
 
 unsigned InfoPalabra::getCantidad(){
 	return(this->cantidad);
@@ -25,6 +29,6 @@ unsigned InfoPalabra::getDocumento(){
 }
 
 InfoPalabra::~InfoPalabra() {
-	// TODO Auto-generated destructor stub
+
 }
 

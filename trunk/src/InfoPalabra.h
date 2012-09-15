@@ -20,6 +20,7 @@ private:
 	unsigned cantidad;
 public:
 	InfoPalabra(unsigned doc,unsigned cant);
+	InfoPalabra(const InfoPalabra& ip);
 	~InfoPalabra();
 	unsigned getCantidad();
 	void incrementarCantidad();
