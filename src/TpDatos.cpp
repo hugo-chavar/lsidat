@@ -10,7 +10,7 @@
 #include "DirList.h"
 #include "Archivo.h"
 #include "Palabra.h"
-#include "Archivo.h"
+#include "Merger.h"
 
 using namespace std;
 
@@ -45,7 +45,7 @@ int main() {
 			archivoActual.leerHastaCaracter(caracterFin,unTexto);
 			caracterFin = '.';
 			archivoActual.leerHastaCaracter(caracterFin,unTexto);
-			unTexto = trim(unTexto);//TODO este trim puede ser responsabilidad de otra clase..
+			unTexto = trim(unTexto);
 			cout << "Se abrio bien el archivo y se leyo este txt: "<<unTexto << endl;
 
 		} else {
@@ -59,7 +59,7 @@ int main() {
 			archivoActual2.leerHastaCaracter(caracterFin,unTexto);
 			caracterFin = '.';
 			archivoActual2.leerHastaCaracter(caracterFin,unTexto);
-			unTexto = trim(unTexto);//TODO este trim puede ser responsabilidad de otra clase..
+			unTexto = trim(unTexto);
 			cout << "Se abrio bien el archivo y se leyo este txt: "<<unTexto << endl;
 
 		} else {
@@ -69,7 +69,8 @@ int main() {
 		cout << "Hubieron problemas al abrir la carpeta." << endl;
 	}
 	string a ="string, 1, 4,6, 133";
-	pal.crearDesdeString(a);
+	//pal.crearDesdeString(a);
+	Merger m;
 
 	return 0;
 }

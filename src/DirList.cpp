@@ -9,14 +9,12 @@
 using namespace std;
 
 DirList::DirList() {
-	// TODO Auto-generated constructor stub
 	_cantidad = 0;
 	_posicionActual=0;
 
 }
 
 DirList::~DirList() {
-	// TODO Auto-generated destructor stub
 }
 
 bool DirList::crearDesdeDirectorio(string dir) {

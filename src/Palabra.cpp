@@ -12,24 +12,19 @@ Palabra::Palabra(string cont) {
 	this->contenido = cont;
 }
 
-//Esta trayendo problemas
 Palabra::~Palabra() {
-	while (this->informacion.size()>0)
-	{
-		InfoPalabra * ptro=&(this->informacion.front());
-		this->informacion.pop_front();
-		delete ptro;
-		cout<<"libere"<<endl;
-	}
+
+	//cout<<"libere"<<endl;
+	informacion.clear();
 }
 
-list<InfoPalabra> Palabra::getInformacion(){
+list<InfoPalabra> Palabra::getInformacion() {
 	return (this->informacion);
 }
 
-string Palabra::getContenido(){
+string Palabra::getContenido() {
 	return (this->contenido);
-	}
+}
 
 void Palabra::agregarAparicion(unsigned doc) {
 
@@ -42,39 +37,41 @@ void Palabra::agregarAparicion(unsigned doc) {
 }
 
 InfoPalabra* Palabra::buscarDoc(unsigned doc) {
-	if((informacion.size()>0)){
+	if ((informacion.size() > 0)) {
 		list<InfoPalabra>::iterator it = this->informacion.begin();
-		unsigned i =0;
-		while (i<informacion.size()) {
+		unsigned i = 0;
+		while (i < informacion.size()) {
 			if (it->getDocumento() == doc) {
-				return(&(*it));//encontrado
+				return (&(*it)); //encontrado
 			} else {
 				advance(it, 1);
 			}
 			i++;
 		}
 	}
-	return (0);//No fue encontrado
+	return (0); //No fue encontrado
 }
 
 void Palabra::agregarNodo(unsigned doc, unsigned cantidad) {
-	this->informacion.push_back(*(new InfoPalabra(doc, cantidad)));
+	InfoPalabra aux(doc, cantidad);
+	this->informacion.push_back(aux);
+	//this->informacion.push_back(*(new InfoPalabra(doc, cantidad)));
 }
 
-void Palabra::crearDesdeString(string  s){
-	vector <string> v;
-	split(v,s,",");
+void Palabra::crearDesdeString(string s) {
+	vector<string> v;
+	split(v, s, ",");
 	string aux;
 
-	unsigned doc,cant;
-	this->contenido = v[ 0 ];
+	unsigned doc, cant;
+	this->contenido = v[0];
 
-	for (size_t n = 1; n < v.size(); n+=2){
-		aux = trim_copy(v[ n ]);
+	for (size_t n = 1; n < v.size(); n += 2) {
+		aux = trim_copy(v[n]);
 		doc = atoi(aux.c_str());
-		aux = trim_copy(v[ n+1 ]);
+		aux = trim_copy(v[n + 1]);
 		cant = atoi(aux.c_str());
-		this->agregarNodo(doc,cant);
+		this->agregarNodo(doc, cant);
 		//cout << "\" Doc: " << trim_copy(v[ n ]) <<" cant: "<<trim_copy(v[ n+1 ])<< "\"\n";
 		//cout << "\" Doc: " << doc <<" cant: "<<cant<< "\"\n";
 		//trim(v[ n ])
