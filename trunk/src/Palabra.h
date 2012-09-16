@@ -26,12 +26,14 @@ private:
 
 public:
 	Palabra(string cont);
+	Palabra();
 	~Palabra();
 	void agregarAparicion(unsigned doc);
 	list<InfoPalabra> getInformacion();
 	string getContenido();
 	void crearDesdeString(string  s);
-
+	string imprimir();
+	void resetearInformacion();
 };
 
 #endif /* PALABRA_H_ */

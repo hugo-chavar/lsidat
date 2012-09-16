@@ -9,6 +9,7 @@
 #include "InfoPalabra.h"
 #include <iostream>
 #include <list>
+#include "Merger.h"
 
 using namespace std;
 
@@ -31,5 +32,7 @@ int main()
 		cout<<"documento:"<<it->getDocumento()<<" cantidad:"<<it->getCantidad()<<endl;
 		advance(it,1);
 	}
+	Merger m;
+
 	return 0;
 }

@@ -47,6 +47,9 @@ public:
   Archivo(const std::string& path, bool & hayErrores);
   //constructor sin parametros
   Archivo();
+  //constructor de copia
+  Archivo(const Archivo&);
+  Archivo& operator=(const Archivo&);
 
   /**
    * Cierra el archivo (no lo destruye fisicamente).

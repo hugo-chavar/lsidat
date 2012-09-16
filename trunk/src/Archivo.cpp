@@ -16,6 +16,15 @@ Archivo::Archivo() {
 
 }
 
+Archivo::Archivo(const Archivo& a){
+	//this->elArchivo=a.elArchivo;
+}
+
+Archivo&
+Archivo:: operator=(const Archivo& a){
+	return *this;
+}
+
 bool Archivo::abrir(const std::string& path){
 	  //Intenta abrir el archivo en modo lectura - escritura.
 	  elArchivo.open(path.c_str(), std::fstream::in | std::fstream::out);
