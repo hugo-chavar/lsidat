@@ -11,11 +11,12 @@ Palabra::Palabra(string cont) {
 
 	this->contenido = cont;
 }
+Palabra::Palabra() {
+
+}
 
 Palabra::~Palabra() {
-
-	//cout<<"libere"<<endl;
-	informacion.clear();
+	resetearInformacion();
 }
 
 list<InfoPalabra> Palabra::getInformacion() {
@@ -65,6 +66,7 @@ void Palabra::crearDesdeString(string s) {
 
 	unsigned doc, cant;
 	this->contenido = v[0];
+	cout<<"Palabra: "<<this->contenido<<endl;
 
 	for (size_t n = 1; n < v.size(); n += 2) {
 		aux = trim_copy(v[n]);
@@ -73,7 +75,7 @@ void Palabra::crearDesdeString(string s) {
 		cant = atoi(aux.c_str());
 		this->agregarNodo(doc, cant);
 		//cout << "\" Doc: " << trim_copy(v[ n ]) <<" cant: "<<trim_copy(v[ n+1 ])<< "\"\n";
-		//cout << "\" Doc: " << doc <<" cant: "<<cant<< "\"\n";
+		cout << "\" Doc: " << doc <<" cant: "<<cant<< "\"\n";
 		//trim(v[ n ])
 	}
 
@@ -81,3 +83,22 @@ void Palabra::crearDesdeString(string s) {
 
 }
 
+string Palabra::imprimir(){
+	string salida =this->contenido;
+	string aux;
+	list<InfoPalabra>::iterator it = this->informacion.begin();
+	unsigned i = 0;
+	while (i < informacion.size()) {
+		aux = static_cast<ostringstream*>( &(ostringstream() << it->getDocumento()) )->str();
+		salida = salida+","+ aux;
+		aux = static_cast<ostringstream*>( &(ostringstream() << it->getCantidad()) )->str();
+		salida = salida+","+ aux;
+		advance(it, 1);
+		i++;
+	}
+	return salida;
+}
+
+void Palabra::resetearInformacion(){
+	informacion.clear();
+}
