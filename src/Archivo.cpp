@@ -9,7 +9,7 @@ using namespace std;
  * si no pudo abrirlo, devuelve indicando que hubo errores.
  */
 Archivo::Archivo(const std::string& path, bool & hayErrores) {
-	hayErrores = this->abrir(path);
+	hayErrores = !this->abrir(path);
 }
 
 Archivo::Archivo() {
@@ -180,5 +180,3 @@ string Archivo::leerLinea(){
 	getline(elArchivo,s);
 	return s;
 }
-
-
