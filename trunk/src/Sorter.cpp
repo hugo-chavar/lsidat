@@ -19,7 +19,7 @@ Sorter::~Sorter() {
 
 void Sorter::agregarPalabra(string palabra,int doc){
 	//falta implementar
-		cout<<"falta implementar agregar palabra"<<endl;
+		cout<<palabra<<endl;
 }
 
 string Sorter::archivarVector(){
