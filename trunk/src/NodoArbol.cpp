@@ -8,14 +8,14 @@
 #include "NodoArbol.h"
 
 NodoArbol::NodoArbol(string palabra){
-	this->dato=new Palabra(palabra);
-	Palabra dato(palabra);
+	this->dato=new Palabra(palabra);//creo que aca esta el problema
 	this->derecho=NULL;
 	this->izquierdo=NULL;
+	cout<<"creo nodo de "<<palabra<<endl;
 }
 
 NodoArbol::~NodoArbol() {
-	cout<<"libere nodo"<<endl;
+	cout<<"libere nodo "<<endl;
 	delete dato;
 }
 
