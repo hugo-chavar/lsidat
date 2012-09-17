@@ -16,11 +16,14 @@ public:
 	~Abb();
 	void agregarPalabra(string palabra,unsigned documento);
 	void borrar(const string clave);
+	void obtenerVectorOrdenado(NodoArbol** & vector);
+	unsigned getCantidad();
 
 private:
 	NodoArbol* raiz;
 	unsigned cantidad;
 	void destruir();
+	void agregarElementosVector(NodoArbol* nodo,unsigned & posicion,NodoArbol** & vector);
 };
 
 #endif /* ABB_H_ */

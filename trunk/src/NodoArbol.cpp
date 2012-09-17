@@ -9,11 +9,13 @@
 
 NodoArbol::NodoArbol(string palabra){
 	this->dato=new Palabra(palabra);
+	Palabra dato(palabra);
 	this->derecho=NULL;
 	this->izquierdo=NULL;
 }
 
 NodoArbol::~NodoArbol() {
+	cout<<"libere nodo"<<endl;
 	delete dato;
 }
 

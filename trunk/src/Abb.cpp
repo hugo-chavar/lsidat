@@ -16,6 +16,11 @@ Abb::Abb() {
 
 Abb::~Abb() {
 	this->destruir();
+	cout<<"libero arbol";
+}
+
+unsigned Abb::getCantidad(){
+	return this->cantidad;
 }
 
 void Abb::agregarPalabra(string palabra,unsigned documento)
@@ -104,4 +109,18 @@ void Abb::destruir(){
 		this->borrar(this->raiz->getPalabra().getContenido());
 }
 
+void Abb::obtenerVectorOrdenado(NodoArbol** & vector){
+	unsigned posicion=0;
+	this->agregarElementosVector(this->raiz,posicion,vector);
+
+}
+
+void Abb::agregarElementosVector(NodoArbol* nodo,unsigned & posicion,NodoArbol** & vector){
+	if (nodo->getIzquierdo())
+			this->agregarElementosVector(nodo->getIzquierdo(),posicion,vector);
+	vector[posicion]=nodo;
+	posicion++;
+	if (nodo->getDerecho())
+			this->agregarElementosVector(nodo->getDerecho(),posicion,vector);
+}
 
