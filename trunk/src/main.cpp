@@ -7,6 +7,7 @@
 
 #include "Sorter.h"
 #include "InfoPalabra.h"
+#include "Parser.h"
 #include <iostream>
 #include <list>
 #include "Abb.h"
@@ -16,6 +17,12 @@ using namespace std;
 
 int main()
 {
+	string word;
+	Parser parser = Parser();
+	Sorter sorter = Sorter();
+	parser.ProcessFiles(sorter);
+
+	/*
 	Palabra hola("hola");
 	hola.agregarAparicion(1);
 	hola.agregarAparicion(5);
@@ -33,6 +40,7 @@ int main()
 		cout<<"documento:"<<it->getDocumento()<<" cantidad:"<<it->getCantidad()<<endl;
 		advance(it,1);
 	}
+=======
 
 	Abb* abb=new Abb();
 	abb->agregarPalabra("hola",1);
@@ -65,6 +73,7 @@ int main()
 	delete abb;
 
 	Merger m;
+	*/
 
 	return 0;
 }
