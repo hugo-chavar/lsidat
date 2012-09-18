@@ -22,6 +22,7 @@ public:
 private:
 	NodoArbol* raiz;
 	unsigned cantidad;
+	//Archivo f;
 	void destruir();
 	void agregarElementosVector(NodoArbol* nodo,unsigned & posicion,NodoArbol** & vector);
 };

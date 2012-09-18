@@ -16,7 +16,6 @@ Abb::Abb() {
 
 Abb::~Abb() {
 	this->destruir();
-	cout<<"libero arbol";
 }
 
 unsigned Abb::getCantidad(){
@@ -27,10 +26,10 @@ void Abb::agregarPalabra(string palabra,unsigned documento)
 {
 	NodoArbol *nodo=this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	while (nodo && (nodo->CompararCon(palabra)!=0)) // Devuelve -1 si la clave del nodo es menor, 0 si son iguales y 1 si la clave es mayor.
+	while (nodo && (nodo->getPalabra()->compararCon(palabra)!=0)) // Devuelve -1 si la clave del nodo es menor, 0 si son iguales y 1 si la clave es mayor.
 	{
 		nodo_padre = nodo;
-		if (nodo->CompararCon(palabra)==1)
+		if (nodo->getPalabra()->compararCon(palabra)>0)
 			nodo=nodo->getIzquierdo();
 		else
 			nodo=nodo->getDerecho();
@@ -38,21 +37,21 @@ void Abb::agregarPalabra(string palabra,unsigned documento)
 	if (!nodo)
 	{
 		nodo= new NodoArbol(palabra);
-		nodo->getPalabra().agregarAparicion(documento);
+		nodo->getPalabra()->agregarAparicion(documento);
 		if (nodo_padre)
 		{
-			if (nodo->CompararCon(nodo_padre->getPalabra().getContenido())==1)
+			if (nodo->getPalabra()->compararCon(nodo_padre->getPalabra()->getContenido())>0)
 				nodo_padre->setDerecho(nodo);
 			else
 				nodo_padre->setIzquierdo(nodo);
 		}
 		else
 			this->raiz = nodo;
-			this->cantidad++;
+		this->cantidad++;
 	}
 	else
 	{
-		nodo->getPalabra().agregarAparicion(documento);
+		nodo->getPalabra()->agregarAparicion(documento);
 	}
 }
 
@@ -61,10 +60,10 @@ void Abb::borrar(const string clave)
 {
 	NodoArbol *nodo = this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	while (nodo && (nodo->CompararCon(clave)!=0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
+	while (nodo && (nodo->getPalabra()->compararCon(clave)!=0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
 	{
 		nodo_padre = nodo;
-		if (nodo->CompararCon(clave)==1)
+		if (nodo->getPalabra()->compararCon(clave)>0)
 			nodo=nodo->getIzquierdo();
 		else
 			nodo=nodo->getDerecho();
@@ -92,7 +91,7 @@ void Abb::borrar(const string clave)
 	}
 	if (nodo_padre)
 	{
-		if (nodo->CompararCon(nodo_padre->getPalabra().getContenido())==1)
+		if (nodo->getPalabra()->compararCon(nodo_padre->getPalabra()->getContenido())>0)
 			nodo_padre->setDerecho(nodo_aux);
 		else
 			nodo_padre->setIzquierdo(nodo_aux);
@@ -106,7 +105,7 @@ void Abb::borrar(const string clave)
 // Destruye el árbol.
 void Abb::destruir(){
 	while (this->raiz)
-		this->borrar(this->raiz->getPalabra().getContenido());
+		this->borrar(this->raiz->getPalabra()->getContenido());
 }
 
 void Abb::obtenerVectorOrdenado(NodoArbol** & vector){
