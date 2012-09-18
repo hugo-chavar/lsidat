@@ -8,15 +8,13 @@
 #include "NodoArbol.h"
 
 NodoArbol::NodoArbol(string palabra){
-	this->dato=new Palabra(palabra);//creo que aca esta el problema
+	this->dato=new Palabra(palabra);
 	this->derecho=NULL;
 	this->izquierdo=NULL;
-	cout<<"creo nodo de "<<palabra<<endl;
 }
 
 NodoArbol::~NodoArbol() {
-	cout<<"libere nodo "<<endl;
-	delete dato;
+	delete (dato);
 }
 
 NodoArbol* NodoArbol::getIzquierdo(){
@@ -35,18 +33,18 @@ void NodoArbol::setDerecho(NodoArbol* der){
 	this->derecho=der;
 }
 
-Palabra NodoArbol::getPalabra(){
-	return(*(this->dato));
+Palabra* NodoArbol::getPalabra(){
+	return((this->dato));
 }
 
 
-int NodoArbol::CompararCon(string clave){
-	if ((this->dato->getContenido())<clave)
-		return (-1);
-	else if((this->dato->getContenido())==clave)
-			return (0);
-		else
-			return (1);
-}
+//int NodoArbol::CompararCon(string clave){
+//	if ((this->dato->getContenido())<clave)
+//		return (-1);
+//	else if((this->dato->getContenido())==clave)
+//			return (0);
+//		else
+//			return (1);
+//}
 
 

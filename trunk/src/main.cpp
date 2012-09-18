@@ -37,8 +37,7 @@ int main()
 	{
 		cout<<"documento:"<<it->getDocumento()<<" cantidad:"<<it->getCantidad()<<endl;
 		advance(it,1);
-	}
-=======
+	}*/
 
 	Abb* abb=new Abb();
 	abb->agregarPalabra("hola",1);
@@ -55,14 +54,16 @@ int main()
 	abb->obtenerVectorOrdenado(vector);
 	list<InfoPalabra>::iterator it2;
 	for(unsigned i=0;i<abb->getCantidad();i++){
-		Palabra palabra=vector[i]->getPalabra();
-		cout<<palabra.getContenido()<<endl;
-		it2=palabra.getInformacion().begin();
-		cout<<"size:"<<palabra.getInformacion().size()<<endl;
-		for(unsigned j=0;j<palabra.getInformacion().size();j++){
-			cout<<"doc:"<<it2->getDocumento()<<" cant:"<<it2->getCantidad()<<endl;
-			advance(it2,1);
-		}
+		Palabra* palabra=vector[i]->getPalabra();
+		cout<<palabra->getContenido()<<endl;
+		it2=palabra->getInformacion().begin();
+		//cout<<"size:"<<palabra->getInformacion().size()<<endl;
+		//cout<<"doc:"<<it2->getDocumento()<<" cant:"<<it2->getCantidad()<<endl;//Modifico para probar
+//		for(unsigned j=1;j<palabra->getInformacion().size();j++){
+//			cout<<"doc:"<<it2->getDocumento()<<" cant:"<<it2->getCantidad()<<endl;
+//			advance(it2,1);
+//		}
+		cout<<palabra->imprimir()<<endl;
 		cout<<endl;
 	}
 	abb->getCantidad();
@@ -71,7 +72,7 @@ int main()
 	delete abb;
 
 	Merger m;
-	*/
+	
 
 	return 0;
 }

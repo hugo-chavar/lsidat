@@ -18,8 +18,8 @@ public:
 	NodoArbol* getDerecho();
 	void setIzquierdo(NodoArbol* izq);
 	void setDerecho(NodoArbol* der);
-	Palabra getPalabra();
-	int CompararCon(string clave);// Devuelve -1 si la clave del nodo es menor, 0 si son iguales y 1 si la clave es mayor.
+	Palabra* getPalabra();
+	//int CompararCon(string clave);
 
 private:
 		Palabra* dato;

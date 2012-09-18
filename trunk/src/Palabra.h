@@ -34,6 +34,7 @@ public:
 	void crearDesdeString(string  s);
 	string imprimir();
 	void resetearInformacion();
+	int compararCon(string clave);
 };
 
 #endif /* PALABRA_H_ */
