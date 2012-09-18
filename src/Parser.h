@@ -7,13 +7,14 @@
 
 #ifndef PARSER_H_
 #define PARSER_H_
-#define DIRECTORY "/media/DATOS/Organizacion de Datos/PruebaPaths.txt" // CAMBIAR
+#define DIRECTORY "/media/DATOS/Organizacion de Datos/Pruebas" // CAMBIAR
 
 #include <iostream>
 #include <string>
 #include <list>
 #include "Archivo.h"
 #include "Sorter.h"
+#include "DirList.h"
 
 using namespace std;
 
@@ -21,10 +22,8 @@ class Parser {
 public:
 	Parser();
 	virtual ~Parser();
-	bool ProcessFiles(Sorter sorter);
+	bool ProcessFiles();
 private:
-	list<string> directories;
-	void Initialize();
 	bool Process(Sorter sorter, string filePath, int doc);
 };
 

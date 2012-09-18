@@ -17,10 +17,8 @@ using namespace std;
 
 int main()
 {
-	string word;
 	Parser parser = Parser();
-	Sorter sorter = Sorter();
-	parser.ProcessFiles(sorter);
+	parser.ProcessFiles();
 
 	/*
 	Palabra hola("hola");

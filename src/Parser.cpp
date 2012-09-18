@@ -7,29 +7,21 @@
 
 #include "Parser.h"
 
-Parser::Parser() {
-	Initialize();
-}
+Parser::Parser() { }
 
-void Parser::Initialize() {
-	bool error = false;
-	string path;
-	char end = '#';
-	Archivo fileDirectory(DIRECTORY, error);
-	while (fileDirectory.leerHastaCaracter(end, path)) {
-		directories.push_back(path);
-	}
-	fileDirectory.~Archivo();
-}
-
-bool Parser::ProcessFiles(Sorter sorter) {
+bool Parser::ProcessFiles() {
 	int doc = 1;
-	while (!directories.empty()) {
-		if (!Process(sorter, directories.front(), doc))
+	Sorter sorter = Sorter();
+	DirList directories;
+	if (!directories.crearDesdeDirectorio(DIRECTORY))
+		return false;
+	while (directories.haySiguiente()) {
+		if (!Process(sorter, directories.siguienteLargo(), doc))
 			return false;
-		directories.pop_front();
 		doc++;
 	}
+	if (!sorter.completo())										// FALTA IMPLEMENTACION DEL SORTER
+		return false;
 	return true;
 }
 
@@ -38,13 +30,11 @@ bool Parser::Process(Sorter sorter, string filePath, int doc) {
 	char character;
 	bool error = false;
 	Archivo file = Archivo(filePath, error);
-	if (error) {
-		file.~Archivo();
+	if (error)
 		return false;
-	}
 	while (file.leerCaracter(character)) {
 		if ((character>='A' & character<='Z') || (character>='a' & character<='z'))
-			word += character;
+			word += tolower(character);
 		else {
 			sorter.agregarPalabra(word, doc);
 			word = "";
@@ -54,6 +44,4 @@ bool Parser::Process(Sorter sorter, string filePath, int doc) {
 	return true;
 }
 
-Parser::~Parser() {
-	directories.~list();
-}
+Parser::~Parser() { }
