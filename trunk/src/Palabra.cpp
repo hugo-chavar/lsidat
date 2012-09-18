@@ -102,3 +102,7 @@ string Palabra::imprimir(){
 void Palabra::resetearInformacion(){
 	informacion.clear();
 }
+
+int Palabra::compararCon(string clave){
+	return this->contenido.compare(clave);
+}
