@@ -12,32 +12,18 @@
 #include <list>
 #include "Abb.h"
 #include "Merger.h"
+#include "Archivo.h"
 
 using namespace std;
 
 int main()
 {
+	//Prueba parser
 	Parser parser = Parser();
 	parser.ProcessFiles();
 
-	/*
-	Palabra hola("hola");
-	hola.agregarAparicion(1);
-	hola.agregarAparicion(5);
-	hola.agregarAparicion(2);
-	hola.agregarAparicion(2);
-	hola.agregarAparicion(2);
-	hola.agregarAparicion(1);
-	string contenido=hola.getContenido();
-	list<InfoPalabra> lista=hola.getInformacion();
-	cout<<"La palabra de contenido "<<contenido<<" aparece:"<<endl;
-	list<InfoPalabra>::iterator it= lista.begin();
-	cout<<"size:"<<lista.size()<<endl;
-	for(unsigned i=1;i<=lista.size();i++)
-	{
-		cout<<"documento:"<<it->getDocumento()<<" cantidad:"<<it->getCantidad()<<endl;
-		advance(it,1);
-	}*/
+
+	//Prueba Sorter
 
 	Abb* abb=new Abb();
 	abb->agregarPalabra("hola",1);
@@ -50,29 +36,11 @@ int main()
 	abb->agregarPalabra("hola",2);
 	abb->agregarPalabra("andres",2);
 	abb->agregarPalabra("como",2);
-	NodoArbol** vector=new NodoArbol*[abb->getCantidad()];
-	abb->obtenerVectorOrdenado(vector);
-	list<InfoPalabra>::iterator it2;
-	for(unsigned i=0;i<abb->getCantidad();i++){
-		Palabra* palabra=vector[i]->getPalabra();
-		cout<<palabra->getContenido()<<endl;
-		it2=palabra->getInformacion().begin();
-		//cout<<"size:"<<palabra->getInformacion().size()<<endl;
-		//cout<<"doc:"<<it2->getDocumento()<<" cant:"<<it2->getCantidad()<<endl;//Modifico para probar
-//		for(unsigned j=1;j<palabra->getInformacion().size();j++){
-//			cout<<"doc:"<<it2->getDocumento()<<" cant:"<<it2->getCantidad()<<endl;
-//			advance(it2,1);
-//		}
-		cout<<palabra->imprimir()<<endl;
-		cout<<endl;
-	}
-	abb->getCantidad();
-
-	delete []vector;
+	abb->escribirEnArchivo("prueba2.txt");
 	delete abb;
 
-	Merger m;
-	
+	//Prueba Merger
 
+	Merger m;
 	return 0;
 }

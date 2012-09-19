@@ -7,6 +7,7 @@
 
 #include "Abb.h"
 #include <iostream>
+#include <fstream>
 
 
 Abb::Abb() {
@@ -108,18 +109,32 @@ void Abb::destruir(){
 		this->borrar(this->raiz->getPalabra()->getContenido());
 }
 
-void Abb::obtenerVectorOrdenado(NodoArbol** & vector){
-	unsigned posicion=0;
-	this->agregarElementosVector(this->raiz,posicion,vector);
-
+void Abb::escribirEnArchivo(const string& nombre){
+	std::fstream archivo;
+	archivo.open("prueba2.txt", fstream::out);
+	this->escribirEnOrden(this->raiz,archivo);
+	archivo.close();
 }
 
-void Abb::agregarElementosVector(NodoArbol* nodo,unsigned & posicion,NodoArbol** & vector){
+void Abb::escribirEnOrden(NodoArbol* nodo,fstream& archivo){
 	if (nodo->getIzquierdo())
-			this->agregarElementosVector(nodo->getIzquierdo(),posicion,vector);
-	vector[posicion]=nodo;
-	posicion++;
+				this->escribirEnOrden(nodo->getIzquierdo(),archivo);
+	archivo<<nodo->getPalabra()->imprimir()<<endl;
 	if (nodo->getDerecho())
-			this->agregarElementosVector(nodo->getDerecho(),posicion,vector);
+				this->escribirEnOrden(nodo->getDerecho(),archivo);
 }
 
+//void Abb::obtenerVectorOrdenado(NodoArbol** & vector){
+//	unsigned posicion=0;
+//	this->agregarElementosVector(this->raiz,posicion,vector);
+//
+//}
+
+//void Abb::agregarElementosVector(NodoArbol* nodo,unsigned & posicion,NodoArbol** & vector){
+//	if (nodo->getIzquierdo())
+//			this->agregarElementosVector(nodo->getIzquierdo(),posicion,vector);
+//	vector[posicion]=nodo;
+//	posicion++;
+//	if (nodo->getDerecho())
+//			this->agregarElementosVector(nodo->getDerecho(),posicion,vector);
+//}

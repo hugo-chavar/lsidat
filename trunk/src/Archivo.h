@@ -120,6 +120,7 @@ public:
   void cerrar();
   bool abrir(const std::string& path);
   std::string leerLinea();
+  void escribirLinea(const string& palabra);
 
 };
 
