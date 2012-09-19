@@ -19,7 +19,6 @@ public:
 	void setIzquierdo(NodoArbol* izq);
 	void setDerecho(NodoArbol* der);
 	Palabra* getPalabra();
-	//int CompararCon(string clave);
 
 private:
 		Palabra* dato;

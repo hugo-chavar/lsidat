@@ -180,3 +180,9 @@ string Archivo::leerLinea(){
 	getline(elArchivo,s);
 	return s;
 }
+
+void Archivo::escribirLinea(const string& palabra){
+	long size=palabra.size();
+	elArchivo<<palabra<<endl;
+	elArchivo.write(palabra.c_str(),size);
+}
