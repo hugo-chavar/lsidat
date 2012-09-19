@@ -39,8 +39,10 @@ int main()
 	abb->escribirEnArchivo("prueba2.txt");
 	delete abb;
 
-	//Prueba Merger
-
+	//Prueba merger
 	Merger m;
+	m.inicializar("hola");
+	cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
+	
 	return 0;
 }

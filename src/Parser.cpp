@@ -33,7 +33,7 @@ bool Parser::Process(Sorter sorter, string filePath, int doc) {
 	if (error)
 		return false;
 	while (file.leerCaracter(character)) {
-		if ((character>='A' & character<='Z') || (character>='a' & character<='z'))
+		if (((character>='A') & (character<='Z')) || ((character>='a') & (character<='z')))
 			word += tolower(character);
 		else {
 			sorter.agregarPalabra(word, doc);
