@@ -21,12 +21,18 @@ public:
 	Merger();
 	~Merger();
 	void inicializar(string dir);
+	void merge();
 	bool escribirSiguienteLinea();
 	unsigned contarMinimos();
 
 private:
 	bitset<MAX_FILES_MERGE> flags;
-	vector <Archivo> archivos;
+	bitset<MAX_FILES_MERGE> openFiles;
+	string inputDir;
+	string outputFileName;
+	Archivo outputFile;
+	//vector <Archivo> archivos;
+	Archivo * archi[MAX_FILES_MERGE];
 	vector <Palabra> palabras;
 };
 

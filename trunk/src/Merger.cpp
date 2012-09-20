@@ -13,22 +13,35 @@ Merger::Merger() {
 	//system("mkdir temp");
 	//pongo en 1 todos los flags
 	this->flags.set();
+	this->openFiles.reset();
+	this->inputDir = "/home/hugo/aa";
+	this->outputFileName = "/home/hugo/ff/merged.txt";
 	//un flag en 0 significa que hay que leer el archivo en esa posicion
 }
 
 void Merger::inicializar(string dir) {
-	string basedir = "/home/hugo/aa";
 	string linea;
 	DirList dl;
 	Palabra p;
 	unsigned i;
+	//Archivo *a;
 
-	if (dl.crearDesdeDirectorio(basedir)) {
+	if (dl.crearDesdeDirectorio(inputDir)) {
 		//cout << "Salida exitosa. Hay "<<dl.getCantidad()<<" archivos." << endl;
 		for (i = 0; i < dl.getCantidad(); i++) {
-			archivos.push_back(Archivo());
-			archivos[i].abrir(dl.siguienteLargo());
-			linea = archivos[i].leerLinea();
+			archi[i] = new Archivo();
+			//archivos.push_back(*a);
+			//archivos[i].abrirLectura(dl.siguienteLargo());
+			archi[i]->abrirLectura(dl.siguienteLargo());
+			openFiles.set(i);
+			//if (!archivos[i].eof()){
+			if (!archi[i]->eof()){
+				linea = archi[i]->leerLinea();
+				cout<<linea<<endl;
+			} else{
+				delete archi[i];
+				openFiles.reset(i);
+			}
 			p.crearDesdeString(linea);
 			//cout<<"Primer linea archivo "<<i<<": "<<linea<<endl;
 			palabras.push_back(p);
@@ -57,9 +70,27 @@ unsigned Merger::contarMinimos(){
 	return mins;
 }
 
+void Merger::merge(){
+	this->outputFile.abrirEscritura(this->outputFileName);
+	string linea = "juafasf";
+	while(!archi[0]->eof()){
+		linea = archi[0]->leerLinea();
+		this->outputFile.escribirLinea(linea);
+
+	}
+}
+
 Merger::~Merger() {
 	//cierro todos los archivos
-	archivos.clear();
+	int i=0;
+	while ((openFiles.count()>0)&&(i< MAX_FILES_MERGE)){
+		if (openFiles.test(i)){
+			delete archi[i];
+			openFiles.reset(i);
+		} else{
+			i++;
+		}
+	}
 	//libero memoria
 	palabras.clear();
 }
