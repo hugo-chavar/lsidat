@@ -8,12 +8,9 @@
 #ifndef SORTER_H_
 #define SORTER_H_
 
-//#define VECTOR_SIZE 1000;
 #include <iostream>
 #include <string>
-#include <list>
-#include "Palabra.h"
-const unsigned VECTOR_SIZE=100;
+#include "Abb.h"
 
 using namespace std;
 
@@ -22,15 +19,14 @@ public:
 	Sorter();
 	~Sorter();
 	void agregarPalabra(string palabra,int doc);
-	string archivarVector();
-	list<string> getListaArchivos();
-	bool completo();
+	void terminar();
+
 
 private:
-	list<string> listaArchivos;
-	//Palabra palabras[VECTOR_SIZE];//esto traia problemas
-	unsigned cantidadPalabras;
-	void agregarArchivoALista(string);
+	unsigned archivosCreados;
+	Abb* arbol;
+	bool arbolCompleto();
+	void archivarArbol();
 };
 
 #endif /* SORTER_H_ */

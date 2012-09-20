@@ -7,42 +7,46 @@
 
 #include "Sorter.h"
 
+#define MAX_NODOS 6
+
 using namespace std;
 
 Sorter::Sorter() {
-	// TODO Auto-generated constructor stub
+	this->archivosCreados=0;
+	this->arbol=new Abb();
 }
 
 Sorter::~Sorter() {
-	// TODO Auto-generated destructor stub
+	delete this->arbol;
 }
 
 void Sorter::agregarPalabra(string palabra,int doc){
-	//falta implementar
-		cout<<palabra<<endl;
+	if (this->arbolCompleto()){
+			this->archivarArbol();
+			delete this->arbol;
+			this->arbol=new Abb();
+	}
+	this->arbol->agregarPalabra(palabra,doc);
 }
 
-string Sorter::archivarVector(){
+void Sorter::archivarArbol(){
 
-	//falta implementar
-	cout<<"falta implementar archivar"<<endl;
-return "falta Implementar archivar";
+	this->archivosCreados++;
+	string aux = static_cast<ostringstream*>( &(ostringstream() << this->archivosCreados) )->str();
+	string nombreArchivo=string("particion")+aux+".txt";
+	this->arbol->escribirEnArchivo(nombreArchivo);
 	}
 
-list<string> Sorter::getListaArchivos(){
+bool Sorter::arbolCompleto(){
 
-	return(this->listaArchivos);
-	}
-
-bool Sorter::completo(){
-
-return((this->cantidadPalabras)<=VECTOR_SIZE);
-
-	}
-
-void Sorter::agregarArchivoALista(string filepath){
-
-	this->listaArchivos.push_back(filepath);
+return((this->arbol->getCantidad())>=(MAX_NODOS));
 }
+
+void Sorter::terminar(){
+	if (this->arbol->getCantidad()>0){
+		this->archivarArbol();
+	}
+}
+
 
 
