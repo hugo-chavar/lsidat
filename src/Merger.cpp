@@ -12,7 +12,7 @@ Merger::Merger() {
 	//system("echo -n '1. Current Directory is '; pwd");
 	//system("mkdir temp");
 	//pongo en 1 todos los flags
-	this->flags.set();
+	this->wordsReaded.set();
 	this->openFiles.reset();
 	this->inputDir = "/home/hugo/aa";
 	this->outputFileName = "/home/hugo/ff/merged.txt";
@@ -24,7 +24,6 @@ void Merger::inicializar(string dir) {
 	DirList dl;
 	Palabra p;
 	unsigned i;
-	//Archivo *a;
 
 	if (dl.crearDesdeDirectorio(inputDir)) {
 		//cout << "Salida exitosa. Hay "<<dl.getCantidad()<<" archivos." << endl;
@@ -35,13 +34,14 @@ void Merger::inicializar(string dir) {
 			archi[i]->abrirLectura(dl.siguienteLargo());
 			openFiles.set(i);
 			//if (!archivos[i].eof()){
-			if (!archi[i]->eof()){
-				linea = archi[i]->leerLinea();
-				cout<<linea<<endl;
-			} else{
-				delete archi[i];
-				openFiles.reset(i);
-			}
+			linea = leerEnArchivo(i);
+//			if (!archi[i]->eof()) {
+//				linea = archi[i]->leerLinea();
+//				cout << linea << endl;
+//			} else {
+//				delete archi[i];
+//				openFiles.reset(i);
+//			}
 			p.crearDesdeString(linea);
 			//cout<<"Primer linea archivo "<<i<<": "<<linea<<endl;
 			palabras.push_back(p);
@@ -51,46 +51,69 @@ void Merger::inicializar(string dir) {
 	}
 }
 
-unsigned Merger::contarMinimos(){
-	unsigned mins =1;
+string Merger::leerEnArchivo(unsigned nroArchivo) {
+	string linea;
+	if (openFiles.test(nroArchivo)) {
+		linea = archi[nroArchivo]->leerLinea();
+		cout << linea << endl;
+		if (archi[nroArchivo]->eof()){
+			delete archi[nroArchivo];
+			openFiles.reset(nroArchivo);
+		}
+	} else {
+		cout << "Esta intentando leer un archivo que no pertenece al set actual." << endl;
+	}
+	return linea;
+}
+
+unsigned Merger::contarMinimos() {
+	unsigned mins = 1;
 	int comp;
-	string minPalabra=palabras[0].getContenido();
-	cout<<"menor palabra es: "<<minPalabra<<endl;
-	for (unsigned j=1;j<palabras.size();j++){
+	minWords.reset();
+	string minPalabra = palabras[0].getContenido();
+	cout << "menor palabra es: " << minPalabra << endl;
+	for (unsigned j = 1; j < palabras.size(); j++) {
 		comp = palabras[j].compararCon(minPalabra);
-		if( comp == 0){
+		if (comp == 0) {
 			mins++;
-		} else if (comp < 0){
+			minWords.set(j);
+		} else if (comp < 0) {
 			mins = 1;
-			minPalabra=palabras[j].getContenido();
-			cout<<"Ahora la menor palabra es: "<<minPalabra<<endl;
+			minWords.reset();
+			minWords.set(j);
+			minPalabra = palabras[j].getContenido();
+			cout << "Ahora la menor palabra es: " << minPalabra << endl;
 		}
 	}
 
 	return mins;
 }
 
-void Merger::merge(){
+void Merger::merge() {
 	this->outputFile.abrirEscritura(this->outputFileName);
-	string linea = "juafasf";
-	while(!archi[0]->eof()){
+	string linea;
+	while (!archi[0]->eof()) {
 		linea = archi[0]->leerLinea();
 		this->outputFile.escribirLinea(linea);
 
 	}
 }
 
-Merger::~Merger() {
-	//cierro todos los archivos
-	int i=0;
-	while ((openFiles.count()>0)&&(i< MAX_FILES_MERGE)){
-		if (openFiles.test(i)){
+void Merger::cerrarArchivos(){
+	int i = 0;
+	while ((openFiles.count() > 0) && (i < MAX_FILES_MERGE)) {
+		if (openFiles.test(i)) {
 			delete archi[i];
 			openFiles.reset(i);
-		} else{
+		} else {
 			i++;
 		}
 	}
+}
+
+Merger::~Merger() {
+	//cierro todos los archivos
+	cerrarArchivos();
 	//libero memoria
 	palabras.clear();
 }
