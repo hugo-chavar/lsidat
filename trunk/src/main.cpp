@@ -10,7 +10,7 @@
 #include "Parser.h"
 #include <iostream>
 #include <list>
-#include "Abb.h"
+#include "Sorter.h"
 #include "Merger.h"
 #include "Archivo.h"
 
@@ -25,21 +25,28 @@ int main()
 
 	//Prueba Sorter
 
-	Abb* abb=new Abb();
-	abb->agregarPalabra("hola",1);
-	abb->agregarPalabra("andres",1);
-	abb->agregarPalabra("como",1);
-	abb->agregarPalabra("es",1);
-	abb->agregarPalabra("hola",1);
-	abb->agregarPalabra("sos",1);
-	abb->agregarPalabra("como",1);
-	abb->agregarPalabra("hola",2);
-	abb->agregarPalabra("andres",2);
-	abb->agregarPalabra("como",2);
-	abb->escribirEnArchivo("prueba2.txt");
-	delete abb;
+	Sorter* sorter=new Sorter();
 
-	//Prueba merger
+	sorter->agregarPalabra("hola",1);
+	sorter->agregarPalabra("andres",1);
+	sorter->agregarPalabra("como",1);
+	sorter->agregarPalabra("es",1);
+	sorter->agregarPalabra("como",1);
+	sorter->agregarPalabra("tp",1);
+	sorter->agregarPalabra("datos",1);
+	sorter->agregarPalabra("sos",1);
+	sorter->agregarPalabra("como",1);
+	sorter->agregarPalabra("hola",2);
+	sorter->agregarPalabra("hola",2);
+	sorter->agregarPalabra("hola",2);
+	sorter->agregarPalabra("andres",2);
+	sorter->agregarPalabra("como",2);
+	sorter->agregarPalabra("te",3);
+	sorter->terminar();
+	delete sorter;
+
+	//Prueba Merger
+
 	Merger m;
 	m.inicializar("hola");
 	//cout<<"cant de minimos: "<<m.contarMinimos()<<endl;

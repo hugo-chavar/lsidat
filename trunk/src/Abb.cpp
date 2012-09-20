@@ -111,7 +111,7 @@ void Abb::destruir(){
 
 void Abb::escribirEnArchivo(const string& nombre){
 	std::fstream archivo;
-	archivo.open("prueba2.txt", fstream::out);
+	archivo.open(nombre.c_str(), fstream::out);
 	this->escribirEnOrden(this->raiz,archivo);
 	archivo.close();
 }

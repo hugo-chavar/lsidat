@@ -20,7 +20,8 @@ bool Parser::ProcessFiles() {
 			return false;
 		doc++;
 	}
-	if (!sorter.completo())										// FALTA IMPLEMENTACION DEL SORTER
+	//if (!sorter.completo())										// FALTA IMPLEMENTACION DEL SORTER
+																	//Andy:Yami esto no hace falta, lo manejo yo desde sorter
 		return false;
 	return true;
 }
