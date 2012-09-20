@@ -24,9 +24,12 @@ public:
 	void merge();
 	bool escribirSiguienteLinea();
 	unsigned contarMinimos();
+	void cerrarArchivos();
+	string leerEnArchivo(unsigned);
 
 private:
-	bitset<MAX_FILES_MERGE> flags;
+	bitset<MAX_FILES_MERGE> wordsReaded;
+	bitset<MAX_FILES_MERGE> minWords;
 	bitset<MAX_FILES_MERGE> openFiles;
 	string inputDir;
 	string outputFileName;
