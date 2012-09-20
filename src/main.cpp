@@ -19,8 +19,8 @@ using namespace std;
 int main()
 {
 	//Prueba parser
-	Parser parser = Parser();
-	parser.ProcessFiles();
+	//Parser parser = Parser();
+	//parser.ProcessFiles();
 
 
 	//Prueba Sorter
@@ -42,7 +42,8 @@ int main()
 	//Prueba merger
 	Merger m;
 	m.inicializar("hola");
-	cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
+	//cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
+	m.merge();
 	
 	return 0;
 }

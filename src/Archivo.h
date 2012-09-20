@@ -17,8 +17,8 @@
  *        Hugo Chavar
  *
  **/
-#ifndef __ARCHIVOXML_H__
-#define __ARCHIVOXML_H__
+#ifndef __ARCHIVO_H__
+#define __ARCHIVO_H__
 
 
 #include <fstream>
@@ -38,6 +38,7 @@ enum tipoTag
 class Archivo {
 private:
   std::fstream  elArchivo; //Referencia al archivo.
+  std::string nombre;
 
 
 public:
@@ -58,6 +59,8 @@ public:
    * Cierra el archivo (no lo destruye fisicamente).
    */
   ~Archivo();
+
+  bool eof();
 
 
 /**
@@ -118,7 +121,8 @@ public:
   bool esContenidoDeTag(std::string &palabra);
 
   void cerrar();
-  bool abrir(const std::string& path);
+  bool abrirLectura(const std::string& path);
+  bool abrirEscritura(const std::string& path);
   std::string leerLinea();
   void escribirLinea(const string& palabra);
 
