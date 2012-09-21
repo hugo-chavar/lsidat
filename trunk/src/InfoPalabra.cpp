@@ -20,8 +20,8 @@ unsigned InfoPalabra::getCantidad(){
 	return(this->cantidad);
 }
 
-void InfoPalabra::incrementarCantidad(){
-	this->cantidad++;
+void InfoPalabra::incrementarCantidad(unsigned cant){
+	this->cantidad+=cant;;
 }
 
 unsigned InfoPalabra::getDocumento(){

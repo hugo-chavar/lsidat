@@ -23,7 +23,7 @@ public:
 	InfoPalabra(const InfoPalabra& ip);
 	~InfoPalabra();
 	unsigned getCantidad();
-	void incrementarCantidad();
+	void incrementarCantidad(unsigned);
 	unsigned getDocumento();
 };
 
