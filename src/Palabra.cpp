@@ -27,14 +27,26 @@ string Palabra::getContenido() {
 	return (this->contenido);
 }
 
-void Palabra::agregarAparicion(unsigned doc) {
+void Palabra::agregarAparicion(unsigned doc,unsigned cant) {
 
 	InfoPalabra* nodo = this->buscarDoc(doc);
 	if (nodo)
-		nodo->incrementarCantidad();
+		nodo->incrementarCantidad(cant);
 	else {
-		this->agregarNodo(doc, 1);
+		this->agregarNodo(doc, cant);
 	}
+}
+
+void Palabra::agregarAparicion(unsigned doc) {
+
+	agregarAparicion(doc,1);
+
+//	InfoPalabra* nodo = this->buscarDoc(doc);
+//	if (nodo)
+//		nodo->incrementarCantidad();
+//	else {
+//		this->agregarNodo(doc, 1);
+//	}
 }
 
 InfoPalabra* Palabra::buscarDoc(unsigned doc) {

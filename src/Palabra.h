@@ -29,6 +29,7 @@ public:
 	Palabra();
 	~Palabra();
 	void agregarAparicion(unsigned doc);
+	void agregarAparicion(unsigned doc,unsigned cant);
 	list<InfoPalabra> getInformacion();
 	string getContenido();
 	void crearDesdeString(string  s);

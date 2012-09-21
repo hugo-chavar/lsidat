@@ -53,7 +53,7 @@ int main() {
 		}
 		//otra forma de hacer lo mismo
 		Archivo archivoActual2;
-		if(archivoActual2.abrir(unArchivo)){
+		if(archivoActual2.abrirLectura(unArchivo)){
 			//leo una parte y la ignoro
 			char caracterFin = '#';
 			archivoActual2.leerHastaCaracter(caracterFin,unTexto);
