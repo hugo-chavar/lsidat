@@ -46,7 +46,9 @@ void Merger::inicializar(string dir) {
 			//cout<<"Primer linea archivo "<<i<<": "<<linea<<endl;
 			palabras.push_back(p);
 			p.resetearInformacion();
-			//cout<<"Primer palabra "<<i<<": "<<palabras[i].imprimir()<<endl;
+			cout<<"Primer palabra "<<i<<": "<<palabras[i].imprimir()<<endl;
+			cout<<"maxDoc: "<<palabras[i].maxDoc()<<endl;
+			cout<<"minDoc: "<<palabras[i].minDoc()<<endl;
 		}
 	}
 }

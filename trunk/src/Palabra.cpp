@@ -49,18 +49,34 @@ void Palabra::agregarAparicion(unsigned doc) {
 //	}
 }
 
+unsigned Palabra::minDoc(){
+	return (this->informacion.begin())->getDocumento();
+}
+
+unsigned Palabra::maxDoc(){
+	list<InfoPalabra>::iterator it = this->informacion.end();
+	it--;
+	return it->getDocumento();
+}
+
 InfoPalabra* Palabra::buscarDoc(unsigned doc) {
 	if ((informacion.size() > 0)) {
-		list<InfoPalabra>::iterator it = this->informacion.begin();
-		unsigned i = 0;
-		while (i < informacion.size()) {
-			if (it->getDocumento() == doc) {
-				return (&(*it)); //encontrado
-			} else {
-				advance(it, 1);
-			}
-			i++;
+		//list<InfoPalabra>::iterator it = this->informacion.begin();
+		//TODO andy: creo que este if funciona.. sin el iterador y sin recorrer toda la lista
+		//deje lo otro comentado por las dudas
+		//La optimizacion prematura es la raiz de todos los males..
+		if ( maxDoc()== doc){
+           return &(*this->informacion.end());
 		}
+//		unsigned i = 0;
+//		while (i < informacion.size()) {
+//			if (it->getDocumento() == doc) {
+//				return (&(*it)); //encontrado
+//			} else {
+//				advance(it, 1);
+//			}
+//			i++;
+//		}
 	}
 	return (0); //No fue encontrado
 }
