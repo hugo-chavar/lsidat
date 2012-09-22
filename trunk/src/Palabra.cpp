@@ -53,10 +53,12 @@ unsigned Palabra::minDoc(){
 	return (this->informacion.begin())->getDocumento();
 }
 
+//TODO hugo:Creo que con estas modificaciones quedo mas sencillo aun
 unsigned Palabra::maxDoc(){
-	list<InfoPalabra>::iterator it = this->informacion.end();
-	it--;
-	return it->getDocumento();
+	return (this->informacion.back().getDocumento());
+//	list<InfoPalabra>::iterator it = this->informacion.end();
+//	it--;
+//	return it->getDocumento();
 }
 
 InfoPalabra* Palabra::buscarDoc(unsigned doc) {
@@ -66,7 +68,8 @@ InfoPalabra* Palabra::buscarDoc(unsigned doc) {
 		//deje lo otro comentado por las dudas
 		//La optimizacion prematura es la raiz de todos los males..
 		if ( maxDoc()== doc){
-           return &(*this->informacion.end());
+           //return &(*this->informacion.end());
+			return (&this->informacion.back());
 		}
 //		unsigned i = 0;
 //		while (i < informacion.size()) {
