@@ -2,7 +2,7 @@
  * Palabra.cpp
  *
  *  Created on: Sep 8, 2012
- *      Author: andy
+ *      Author: Andres Sanabria
  */
 
 #include "Palabra.h"
@@ -28,7 +28,6 @@ string Palabra::getContenido() {
 }
 
 void Palabra::agregarAparicion(unsigned doc,unsigned cant) {
-
 	InfoPalabra* nodo = this->buscarDoc(doc);
 	if (nodo)
 		nodo->incrementarCantidad(cant);
@@ -38,48 +37,26 @@ void Palabra::agregarAparicion(unsigned doc,unsigned cant) {
 }
 
 void Palabra::agregarAparicion(unsigned doc) {
-
 	agregarAparicion(doc,1);
-
-//	InfoPalabra* nodo = this->buscarDoc(doc);
-//	if (nodo)
-//		nodo->incrementarCantidad();
-//	else {
-//		this->agregarNodo(doc, 1);
-//	}
 }
 
 unsigned Palabra::minDoc(){
 	return (this->informacion.begin())->getDocumento();
 }
 
-//TODO hugo:Creo que con estas modificaciones quedo mas sencillo aun
+void Palabra::borrarMinDoc(){
+	this->informacion.pop_front();
+}
+
 unsigned Palabra::maxDoc(){
 	return (this->informacion.back().getDocumento());
-//	list<InfoPalabra>::iterator it = this->informacion.end();
-//	it--;
-//	return it->getDocumento();
 }
 
 InfoPalabra* Palabra::buscarDoc(unsigned doc) {
 	if ((informacion.size() > 0)) {
-		//list<InfoPalabra>::iterator it = this->informacion.begin();
-		//TODO andy: creo que este if funciona.. sin el iterador y sin recorrer toda la lista
-		//deje lo otro comentado por las dudas
-		//La optimizacion prematura es la raiz de todos los males..
 		if ( maxDoc()== doc){
-           //return &(*this->informacion.end());
 			return (&this->informacion.back());
 		}
-//		unsigned i = 0;
-//		while (i < informacion.size()) {
-//			if (it->getDocumento() == doc) {
-//				return (&(*it)); //encontrado
-//			} else {
-//				advance(it, 1);
-//			}
-//			i++;
-//		}
 	}
 	return (0); //No fue encontrado
 }
@@ -87,7 +64,10 @@ InfoPalabra* Palabra::buscarDoc(unsigned doc) {
 void Palabra::agregarNodo(unsigned doc, unsigned cantidad) {
 	InfoPalabra aux(doc, cantidad);
 	this->informacion.push_back(aux);
-	//this->informacion.push_back(*(new InfoPalabra(doc, cantidad)));
+}
+
+void Palabra::agregarListaAlFinal(list<InfoPalabra> toAppend){
+	this->informacion.splice(informacion.end(),toAppend);
 }
 
 void Palabra::crearDesdeString(string s) {
@@ -109,9 +89,6 @@ void Palabra::crearDesdeString(string s) {
 	//	cout << "\" Doc: " << doc <<" cant: "<<cant<< "\"\n";
 		//trim(v[ n ])
 	}
-
-	//cout << endl;
-
 }
 
 string Palabra::imprimir(){

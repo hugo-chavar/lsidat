@@ -59,7 +59,7 @@ bool Archivo::abrirEscritura(const std::string& path) {
  * Cierra el archivo (no lo destruye fisicamente).
  */
 Archivo::~Archivo() {
-	cout << "Ejecutando destructor .." << nombre << endl;
+	//cout << "Ejecutando destructor .." << nombre << endl;
 	this->cerrar();
 }
 
