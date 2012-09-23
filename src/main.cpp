@@ -24,7 +24,7 @@ int main()
 
 
 	//Prueba Sorter
-
+/*
 	Sorter* sorter=new Sorter();
 
 	sorter->agregarPalabra("hola",1);
@@ -44,13 +44,19 @@ int main()
 	sorter->agregarPalabra("te",3);
 	sorter->terminar();
 	delete sorter;
-
+*/
 	//Prueba Merger
 
 	Merger m;
-	m.inicializar("hola");
-	cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
+
+	m.setInputDir("/home/hugo/aa");
+	m.setOutputFileName("/home/hugo/ff/merged.txt");
+	m.inicializarEtapa();
+	//cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
+	//m.merge();
+	//cout<<"Archivos por etapa: "<<m.calcularArchivosPorEtapa()<<endl;
 	m.merge();
 	
+
 	return 0;
 }
