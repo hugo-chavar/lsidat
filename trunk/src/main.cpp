@@ -48,15 +48,34 @@ int main()
 	//Prueba Merger
 
 	Merger m;
-
+	//Etapa 1
+	//InputDir: es donde estan los archivos originales
+	//TODO el parser tendria que decirme la carpeta ya que el Sorter no lo veo
 	m.setInputDir("/home/hugo/aa");
-	m.setOutputFileName("/home/hugo/ff/merged.txt");
-	m.inicializarEtapa();
+	//OutputFolder es a donde van los archivos mergeados en la primer etapa
+	//es una carpeta temporal interna al programa
+	m.setOutputFolderName("/home/hugo/bb");
+	//setMode necesita que se haya seteado el inputDir
+	m.setMode(ETAPA);
+	//m.inicializarEtapa();
 	//cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
 	//m.merge();
 	//cout<<"Archivos por etapa: "<<m.calcularArchivosPorEtapa()<<endl;
 	m.merge();
 	
+	//Etapa 2
+	//ahora la salida de la etapa anterior es la entrada para la etapa final
+	m.setInputDir("/home/hugo/bb");
+	//indico el nombre del archivo final
+	//esto se tiene que setear solo antes de hacer el merge final
+	//ya que internamente se usa como outputFile las salidas intermedias de los merges
+	m.setOutputFileName("/home/hugo/cc/merged.txt");
+	m.setMode(FINAL);
+	//crucemos los dedos
+	m.merge();
+
+
+
 
 	return 0;
 }

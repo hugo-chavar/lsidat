@@ -83,6 +83,10 @@ bool DirList::haySiguiente(){
 	return (_posicionActual<_cantidad);
 }
 
+void DirList::limpiar(){
+	archivos.clear();
+}
+
 bool DirList::seek(unsigned pos){
 	bool status = (pos<_cantidad);
 	if(status){

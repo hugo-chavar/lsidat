@@ -16,12 +16,20 @@
 #include "Archivo.h"
 #include "Palabra.h"
 
+enum mergeMode{
+	ETAPA,
+	FINAL
+};
+
 class Merger {
 public:
 	Merger();
 	~Merger();
 	void setInputDir(string);
 	void setOutputFileName(string);
+	void setNextFileName();
+	void setOutputFolderName(string);
+	void setMode(mergeMode);
 	void inicializarEtapa();
 	void merge();
 	bool escribirSiguienteLinea();
@@ -40,10 +48,13 @@ private:
 	bitset<MAX_FILES_MERGE> wordsReaded;
 	bitset<MAX_FILES_MERGE> minWords;
 	bitset<MAX_FILES_MERGE> openFiles;
+	mergeMode mode;
 	bool minCounted;
 	unsigned minPosition;
+	unsigned currentFileNumber;
 	string inputDir;
 	string outputFileName;
+	string outputFolderName;
 	Archivo outputFile;
 	//vector <Archivo> archivos;
 	Archivo * stepFiles[MAX_FILES_MERGE];

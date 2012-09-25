@@ -36,6 +36,7 @@ public:
 	bool seek(unsigned);
 	unsigned posicionActual();
 	unsigned getCantidad() const;
+	void limpiar();
 
 };
 
