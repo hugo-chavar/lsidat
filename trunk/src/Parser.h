@@ -7,7 +7,7 @@
 
 #ifndef PARSER_H_
 #define PARSER_H_
-#define DIRECTORY "/media/DATOS/Organizacion de Datos/Pruebas" // CAMBIAR
+#define DIRECTORY "/media/DATOS/Organizacion de Datos/Pruebas/Archivos" // CAMBIAR
 
 #include <iostream>
 #include <string>

@@ -9,9 +9,34 @@
 
 Parser::Parser() { }
 
+bool Parser::Process(Sorter sorter, string filePath, int doc) {
+	string word = "";
+	char character;
+	Archivo file;
+	if (!file.abrirLectura(filePath)) {
+		return false;
+	}
+	while (!file.eof()) {
+		string line = file.leerLinea();
+		int i;
+		for (i=0; i < line.length(); i++) {
+			if (((line[i]>='A') & (line[i]<='Z')) || ((line[i]>='a') & (line[i]<='z')))
+				word += tolower(line[i]);
+			else {
+				if (word != "")
+					sorter.agregarPalabra(word, doc);
+				word = "";
+			}
+		}
+		if (word != "")
+			sorter.agregarPalabra(word, doc);
+	}
+	return true;
+}
+
 bool Parser::ProcessFiles() {
 	int doc = 1;
-	Sorter sorter = Sorter();
+	Sorter sorter;
 	DirList directories;
 	if (!directories.crearDesdeDirectorio(DIRECTORY))
 		return false;
@@ -20,28 +45,6 @@ bool Parser::ProcessFiles() {
 			return false;
 		doc++;
 	}
-	//if (!sorter.completo())										// FALTA IMPLEMENTACION DEL SORTER
-																	//Andy:Yami esto no hace falta, lo manejo yo desde sorter
-		return false;
-	return true;
-}
-
-bool Parser::Process(Sorter sorter, string filePath, int doc) {
-	string word = "";
-	char character;
-	bool error = false;
-	Archivo file = Archivo(filePath, error);
-	if (error)
-		return false;
-	while (file.leerCaracter(character)) {
-		if (((character>='A') & (character<='Z')) || ((character>='a') & (character<='z')))
-			word += tolower(character);
-		else {
-			sorter.agregarPalabra(word, doc);
-			word = "";
-		}
-	}
-	file.~Archivo();
 	return true;
 }
 
