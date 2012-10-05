@@ -1,0 +1,33 @@
+/*
+ * Matrix.h
+ *
+ *  Created on: 05/10/2012
+ *      Author: Yamila Glinsek
+ */
+
+#ifndef MATRIX_H_
+#define MATRIX_H_
+
+#include <iostream>
+#include <string>
+#include <list>
+#include <math.h>
+#include <sstream>
+#include "Archivo.h"
+#include "Palabra.h"
+#include "InfoPalabra.h"
+
+using namespace std;
+
+class Matrix {
+public:
+	Matrix();
+	bool buildInitialMatrix(string inputPath, string outputPath);
+	void SVD();
+	virtual ~Matrix();
+private:
+	int calculateGlobalFrequency(list<InfoPalabra> wordInfo);
+	double calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq);
+};
+
+#endif /* MATRIX_H_ */
