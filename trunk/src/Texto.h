@@ -44,19 +44,19 @@ std::string& trim_right_inplace(std::string& s, const std::string& delimiters);
 
 std::string& trim_left_inplace(std::string& s, const std::string& delimiters);
 
-std::string& trim(std::string& s,const std::string& delimiters = " \f\n\r\t\v");
+std::string& trim(std::string& s,
+		const std::string& delimiters = " \f\n\r\t\v");
 
-inline std::string trim_right_copy(
-  const std::string& s,
-  const std::string& delimiters );
+inline std::string trim_right_copy(const std::string& s,
+		const std::string& delimiters);
 
-inline std::string trim_left_copy(
-  const std::string& s,
-  const std::string& delimiters );
+inline std::string trim_left_copy(const std::string& s,
+		const std::string& delimiters);
 
-std::string trim_copy(
-  const std::string& s,
-  const std::string& delimiters = " \f\n\r\t\v" );
+std::string trim_copy(const std::string& s, const std::string& delimiters =
+		" \f\n\r\t\v");
 
+std::string pad_left_copy(std::string& s, unsigned size,
+		const char& fill);
 
 #endif /* TEXTO_H_ */

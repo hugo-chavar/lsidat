@@ -8,7 +8,7 @@
 #ifndef MERGER_H_
 #define MERGER_H_
 
-#define MAX_FILES_MERGE 32
+#define MAX_FILES_MERGE 1024
 
 #include <iostream>
 #include <bitset>
@@ -17,7 +17,7 @@
 #include "Palabra.h"
 
 enum mergeMode{
-	ETAPA,
+	STAGE,
 	FINAL
 };
 
@@ -30,19 +30,19 @@ public:
 	void setNextFileName();
 	void setOutputFolderName(string);
 	void setMode(mergeMode);
-	void inicializarEtapa();
+	void initializeStage();
 	void merge();
-	bool escribirSiguienteLinea();
-	unsigned contarMinimos();
-	void resolverMinimos();
-	void escribirMinimo();
-	void leerMas();
-	void aparearPalabras(unsigned,unsigned);
-	unsigned calcularArchivosPorEtapa();
-	bool finDeEtapa();
-	bool finDelMerge();
-	void cerrarArchivos();
-	void leerEnArchivo(unsigned);
+	bool writeNextLine();
+	unsigned countMinima();
+	void fixMinima();
+	void writeMinimum();
+	void readMore();
+	void joinWords(unsigned,unsigned);
+	unsigned calculateFilesPerStage();
+	bool endOfStage();
+	bool endOfMerge();
+	void closeAllFiles();
+	void readFromFileNumber(unsigned);
 
 private:
 	bitset<MAX_FILES_MERGE> wordsReaded;
@@ -56,7 +56,6 @@ private:
 	string outputFileName;
 	string outputFolderName;
 	Archivo outputFile;
-	//vector <Archivo> archivos;
 	Archivo * stepFiles[MAX_FILES_MERGE];
 	vector <Palabra> words;
 	DirList directories;

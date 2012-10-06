@@ -29,6 +29,7 @@ bool Archivo::abrirLectura(const std::string& path) {
 	//Intenta abrir el archivo en modo lectura - escritura.
 	elArchivo.open(path.c_str(), std::fstream::in | std::fstream::out);
 	nombre = "Lectura:" + path;
+	//cout << "Abriendo .." << nombre << endl;
 
 	if (!elArchivo.is_open()) {
 		//Si no hubo exito en la apertura...
@@ -90,65 +91,9 @@ bool Archivo::leerCaracter(char &salida) {
 	return true;
 }
 
-/**
- * Pre: El archivo XML debe estar abierto para lectura.
- * Post: Posiciona el cursor a continuacion de la proxima aparicion del caracter indicado,
- * devuelve el texto sobre el que avanzo.
- */
-bool Archivo::leerHastaCaracter(char &caracterFin,
-		std::string &textoEncontrado) {
-	char caracterLeido = ' ';
-	textoEncontrado = "";
-	bool continuaArchivo = this->leerCaracter(caracterLeido);
-	//Leo hasta que encuentre el caracter de fin o hasta que falle el leer caracter (por fin de archivo).
-	while ((caracterLeido != caracterFin) && (continuaArchivo)) {
-		textoEncontrado += caracterLeido;
-		continuaArchivo = this->leerCaracter(caracterLeido);
-	}
-	return (caracterLeido == caracterFin);
-}
 
 /**
- * Pre: El archivo XML debe estar abierto para lectura.
- * Post: Recorre el archivo hasta el siguiente simbolo <,
- * devuelve el texto sobre el que avanzo.
- * Nota: Llamo Etiqueta a lo que se encuentra entre los simbolos < y >.
- */
-bool Archivo::leerHastaInicioEtiqueta(std::string &textoObtenido) {
-	char caracterInicio = '<';
-	return this->leerHastaCaracter(caracterInicio, textoObtenido);
-}
-
-/**
- * Pre: El archivo XML debe estar abierto para lectura.
- * Post: Recorre el archivo hasta el siguiente simbolo >,
- * devuelve el texto sobre el que avanzo.
- * Nota: Llamo Etiqueta a lo que se encuentra entre los simbolos < y >.
- */
-bool Archivo::leerHastaFinEtiqueta(std::string &textoObtenido) {
-	char caracterFin = '>';
-	return this->leerHastaCaracter(caracterFin, textoObtenido);
-}
-
-/**
- * Pre:-
- * Post:
- *  Devuelve FIN_TAG si el segundo caracter de la etiqueta es /.
- *  Devuelve COMENTARIOS si el segundo caracter de la etiqueta es ?.
- *  Devuelve NUEVO_TAG en otro caso.
- */
-tipoTag Archivo::tipoDeTag(std::string &textoObtenido) {
-	char primerCaracter = textoObtenido[0];
-	tipoTag tipoDeTagActual = NUEVO_TAG;
-	if (primerCaracter == '/')
-		tipoDeTagActual = FIN_TAG;
-	else if ((primerCaracter == '?') || (primerCaracter == '!'))
-		tipoDeTagActual = COMENTARIOS;
-	return tipoDeTagActual;
-}
-
-/**
- * Pre:  El archivo XML debe estar abierto para lectura.
+ * Pre:  El archivo debe estar abierto para lectura.
  * Post: Posiciona el cursor al comienzo del archivo.
  */
 void Archivo::irAlPrincipio() {
@@ -160,7 +105,7 @@ void Archivo::irAlPrincipio() {
 }
 
 /**
- * Pre: El archivo XML debe estar abierto para lectura.
+ * Pre: El archivo debe estar abierto para lectura.
  * Post: Posiciona el cursor al final del archivo.
  */
 void Archivo::irAlFinal() {
@@ -171,18 +116,10 @@ void Archivo::irAlFinal() {
 	elArchivo.tellg();
 }
 
-/**
- * Pre: -
- * Post: Determina si el Tag tiene contenido.
- */
-bool Archivo::esContenidoDeTag(std::string &palabra) {
-	palabra = trim(palabra);
-	return (palabra != "");
-}
 
 void Archivo::cerrar() {
 	if (elArchivo.is_open()) {
-		cout << "cerrando .." << nombre << endl;
+		//cout << "cerrando .." << nombre << endl;
 		elArchivo.close();
 	}
 }
@@ -197,7 +134,7 @@ void Archivo::escribirLinea(const string& palabra) {
 	//long size=palabra.size();
 	if (palabra.size() > 0) {
 		elArchivo << palabra << endl;
-		cout << "escribiendo: " << palabra << endl;
+		//cout << "escribiendo: " << palabra << endl;
 	}
 	//elArchivo.write(palabra.c_str(),size);
 }
