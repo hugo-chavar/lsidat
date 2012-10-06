@@ -43,6 +43,16 @@ std::string trim_copy(
   return trim_left_copy( trim_right_copy( s, delimiters ), delimiters );
 }
 
+std::string pad_left_copy(std::string& s, unsigned size, const char& fill){
+	std::string aux = "";
+	for (unsigned i = 0;i< (size -s.size());i++){
+		aux+=fill;
+	}
+	aux+=s;
+	return aux;
+
+}
+
 
 
 

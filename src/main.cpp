@@ -5,22 +5,64 @@
  *      Author: andy
  */
 
-#include "Sorter.h"
-#include "InfoPalabra.h"
-#include "Parser.h"
 #include <iostream>
 #include <list>
+#include <string.h>
+#include "InfoPalabra.h"
+#include "Parser.h"
 #include "Sorter.h"
 #include "Merger.h"
 #include "Archivo.h"
+
+#define DIR_MERGER 			DIRECTORY/tempmerger
+#define DIR_MERGE_OUTPUT 	DIRECTORY/merge
+#define MERGE_FILE 			DIR_MERGE_OUTPUT/merge.txt
+
 
 using namespace std;
 
 int main()
 {
-	//Prueba parser
-	//Parser parser = Parser();
-	//parser.ProcessFiles();
+	Parser parser;
+	parser.ProcessFiles();
+
+	//creo una carpeta para q el MERGER tire ahi la salida
+	//TODO: esto debe corregirse.. es lento, inseguro, ineficiente...bla bla
+	char comando[100];
+	strcpy(comando,"mkdir -p ");
+	strcat(comando,Xstr(DIR_MERGER));
+	system(comando);
+	strcpy(comando,"mkdir -p ");
+	strcat(comando,Xstr(DIR_MERGE_OUTPUT));
+	system(comando);
+	//fin de creacion de dir temporal
+
+
+	Merger m;
+
+	//Etapa 1
+	//InputDir: es donde estan los archivos originales
+	m.setInputDir(Xstr(DIR_SORTER));
+	//OutputFolder es a donde van los archivos mergeados en la primer etapa
+	//es una carpeta temporal interna al programa
+	m.setOutputFolderName(Xstr(DIR_MERGER));
+	//setMode necesita que se haya seteado el inputDir
+	m.setMode(STAGE);
+	//m.initializeStage();
+	//cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
+	//m.merge();
+	//cout<<"Archivos por etapa: "<<m.calcularArchivosPorEtapa()<<endl;
+	m.merge();
+	
+	//Etapa 2
+	//ahora la salida de la etapa anterior es la entrada para la etapa final
+	m.setInputDir(Xstr(DIR_MERGER));
+	//indico el nombre del archivo final
+	//esto se tiene que setear solo antes de hacer el merge final
+	//ya que internamente se usa como outputFile las salidas intermedias de los merges
+	m.setOutputFileName(Xstr(MERGE_FILE));
+	m.setMode(FINAL);
+	m.merge();
 
 
 	//Prueba Sorter
@@ -45,37 +87,6 @@ int main()
 	sorter->terminar();
 	delete sorter;
 */
-	//Prueba Merger
-
-	Merger m;
-	//Etapa 1
-	//InputDir: es donde estan los archivos originales
-	//TODO el parser tendria que decirme la carpeta ya que el Sorter no lo veo
-	m.setInputDir("/home/hugo/aa");
-	//OutputFolder es a donde van los archivos mergeados en la primer etapa
-	//es una carpeta temporal interna al programa
-	m.setOutputFolderName("/home/hugo/bb");
-	//setMode necesita que se haya seteado el inputDir
-	m.setMode(ETAPA);
-	//m.inicializarEtapa();
-	//cout<<"cant de minimos: "<<m.contarMinimos()<<endl;
-	//m.merge();
-	//cout<<"Archivos por etapa: "<<m.calcularArchivosPorEtapa()<<endl;
-	m.merge();
-	
-	//Etapa 2
-	//ahora la salida de la etapa anterior es la entrada para la etapa final
-	m.setInputDir("/home/hugo/bb");
-	//indico el nombre del archivo final
-	//esto se tiene que setear solo antes de hacer el merge final
-	//ya que internamente se usa como outputFile las salidas intermedias de los merges
-	m.setOutputFileName("/home/hugo/cc/merged.txt");
-	m.setMode(FINAL);
-	//crucemos los dedos
-	m.merge();
-
-
-
 
 	return 0;
 }

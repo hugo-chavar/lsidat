@@ -111,6 +111,7 @@ void Abb::destruir(){
 
 void Abb::escribirEnArchivo(const string& nombre){
 	std::fstream archivo;
+	cout<<"Abb esta grabando en disco a: "<<nombre<<endl; //todo sacar al finalizar el debuggeo
 	archivo.open(nombre.c_str(), fstream::out);
 	this->escribirEnOrden(this->raiz,archivo);
 	archivo.close();
