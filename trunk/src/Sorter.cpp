@@ -10,9 +10,10 @@
 
 using namespace std;
 
-Sorter::Sorter() {
+Sorter::Sorter(string outputDirectory) {
 	this->archivosCreados = 0;
 	this->arbol = new Abb();
+	this->outputDirectory = outputDirectory;
 }
 
 Sorter::~Sorter() {
@@ -33,7 +34,7 @@ void Sorter::archivarArbol() {
 	this->archivosCreados++;
 	string aux = static_cast<ostringstream*>(&(ostringstream()
 			<< this->archivosCreados))->str();
-	string nombreArchivo = string(Xstr(DIR_SORTER)) + string("/particion.") + pad_left_copy(aux,6,'0');
+	string nombreArchivo = outputDirectory + string("/particion.") + pad_left_copy(aux,6,'0');
 	this->arbol->escribirEnArchivo(nombreArchivo);
 }
 
