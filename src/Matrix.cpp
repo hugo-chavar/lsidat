@@ -20,22 +20,20 @@ int Matrix::calculateGlobalFrequency(list<InfoPalabra> wordInfo) {
 	return gFreq;
 }
 
-double Matrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq) {
+double Matrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq, int numFiles) {
 	list<InfoPalabra>::iterator iter = wordInfo.begin();
 	double gWeight = 0;
-	int nDoc = 0;
 	unsigned i;
 	for (i=0; i < wordInfo.size(); i++) {
-		nDoc++;
 		int lFreq= iter->getCantidad();
 		gWeight += (lFreq/(double)gFreq) * log(lFreq/(double)gFreq);
 		advance(iter, 1);
 	}
-	gWeight = (gWeight/(double)log(nDoc)) + 1;
+	gWeight = (gWeight/(double)log(numFiles)) + 1;
 	return gWeight;
 }
 
-bool Matrix::buildInitialMatrix(string inputPath, string outputPath) {
+bool Matrix::buildInitialMatrix(string inputPath, string outputPath, int numFiles) {
 	Archivo inputFile;
 	Archivo outputFile;
 	if (!inputFile.abrirLectura(inputPath) or !outputFile.abrirEscritura(outputPath)) {
@@ -47,7 +45,7 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath) {
 		word.crearDesdeString(line);
 		list <InfoPalabra> wordInfo = word.getInformacion();
 		int gFreq = calculateGlobalFrequency(wordInfo);
-		double gWeight = calculateGlobalWeight(wordInfo, gFreq);
+		double gWeight = calculateGlobalWeight(wordInfo, gFreq, numFiles);
 		string lineToWrite = "";
 		while (!wordInfo.empty()) {
 			int doc = wordInfo.front().getDocumento();

@@ -8,11 +8,6 @@
 #ifndef SORTER_H_
 #define SORTER_H_
 
-#define DIRECTORY 		/home/hugo/Downloads/classic //todo: ver otra manera de manejar los directorios
-#define DIR_SORTER 		DIRECTORY/tempsorter
-#define Str(x) 			#x
-#define Xstr(x) 		Str(x)
-
 #define MAX_NODOS 		1000
 
 #include <iostream>
@@ -24,7 +19,7 @@ using namespace std;
 
 class Sorter {
 public:
-	Sorter();
+	Sorter(string outputDirectory);
 	~Sorter();
 	void agregarPalabra(string palabra,int doc);
 	void terminar();
@@ -33,6 +28,7 @@ public:
 private:
 	unsigned archivosCreados;
 	Abb* arbol;
+	string outputDirectory;
 	bool arbolCompleto();
 	void archivarArbol();
 };

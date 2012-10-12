@@ -22,12 +22,12 @@ using namespace std;
 class Matrix {
 public:
 	Matrix();
-	bool buildInitialMatrix(string inputPath, string outputPath);
+	bool buildInitialMatrix(string inputPath, string outputPath, int numFiles);
 	void SVD();
 	virtual ~Matrix();
 private:
 	int calculateGlobalFrequency(list<InfoPalabra> wordInfo);
-	double calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq);
+	double calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq, int numFiles);
 };
 
 #endif /* MATRIX_H_ */

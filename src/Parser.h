@@ -7,8 +7,6 @@
 
 #ifndef PARSER_H_
 #define PARSER_H_
-//#define DIRECTORY "/media/DATOS/Organizacion de Datos/Pruebas/Archivos" // CAMBIAR
-//Hugo: pasé la linea de arriba a Sorter.h, para empezar a unificar
 
 #include <iostream>
 #include <string>
@@ -23,8 +21,10 @@ class Parser {
 public:
 	Parser();
 	virtual ~Parser();
-	bool ProcessFiles();
+	bool ProcessFiles(string inputDirectory, string outputDirectory);
+	int numFiles();
 private:
+	int cantArchivos;
 	bool Process(Sorter* sorter, string filePath, int doc);
 };
 
