@@ -32,7 +32,8 @@ void Merger::setOutputFolderName(string foldername) {
 void Merger::setNextFileName(){
 	if (this->mode == STAGE){
 		//si es FINAL debe estar seteado con setOutputFileName
-		string aux = static_cast<ostringstream*>( &(ostringstream() << this->currentFileNumber) )->str();
+		//string aux = static_cast<ostringstream*>( &(ostringstream() << this->currentFileNumber) )->str();
+		string aux = toString(this->currentFileNumber);
 		this->outputFileName = this->outputFolderName + "/"+"etapa."+ pad_left_copy(aux,4,'0');;
 		this->currentFileNumber++;
 	}

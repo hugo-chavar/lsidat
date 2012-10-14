@@ -5,6 +5,7 @@
  *      Author: Yamila Glinsek
  */
 
+#include <iomanip>
 #include "Matrix.h"
 
 Matrix::Matrix() { }
@@ -43,6 +44,10 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath, int numFile
 		string line = inputFile.leerLinea();
 		Palabra word;
 		word.crearDesdeString(line);
+		//
+		if ((word.cantidad()/(double)numFiles) > 0.80){
+			cout<<"Palabra \""<<word.getContenido()<<"\" aparece en mas del 80% de los docs"<<endl;
+		}
 		list <InfoPalabra> wordInfo = word.getInformacion();
 		int gFreq = calculateGlobalFrequency(wordInfo);
 		double gWeight = calculateGlobalWeight(wordInfo, gFreq, numFiles);
@@ -52,8 +57,10 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath, int numFile
 			int lFreq = wordInfo.front().getCantidad();
 			double lWeight = log(lFreq + 1);
 			double weight = lWeight * gWeight;
-			string sDoc = static_cast<ostringstream*>( &(ostringstream() << doc) )->str();
-			string sWeight = static_cast<ostringstream*>( &(ostringstream() << weight) )->str();
+			//string sDoc = static_cast<ostringstream*>( &(ostringstream() << doc) )->str();
+			string sDoc = toString(doc);
+			//string sWeight = static_cast<ostringstream*>( &(ostringstream()<< weight) )->str();
+			string sWeight = toString(weight,4); //redondeo a 4 decimales
 			lineToWrite += sDoc + ":" + sWeight + " ";
 			wordInfo.pop_front();
 		}
