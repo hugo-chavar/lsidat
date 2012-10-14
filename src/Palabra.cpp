@@ -97,9 +97,11 @@ string Palabra::imprimir(){
 	list<InfoPalabra>::iterator it = this->informacion.begin();
 	unsigned i = 0;
 	while (i < informacion.size()) {
-		aux = static_cast<ostringstream*>( &(ostringstream() << it->getDocumento()) )->str();
+		//aux = static_cast<ostringstream*>( &(ostringstream() << it->getDocumento()) )->str();
+		aux = toString(it->getDocumento());
 		salida = salida+","+ aux;
-		aux = static_cast<ostringstream*>( &(ostringstream() << it->getCantidad()) )->str();
+		aux = toString(it->getCantidad());
+		//aux = static_cast<ostringstream*>( &(ostringstream() << it->getCantidad()) )->str();
 		salida = salida+","+ aux;
 		advance(it, 1);
 		i++;
@@ -113,4 +115,8 @@ void Palabra::resetearInformacion(){
 
 int Palabra::compararCon(string clave){
 	return this->contenido.compare(clave);
+}
+
+unsigned Palabra::cantidad(){
+	return (this->informacion.size());
 }

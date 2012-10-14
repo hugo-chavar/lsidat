@@ -4,6 +4,7 @@
  *  Created on: Sep 14, 2012
  *      Author: hugo
  */
+#include <iomanip>
 #include "Texto.h"
 
 
@@ -53,6 +54,24 @@ std::string pad_left_copy(std::string& s, unsigned size, const char& fill){
 
 }
 
+std::string toString(int n){
+	std::string aux;
+	aux = static_cast<std::ostringstream*>( &(std::ostringstream() << n) )->str();
+	return aux;
+}
+
+std::string toString(unsigned n){
+	std::string aux;
+	aux = static_cast<std::ostringstream*>( &(std::ostringstream() << n) )->str();
+	return aux;
+}
 
 
-
+std::string toString(double number, int decimals ){
+	std::ostringstream aux;
+	std::string s;
+	aux << std::setprecision(decimals)  <<std::fixed<< number;
+	s = aux.str();
+	//aux = static_cast<std::ostringstream*>( &(std::ostringstream() << n) )->str();
+	return s;
+}

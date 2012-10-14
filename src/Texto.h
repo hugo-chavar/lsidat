@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <stdlib.h>
 
 struct split {
@@ -58,5 +59,11 @@ std::string trim_copy(const std::string& s, const std::string& delimiters =
 
 std::string pad_left_copy(std::string& s, unsigned size,
 		const char& fill);
+
+std::string toString(int n);
+
+std::string toString(unsigned n);
+
+std::string toString(double number, int decimals );
 
 #endif /* TEXTO_H_ */

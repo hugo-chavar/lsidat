@@ -2,125 +2,111 @@
  * Abb.cpp
  *
  *  Created on: Sep 14, 2012
- *      Author: andy
+ *      Author: Andres Sanabria
  */
 
 #include "Abb.h"
 #include <iostream>
 #include <fstream>
 
-
 Abb::Abb() {
-		this->raiz = NULL;
-		this->cantidad = 0;
+	this->raiz = NULL;
+	this->cantidad = 0;
 }
 
 Abb::~Abb() {
 	this->destruir();
 }
 
-unsigned Abb::getCantidad(){
+unsigned Abb::getCantidad() {
 	return this->cantidad;
 }
 
-void Abb::agregarPalabra(string palabra,unsigned documento)
-{
-	NodoArbol *nodo=this->raiz;
+void Abb::agregarPalabra(string palabra, unsigned documento) {
+	NodoArbol *nodo = this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	while (nodo && (nodo->getPalabra()->compararCon(palabra)!=0)) // Devuelve -1 si la clave del nodo es menor, 0 si son iguales y 1 si la clave es mayor.
+	while (nodo && ((nodo->getPalabra()->compararCon(palabra)) != 0)) // Devuelve -1 si la clave del nodo es menor, 0 si son iguales y 1 si la clave es mayor.
 	{
 		nodo_padre = nodo;
-		if (nodo->getPalabra()->compararCon(palabra)>0)
-			nodo=nodo->getIzquierdo();
+		if ((nodo->getPalabra()->compararCon(palabra)) > 0)
+			nodo = nodo->getIzquierdo();
 		else
-			nodo=nodo->getDerecho();
+			nodo = nodo->getDerecho();
 	}
-	if (!nodo)
-	{
-		nodo= new NodoArbol(palabra);
+	if (!nodo) {
+		nodo = new NodoArbol(palabra);
 		nodo->getPalabra()->agregarAparicion(documento);
-		if (nodo_padre)
-		{
-			if (nodo->getPalabra()->compararCon(nodo_padre->getPalabra()->getContenido())>0)
+		if (nodo_padre) {
+			if ((nodo->getPalabra()->compararCon(
+					nodo_padre->getPalabra()->getContenido())) > 0)
 				nodo_padre->setDerecho(nodo);
 			else
 				nodo_padre->setIzquierdo(nodo);
-		}
-		else
+		} else
 			this->raiz = nodo;
 		this->cantidad++;
-	}
-	else
-	{
+	} else {
 		nodo->getPalabra()->agregarAparicion(documento);
 	}
 }
 
-
-void Abb::borrar(const string clave)
-{
+void Abb::borrar(const string clave) {
 	NodoArbol *nodo = this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	while (nodo && (nodo->getPalabra()->compararCon(clave)!=0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
+	while (nodo && ((nodo->getPalabra()->compararCon(clave)) != 0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
 	{
 		nodo_padre = nodo;
-		if (nodo->getPalabra()->compararCon(clave)>0)
-			nodo=nodo->getIzquierdo();
+		if ((nodo->getPalabra()->compararCon(clave)) > 0)
+			nodo = nodo->getIzquierdo();
 		else
-			nodo=nodo->getDerecho();
+			nodo = nodo->getDerecho();
 	}
 	NodoArbol *nodo_aux = NULL;
-	if ((!nodo->getDerecho())&& (nodo->getIzquierdo()))
+	if ((!nodo->getDerecho()) && (nodo->getIzquierdo()))
 		nodo_aux = nodo->getIzquierdo();
 	else if (!nodo->getIzquierdo() && nodo->getDerecho())
 		nodo_aux = nodo->getDerecho();
-	else if (nodo->getIzquierdo() && nodo->getDerecho())
-	{
+	else if (nodo->getIzquierdo() && nodo->getDerecho()) {
 		NodoArbol *padre_aux = NULL;
-		nodo_aux = nodo->getIzquierdo();//
-		while (nodo_aux->getDerecho())
-		{
+		nodo_aux = nodo->getIzquierdo();
+		while (nodo_aux->getDerecho()) {
 			padre_aux = nodo_aux;
 			nodo_aux = nodo_aux->getDerecho();
 		}
-		if (padre_aux)
-		{
+		if (padre_aux) {
 			padre_aux->setDerecho(nodo_aux->getIzquierdo());
 			nodo_aux->setIzquierdo(nodo->getIzquierdo());
 		}
 		nodo_aux->setDerecho(nodo->getDerecho());
 	}
-	if (nodo_padre)
-	{
-		if (nodo->getPalabra()->compararCon(nodo_padre->getPalabra()->getContenido())>0)
+	if (nodo_padre) {
+		if (nodo->getPalabra()->compararCon(
+				nodo_padre->getPalabra()->getContenido()) > 0)
 			nodo_padre->setDerecho(nodo_aux);
 		else
 			nodo_padre->setIzquierdo(nodo_aux);
-	}
-	else
+	} else
 		this->raiz = nodo_aux;
 	delete nodo;
 	this->cantidad--;
 }
 
-// Destruye el árbol.
-void Abb::destruir(){
+void Abb::destruir() {
 	while (this->raiz)
 		this->borrar(this->raiz->getPalabra()->getContenido());
 }
 
-void Abb::escribirEnArchivo(const string& nombre){
+void Abb::escribirEnArchivo(const string& nombre) {
 	std::fstream archivo;
-	//cout<<"Abb esta grabando en disco a: "<<nombre<<endl; //todo sacar al finalizar el debuggeo
 	archivo.open(nombre.c_str(), fstream::out);
-	this->escribirEnOrden(this->raiz,archivo);
+	this->escribirEnOrden(this->raiz, archivo);
 	archivo.close();
 }
 
-void Abb::escribirEnOrden(NodoArbol* nodo,fstream& archivo){
+void Abb::escribirEnOrden(NodoArbol* nodo, fstream& archivo) {
 	if (nodo->getIzquierdo())
-				this->escribirEnOrden(nodo->getIzquierdo(),archivo);
-	archivo<<nodo->getPalabra()->imprimir()<<endl;
+		this->escribirEnOrden(nodo->getIzquierdo(), archivo);
+	archivo << nodo->getPalabra()->imprimir() << endl;
 	if (nodo->getDerecho())
-				this->escribirEnOrden(nodo->getDerecho(),archivo);
+		this->escribirEnOrden(nodo->getDerecho(), archivo);
 }
