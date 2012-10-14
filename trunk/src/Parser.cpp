@@ -42,10 +42,11 @@ bool Parser::ProcessFiles(string inputDirectory, string outputDirectory) {
 	int doc = 1;
 	Sorter* sorter = new Sorter(outputDirectory);
 	DirList directories;
-	if (!directories.crearDesdeDirectorio(inputDirectory))
+	if (!directories.createFromDirectory(inputDirectory))
 		return false;
-	while (directories.haySiguiente()) {
-		if (!Process(sorter, directories.siguienteLargo(), doc))
+	directories.writeToFile(inputDirectory+"/adm/fileList.txt");
+	while (directories.hasNext()) {
+		if (!Process(sorter, directories.nextFullPath(), doc))
 			return false;
 		doc++;
 	}

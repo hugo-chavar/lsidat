@@ -9,18 +9,13 @@
 //#include "Texto.h"
 
 Merger::Merger() {
-	//system("echo -n '1. Current Directory is '; pwd");
-	//system("mkdir temp");
-	//pongo en 1 todos los flags
-
-
 }
 
 void Merger::setInputDir(string dir) {
 
 	this->inputDir = dir;
-	this->directories.limpiar();
-	this->directories.crearDesdeDirectorio(inputDir);
+	this->directories.clean();
+	this->directories.createFromDirectory(inputDir);
 
 }
 
@@ -49,7 +44,7 @@ void Merger::setMode(mergeMode mode){
 	if (this->mode == STAGE){
 		this->filesByStep = this->calculateFilesPerStage();
 	} else { // es FINAL
-		this->filesByStep = directories.getCantidad();
+		this->filesByStep = directories.count();
 	}
 	words.clear();
 	for (unsigned i = 0; i < this->filesByStep; i++) {
@@ -60,33 +55,20 @@ void Merger::setMode(mergeMode mode){
 void Merger::initializeStage() {
 	unsigned i = 0;
 	minCounted = false;
-
 	this->wordsReaded.set();
-	//cout<<"wordsReaded ANTES DE EMPEZAR "<<endl;
-	//cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
 	this->openFiles.reset();
 
-	//if (!finDelMerge()) { // TODO podria retornar falso si llego el fin del merge..
-	while ((i < this->filesByStep) && (directories.haySiguiente())) {
+	while ((i < this->filesByStep) && (directories.hasNext())) {
 		stepFiles[i] = new Archivo();
-		stepFiles[i]->abrirLectura(directories.siguienteLargo());
+		stepFiles[i]->abrirLectura(directories.nextFullPath());
 		openFiles.set(i);
 		readFromFileNumber(i);
 		i++;
-//			cout << "Primer palabra " << i << ": " << words[i].imprimir()
-//					<< endl;
-//			cout << "maxDoc: " << words[i].maxDoc() << endl;
-//			cout << "minDoc: " << words[i].minDoc() << endl;
 	}
-	//cout<<"wordsReaded DESPUES DE INICIALIZAR "<<endl;
-	//cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
-	//}
 }
 
 void Merger::readFromFileNumber(unsigned nroArchivo) {
 	string linea;
-
-	//if (openFiles.test(nroArchivo)) { // estoy haciendo doble chequeo del if..corregir
 	linea = stepFiles[nroArchivo]->leerLinea();
 	if (stepFiles[nroArchivo]->eof()) {
 		delete stepFiles[nroArchivo];
@@ -94,21 +76,12 @@ void Merger::readFromFileNumber(unsigned nroArchivo) {
 	} else {
 		words[nroArchivo].crearDesdeString(linea);
 		wordsReaded.reset(nroArchivo);
-		//cout<<"Leido arch "<<nroArchivo<<"= " << linea << endl;
 	}
-//	} else {
-//		cout
-//				<< "Esta intentando leer un archivo que no pertenece al set actual."
-//				<< endl;
-//	}
-	//return linea;
 }
 
 void Merger::readMore() {
-	// el ultimo metodo dificil de implementar.. veamos ..
 	//en cada posicion donde WORDSREADED este en SET y el archivo sigue vivo
 	//se debe leer el archivo en esa posicion
-	// del resto del papeleo se encargan los otros metodos
 	for (unsigned i = 0; i < this->filesByStep; i++) { //TODO mejorar este for.. mismo problema q en inicializar
 		if ((wordsReaded.test(i)) && (openFiles.test(i))) {
 			readFromFileNumber(i);
@@ -126,17 +99,12 @@ unsigned Merger::countMinima() {
 	minWords.reset();
 	this->minPosition = 0;
 	string minPalabra = words[this->minPosition].getContenido();
-//	cout << "menor palabra es: " << minPalabra << endl;
-//	cout<<"wordsReaded ANTES DE BUSCAR MINIMO "<<endl;
-//	cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
 	while (wordsReaded.test(this->minPosition)) {
 		this->minPosition++;
 		minPalabra = words[this->minPosition].getContenido();
-		//cout << "menor palabra es: " << minPalabra << endl;
 	}
 
 	minPalabra = words[this->minPosition].getContenido();
-//	cout << "menor palabra es: " << minPalabra << endl;
 	minWords.set(this->minPosition);
 
 	for (j = (this->minPosition + 1); j < words.size(); j++) {
@@ -151,7 +119,6 @@ unsigned Merger::countMinima() {
 				minWords.reset();
 				minWords.set(j);
 				minPalabra = words[j].getContenido();
-//				cout << "Ahora la menor palabra es: " << minPalabra << endl;
 			}
 		}
 	}
@@ -180,20 +147,13 @@ void Merger::joinWords(unsigned a, unsigned b) {
 	words[max].resetearInformacion();
 
 	//desafecto a la palabra appendeada
-	//cout<<"minWords: "<<minWords.to_string()<<endl;
 	minWords.reset(max);
-	//cout<<"minWords: "<<minWords.to_string()<<endl;
 	//indico que el archivo del cual se desafecto la palabra debe ser leido
-	//cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
 	wordsReaded.set(max);
-	//cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
 	this->minPosition = min;
 }
 
 void Merger::fixMinima() {
-	//Este metodo ya funciona bien
-	//Atencion: supone que el orden de los documentos se mantiene en el orden de los archivos
-	//cout<<"minWords: "<<minWords.to_string()<<endl;
 	unsigned min1, j = 0;
 	while (!minWords.test(j)) {
 		j++;
@@ -202,27 +162,20 @@ void Merger::fixMinima() {
 	while (!minWords.test(j)) {
 		j++;
 	}
-//	cout << "min1: " << words[min1].getContenido() << " min2: "<< words[j].getContenido() << endl;
 	joinWords(min1, j);
-	//this->minCounted = false; esta linea es problematica, no volver a ponerla
-
 }
 
 void Merger::writeMinimum() {
-	//string linea;
-	//linea = stepFiles[this->minPosition]->leerLinea();
 	this->outputFile.escribirLinea(words[this->minPosition].imprimir());
 	this->wordsReaded.set(this->minPosition);
 	words[this->minPosition].resetearInformacion();
 	this->minCounted = false;
-	//cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
 }
 
 void Merger::merge() {
 	unsigned etapa,cantmin;
 	etapa =1;
 	while (!endOfMerge()) {
-		cout<<"Etapa: "<<etapa<<endl;
 		setNextFileName();
 		this->outputFile.abrirEscritura(this->outputFileName);
 		initializeStage();
@@ -230,25 +183,10 @@ void Merger::merge() {
 		while (!endOfStage()) {
 			cantmin = countMinima();
 			while (cantmin > 1) {
-				//cout << "Antes de resolver, minimos: "<<cantmin << endl;
-				//cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
-//			for (unsigned i = 0; i < this->filesByStep; i++) {
-//				if (!wordsReaded.test(i)) {
-//					cout << "Palabra " << i << ": " << words[i].imprimir()<< endl;
-//				}
-//			}
 				fixMinima();
-//			cout << "Despues de resolver " << endl;
-//			cout<<"wordsReaded: "<<wordsReaded.to_string()<<endl;
-//			for (unsigned i = 0; i < this->filesByStep; i++) {
-//				if (!wordsReaded.test(i)) {
-//					cout << "Palabra " << i << ": " << words[i].imprimir()<< endl;
-//				}
-//			}
 				cantmin = countMinima();
 			}
 			writeMinimum();
-			//cout << "Leyendo archivos que tenian la minima palabra.. " << endl;
 			readMore();
 
 		}
@@ -258,22 +196,20 @@ void Merger::merge() {
 }
 
 bool Merger::endOfStage() {
-	//cout << "Archivos abiertos: " << openFiles.to_string() << endl;
 	return !openFiles.any();
 }
 
 unsigned Merger::calculateFilesPerStage() {
 	unsigned i = 1;
 
-	while ((i * i) < directories.getCantidad()) { //
+	while ((i * i) < directories.count()) { //
 		i++;
-		//cout<<"todavia i =  "<<i<<"i<<1 = "<<(i*i)<<endl;
 	}
 	return i;
 }
 
 bool Merger::endOfMerge() {
-	return !directories.haySiguiente();
+	return !directories.hasNext();
 }
 
 void Merger::closeAllFiles() {

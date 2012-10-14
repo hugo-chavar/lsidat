@@ -9,15 +9,15 @@
 using namespace std;
 
 DirList::DirList() {
-	_cantidad = 0;
-	_posicionActual=0;
+	_count = 0;
+	_currentPosition=0;
 
 }
 
 DirList::~DirList() {
 }
 
-bool DirList::crearDesdeDirectorio(string dir) {
+bool DirList::createFromDirectory(string dir) {
 	string filepath, filename;
 	//ifstream fin; por si necesito abrir los archivos
 	DIR *dp;
@@ -25,10 +25,10 @@ bool DirList::crearDesdeDirectorio(string dir) {
 	struct stat filestat;
 	dp = opendir(dir.c_str());
 	if (dp == NULL) {
-		cout << "Se produjo un error al abrir el directorio " << dir << endl;
+		cerr << "Se produjo un error al abrir el directorio " << dir << endl;
 		return false;
 	}
-	this->directorio = dir;
+	this->directory = dir;
 
 	while ((dirp = readdir(dp))) {
 		filepath = dir + "/" + dirp->d_name;
@@ -40,11 +40,11 @@ bool DirList::crearDesdeDirectorio(string dir) {
 		if (S_ISDIR( filestat.st_mode ))
 			continue;
 		filename = dirp->d_name;
-		archivos.push_back(filename);
-		_cantidad++;
+		files.push_back(filename);
+		_count++;
 
 		//por ahora solo muestro los nombres de archivos completos
-		cout << filepath << endl;
+		//cout << filepath << endl;
 
 		//por si hace falta abrir los archivos dejo el codigo para hacerlo
 //		fin.open( filepath.c_str() );
@@ -53,47 +53,49 @@ bool DirList::crearDesdeDirectorio(string dir) {
 //		    fin.close();
 	}
 	//queda ordenado por nombre de archivo
-	archivos.sort();
+	files.sort();
 	//dejo apuntando al primero
-	iterador = archivos.begin();
+	iterador = files.begin();
 
 	closedir(dp);
+	cout << "Procesamiento exitoso de directorio " << dir <<"."<< endl;
+	cout << "Cantidad de archivos " << _count <<"."<< endl;
 	return true;
 
 }
 
-string DirList::siguiente(){
+string DirList::next(){
 	string sigte = *iterador;
 	iterador++;
-	_posicionActual++;
+	_currentPosition++;
 
 	return sigte;
 
 }
 
-string DirList::siguienteLargo(){
-	string sigte = directorio+"/"+(*iterador);
+string DirList::nextFullPath(){
+	string sigte = directory+"/"+(*iterador);
 	iterador++;
-	_posicionActual++;
+	_currentPosition++;
 
 	return sigte;
 
 }
-bool DirList::haySiguiente(){
-	return (_posicionActual<_cantidad);
+bool DirList::hasNext(){
+	return (_currentPosition<_count);
 }
 
-void DirList::limpiar(){
-	archivos.clear();
-	_cantidad = 0;
-	_posicionActual=0;
+void DirList::clean(){
+	files.clear();
+	_count = 0;
+	_currentPosition=0;
 }
 
 bool DirList::seek(unsigned pos){
-	bool status = (pos<_cantidad);
+	bool status = (pos<_count);
 	if(status){
-		_posicionActual=pos;
-		iterador = archivos.begin();
+		_currentPosition=pos;
+		iterador = files.begin();
 		for (unsigned i=0;i<pos;i++){
 			iterador++;
 		}
@@ -101,10 +103,19 @@ bool DirList::seek(unsigned pos){
 	return status;
 }
 
-unsigned DirList::getCantidad() const {
-	return _cantidad;
+unsigned DirList::count() const {
+	return _count;
 }
 
-unsigned DirList::posicionActual(){
-	return _posicionActual;
+unsigned DirList::currentPosition(){
+	return _currentPosition;
+}
+
+void DirList::writeToFile(string filepath){
+	Archivo file;
+	file.abrirEscritura(filepath);
+	while (this->hasNext()){
+		file.escribirLinea(this->next());
+	}
+	seek(0);
 }

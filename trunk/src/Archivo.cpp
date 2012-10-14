@@ -13,7 +13,6 @@ Archivo::Archivo(const std::string& path, bool & hayErrores) {
 }
 
 Archivo::Archivo() {
-
 }
 
 Archivo::Archivo(const Archivo& a) {
@@ -26,8 +25,8 @@ Archivo::operator=(const Archivo& a) {
 }
 
 bool Archivo::abrirLectura(const std::string& path) {
-	//Intenta abrir el archivo en modo lectura - escritura.
-	elArchivo.open(path.c_str(), std::fstream::in | std::fstream::out);
+	//Intenta abrir el archivo en modo lectura
+	elArchivo.open(path.c_str(), std::fstream::in); //| std::fstream::out
 	nombre = "Lectura:" + path;
 	//cout << "Abriendo .." << nombre << endl;
 
@@ -42,7 +41,7 @@ bool Archivo::abrirLectura(const std::string& path) {
 }
 
 bool Archivo::abrirEscritura(const std::string& path) {
-	//Intenta abrir el archivo en modo lectura - escritura.
+	//Intenta abrir el archivo en modo escritura.
 	elArchivo.open(path.c_str(), std::fstream::out);
 	nombre = "Escritura:" + path;
 
@@ -56,9 +55,6 @@ bool Archivo::abrirEscritura(const std::string& path) {
 	return true;
 }
 
-/**
- * Cierra el archivo (no lo destruye fisicamente).
- */
 Archivo::~Archivo() {
 	//cout << "Ejecutando destructor .." << nombre << endl;
 	this->cerrar();
@@ -67,12 +63,6 @@ Archivo::~Archivo() {
 bool Archivo::eof() {
 	return elArchivo.eof();
 }
-
-/**
- * Pre: El archivo XML debe estar abierto para lectura.
- * Post: Lee el siguiente caracter del archivo y lo devuelve en el parametro,
- * devuelve verdadero si la lectura fue exitosa, y falso sino.
- */
 bool Archivo::leerCaracter(char &salida) {
 	char caracter;
 	// lee del archivo parte de la linea, hasta haber leido:
@@ -90,7 +80,6 @@ bool Archivo::leerCaracter(char &salida) {
 	}
 	return true;
 }
-
 
 /**
  * Pre:  El archivo debe estar abierto para lectura.
@@ -115,7 +104,6 @@ void Archivo::irAlFinal() {
 	elArchivo.seekp(0, ios::end);
 	elArchivo.tellg();
 }
-
 
 void Archivo::cerrar() {
 	if (elArchivo.is_open()) {
