@@ -16,27 +16,29 @@
 #include <sys/types.h>
 #include <string>
 #include <list>
+#include "Archivo.h"
 
 using namespace std;
 
 class DirList {
 private:
-	list <string> archivos;
+	list <string> files;
 	list <string>::iterator iterador;
-	unsigned _cantidad;
-	unsigned _posicionActual;
-	string directorio;
+	unsigned _count;
+	unsigned _currentPosition;
+	string directory;
 public:
 	DirList();
 	~DirList();
-	bool crearDesdeDirectorio(string);
-	bool haySiguiente();
-	string siguiente();
-	string siguienteLargo();
+	bool createFromDirectory(string);
+	bool hasNext();
+	string next();
+	string nextFullPath();
 	bool seek(unsigned);
-	unsigned posicionActual();
-	unsigned getCantidad() const;
-	void limpiar();
+	unsigned currentPosition();
+	unsigned count() const;
+	void clean();
+	void writeToFile(string);
 
 };
 

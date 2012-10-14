@@ -111,7 +111,7 @@ void Abb::destruir(){
 
 void Abb::escribirEnArchivo(const string& nombre){
 	std::fstream archivo;
-	cout<<"Abb esta grabando en disco a: "<<nombre<<endl; //todo sacar al finalizar el debuggeo
+	//cout<<"Abb esta grabando en disco a: "<<nombre<<endl; //todo sacar al finalizar el debuggeo
 	archivo.open(nombre.c_str(), fstream::out);
 	this->escribirEnOrden(this->raiz,archivo);
 	archivo.close();
@@ -124,18 +124,3 @@ void Abb::escribirEnOrden(NodoArbol* nodo,fstream& archivo){
 	if (nodo->getDerecho())
 				this->escribirEnOrden(nodo->getDerecho(),archivo);
 }
-
-//void Abb::obtenerVectorOrdenado(NodoArbol** & vector){
-//	unsigned posicion=0;
-//	this->agregarElementosVector(this->raiz,posicion,vector);
-//
-//}
-
-//void Abb::agregarElementosVector(NodoArbol* nodo,unsigned & posicion,NodoArbol** & vector){
-//	if (nodo->getIzquierdo())
-//			this->agregarElementosVector(nodo->getIzquierdo(),posicion,vector);
-//	vector[posicion]=nodo;
-//	posicion++;
-//	if (nodo->getDerecho())
-//			this->agregarElementosVector(nodo->getDerecho(),posicion,vector);
-//}
