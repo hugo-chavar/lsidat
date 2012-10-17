@@ -90,7 +90,7 @@ int main()
 	// Creacion de la matriz inicial.
 	createDirectory(Xstr(DIR_MATRIX));
 	Matrix matrix;
-	cout<<"Building initial matrix..";
+	cout<<"Building initial matrix.."<<endl;
 	matrix.buildInitialMatrix(MERGE_FILE, INITIAL_MATRIX_FILE, parser.numFiles());
 	cout<<"Done"<<endl;
 

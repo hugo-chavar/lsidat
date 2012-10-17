@@ -25,8 +25,9 @@ double Matrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq, int 
 	list<InfoPalabra>::iterator iter = wordInfo.begin();
 	double gWeight = 0;
 	unsigned i;
+	int lFreq;
 	for (i=0; i < wordInfo.size(); i++) {
-		int lFreq= iter->getCantidad();
+		lFreq = iter->getCantidad();
 		gWeight += (lFreq/(double)gFreq) * log(lFreq/(double)gFreq);
 		advance(iter, 1);
 	}
@@ -40,13 +41,17 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath, int numFile
 	if (!inputFile.abrirLectura(inputPath) or !outputFile.abrirEscritura(outputPath)) {
 		return false;
 	}
+	double ratio;
 	while (!inputFile.eof()) {
 		string line = inputFile.leerLinea();
 		Palabra word;
 		word.crearDesdeString(line);
-		//
-		if ((word.cantidad()/(double)numFiles) > 0.80){
-			cout<<"Palabra \""<<word.getContenido()<<"\" aparece en mas del 80% de los docs"<<endl;
+		//esto se va a usar para las stop words
+		ratio = word.cantidad()/(double)numFiles;
+		if (ratio > 0.80){
+			cout<<"Palabra \""<< word.getContenido()
+					<< "\" aparece en mas del 80% ("
+					<< toString(ratio*100,2)<<"%) de los docs" << endl;
 		}
 		list <InfoPalabra> wordInfo = word.getInformacion();
 		int gFreq = calculateGlobalFrequency(wordInfo);
