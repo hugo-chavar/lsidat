@@ -8,7 +8,7 @@
 #ifndef SORTER_H_
 #define SORTER_H_
 
-#define MAX_NODOS 		1000
+#define MAX_NODOS 		10000
 
 #include <iostream>
 #include <string>

@@ -9,6 +9,7 @@
 #define MERGER_H_
 
 #define MAX_FILES_MERGE 1024
+//#define MIN_FILES_STAGE_MERGE 10
 
 #include <iostream>
 #include <bitset>
