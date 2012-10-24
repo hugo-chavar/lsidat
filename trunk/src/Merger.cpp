@@ -42,6 +42,9 @@ void Merger::setNextFileName(){
 void Merger::setMode(mergeMode mode){
 	this->mode = mode;
 	Palabra p;
+	if (directories.count() < 5){
+		//this->mode = FINAL; //TODO ver como evitar un paso
+	}
 	if (this->mode == STAGE){
 		this->filesByStep = this->calculateFilesPerStage();
 	} else { // es FINAL
