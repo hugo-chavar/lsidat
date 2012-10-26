@@ -39,7 +39,7 @@ bool Parser::Process(Sorter* sorter, string filePath, int doc) {
 }
 
 bool Parser::ProcessFiles(string inputDirectory, string outputDirectory) {
-	int doc = 1;
+	int doc = 0;
 	Sorter* sorter = new Sorter(outputDirectory);
 	DirList directories;
 	if (!directories.createFromDirectory(inputDirectory))
@@ -50,7 +50,7 @@ bool Parser::ProcessFiles(string inputDirectory, string outputDirectory) {
 			return false;
 		doc++;
 	}
-	cantArchivos = doc-1;
+	cantArchivos = doc;
 	sorter->terminar();
 	delete sorter;
 	return true;
