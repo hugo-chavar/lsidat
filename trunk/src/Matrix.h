@@ -23,7 +23,7 @@ class Matrix {
 public:
 	Matrix();
 	bool buildInitialMatrix(string inputPath, string outputPath, int numFiles);
-	void SVD();
+	int SVD(string inputPath, string outputPath,int rank);
 	virtual ~Matrix();
 private:
 	int calculateGlobalFrequency(list<InfoPalabra> wordInfo);
