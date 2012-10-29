@@ -93,6 +93,13 @@ int main()
 	cout<<"Building initial matrix.."<<endl;
 	matrix.buildInitialMatrix(MERGE_FILE, INITIAL_MATRIX_FILE, parser.numFiles());
 	cout<<"Done"<<endl;
+	cout<<"Reduccion y descomposicion en valores singulares"<<endl;
+	if( matrix.SVD(INITIAL_MATRIX_FILE,DIR_MATRIX,50)==0){
+		cout<<"Descomposition done"<<endl;
+	}
+	else{
+		cout<<"Some Errors ocurred during Descomposition"<<endl;
+	}
 
 	cout<<"Removing some temporary files..";
 	//solo borro el tempmerger como ejemplo, comentar si es necesario revisar los archivos

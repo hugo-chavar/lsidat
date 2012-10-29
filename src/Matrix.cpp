@@ -7,6 +7,9 @@
 
 #include <iomanip>
 #include "Matrix.h"
+#include "redsvd.hpp"
+#include "redsvdFile.hpp"
+
 
 #define THRESHOLD_STOP_WORD 0.65
 
@@ -85,7 +88,16 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath,
 	return true;
 }
 
-void Matrix::SVD() {
+int Matrix::SVD(string inputPath, string outputPath,int rank) {
+	try{
+	  cout<<endl<<endl<<"Empieza mi Prueba"<<endl;
+
+	  REDSVD::fileProcess<REDSVD::SMatrixXf, REDSVD::RedSVD>(inputPath,outputPath,rank);
+	  return 0;}
+		catch (const string& error){
+		  cerr << "Error: " << error << endl;
+		  }
+		return -1;
 }
 
 Matrix::~Matrix() {
