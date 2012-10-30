@@ -15,7 +15,7 @@
 #include "Archivo.h"
 #include "Matrix.h"
 
-#define DIRECTORY 				"/home/andy/Desktop/zzzz"//"/media/DATOS/Organizacion de Datos/Pruebas"
+#define DIRECTORY 				"/home/hugo/zz"//"/home/andy/Desktop/zzzz"//"/media/DATOS/Organizacion de Datos/Pruebas"
 #define DIR_SORTER 				DIRECTORY"/tempsorter"
 #define DIR_MERGER 				DIRECTORY"/tempmerger"
 #define DIR_MERGE_OUTPUT 		DIRECTORY"/merge"

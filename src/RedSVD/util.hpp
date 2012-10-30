@@ -23,9 +23,9 @@
 #define EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET
 
 #include <vector>
-#include </home/andy/Documents/eigen3/Eigen/Sparse>
-#include </home/andy/Documents/eigen3/Eigen/Dense>
-#include </home/andy/Documents/eigen3/Eigen/Eigenvalues>
+#include <../Eigen/Sparse>
+#include <../Eigen/Dense>
+#include <../Eigen/Eigenvalues>
 
 namespace REDSVD {
 
