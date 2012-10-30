@@ -7,8 +7,8 @@
 
 #include <iomanip>
 #include "Matrix.h"
-#include "redsvd.hpp"
-#include "redsvdFile.hpp"
+#include "RedSVD/redsvd.hpp"
+#include "RedSVD/redsvdFile.hpp"
 
 
 #define THRESHOLD_STOP_WORD 0.65
