@@ -9,7 +9,7 @@
 #define MERGER_H_
 
 #define MAX_FILES_MERGE 1024
-//#define MIN_FILES_STAGE_MERGE 10
+#define MIN_FILES_STAGE_MERGE 10
 
 #include <iostream>
 #include <bitset>
@@ -19,7 +19,8 @@
 
 enum mergeMode{
 	STAGE,
-	FINAL
+	FINAL,
+	NONE
 };
 
 class Merger {
@@ -30,6 +31,8 @@ public:
 	void setOutputFileName(string);
 	void setNextFileName();
 	void setOutputFolderName(string);
+	string getOutputFolderName();
+	string getMergedFilename();
 	void setMode(mergeMode);
 	void initializeStage();
 	void merge();

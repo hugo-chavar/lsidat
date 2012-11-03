@@ -21,11 +21,14 @@ class Parser {
 public:
 	Parser();
 	virtual ~Parser();
-	bool ProcessFiles(string inputDirectory, string outputDirectory);
+	bool ProcessFiles( string outputDirectory);
+	bool setInputDirectory(string inputDirectory);
+	void setFilesProcessedPath(string filesProcessed);
 	int numFiles();
 private:
 	int cantArchivos;
 	bool Process(Sorter* sorter, string filePath, int doc);
+	DirList directories;
 };
 
 #endif /* PARSER_H_ */

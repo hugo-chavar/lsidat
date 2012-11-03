@@ -15,95 +15,173 @@
 #include "Archivo.h"
 #include "Matrix.h"
 
-#define DIRECTORY 				"/home/hugo/zz"//"/home/andy/Desktop/zzzz"//"/media/DATOS/Organizacion de Datos/Pruebas"
-#define DIR_SORTER 				DIRECTORY"/tempsorter"
-#define DIR_MERGER 				DIRECTORY"/tempmerger"
-#define DIR_MERGE_OUTPUT 		DIRECTORY"/merge"
-#define MERGE_FILE 				DIR_MERGE_OUTPUT"/merge.txt"
-#define DIR_MATRIX				DIRECTORY"/matrix"
-#define INITIAL_MATRIX_FILE		DIR_MATRIX"/initialMatrix.txt"
-#define DIR_ADM_FILES	 		DIRECTORY"/adm"
-//lo siguiente no se usa, no quiero modificar el parser, x ahora lo harcodeo dentro del parser
-//#define FILES_LIST		 		DIR_ADM_FILES"/fileList.txt"
-#define Str(x) 					#x
-#define Xstr(x) 				Str(x)
+//#define DIRECTORY 				"/home/andy/Desktop/zzzz"//"/media/DATOS/Organizacion de Datos/Pruebas"
+//#define DIR_SORTER 				DIRECTORY"/tempsorter"
+//#define DIR_MERGER 				DIRECTORY"/tempmerger"
+//#define DIR_MERGE_OUTPUT 		DIRECTORY"/merge"
+//#define MERGE_FILE 				DIR_MERGE_OUTPUT"/merge.txt"
+//#define DIR_MATRIX				DIRECTORY"/matrix"
+//#define INITIAL_MATRIX_FILE		DIR_MATRIX"/initialMatrix.txt"
+//#define DIR_ADM_FILES	 		DIRECTORY"/adm"
+#define DIR_SORTER 				"/tempsorter"
+#define DIR_MERGER 				"/tempmerger"
+#define DIR_MERGE_OUTPUT 		"/merge"
+#define MERGE_FILE 				"/merge.txt"
+#define DIR_MATRIX				"/matrix"
+#define INITIAL_MATRIX_FILE		"/initialMatrix.txt"
+#define REDUCED_MATRIX			"/reduced"
+//#define DIR_ADM_FILES	 		"/adm"
+#define FILES_LIST		 		"/filesList.txt"
+#define TERM_LIST		 		"/termList.txt"
+#define STOPWORD_LIST		 	"/stopwordList.txt"
 
 using namespace std;
 
 
 
-void createDirectory(const char* directory) {
-	char comando[100];
-	strcpy(comando,"mkdir -p ");
-	strcat(comando,directory);
-	system(comando);
+void createDirectory(string directory) {
+	string comando = "mkdir -p "+directory;
+	system(comando.c_str());
 }
 
-void deleteDirectory(const char* directory) {
-	char comando[100];
-	strcpy(comando,"rm -rf ");
-	strcat(comando,directory);
-	system(comando);
+void deleteDirectory(string directory) {
+	string comando = "rm -rf "+directory;
+	system(comando.c_str());
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+//	cmdline::optionparser a;
+//	a.add<string>("repositorio", 'r', "nombre de repositorio", true, "");
+//	a.add<string>("dir", 'd', "carpeta de documentos", true, "");
+//	a.add<int>("rango", 'k', "rango de la matriz reducida", false, 200, cmdline::range(1, 65535));
+//	a.add("help", 0, "muestra este mensaje");
+
+//	bool ok=a.parse(argc, argv);
+//
+//	if (argc==1 || a.exist("help")){
+//		cerr<<a.usage();
+//		return 0;
+//	}
+//
+//	if (!ok){
+//		cerr<<a.error()<<endl<<a.usage();
+//		return 0;
+//	}
+//
+//	string rep =a.get<string>("indice");
+//	string sourcefiles = a.get<string>("dir");
+	//int rango = a.get<int>("rango");
+
+	//cout<<"argc "<<argc<<endl;
+	if (argc != 4){
+		cerr<<"Cantidad de argumentos invalidos."<<endl;
+		return 0;
+	}
+
+	string rep,sourcefiles;
+	rep = argv[1];
+	sourcefiles = argv[3];
+	int rango = atoi(argv[2]);
+	rango = abs(rango);
+	if((rango < 20)||(rango>500)){
+		cerr<<"Valor de reduccion fuera de rango, ingrese entre 20 y 500"<<endl;
+		return 0;
+	}
+
+
+	string diradmfiles = rep;
+	string filesList = diradmfiles+FILES_LIST;
+
+	Parser parser;
+	//se verifica si el directorio ingresado es valido
+	if(!parser.setInputDirectory(sourcefiles)){
+		return 0;
+	}
+
+	createDirectory(diradmfiles);
+	parser.setFilesProcessedPath(filesList);
 
 	// Parseo de documentos y creacion de archivos auxiliares ordenados.
-	createDirectory(Xstr(DIR_SORTER));
-	createDirectory(Xstr(DIR_ADM_FILES));
-	Parser parser;
+	string dirsorter = rep+DIR_SORTER;
+
+	string dirmerger = rep+DIR_MERGER;
+	string dirmatrix = rep+DIR_MATRIX;
+	string initmatrix = dirmatrix+INITIAL_MATRIX_FILE;
+	string dirmergeoutput = rep+DIR_MERGE_OUTPUT;
+	string mergefile = dirmergeoutput+ MERGE_FILE;
+	string reducedmatrix = diradmfiles+REDUCED_MATRIX;
+
+	string termList = diradmfiles+TERM_LIST;
+	string stlist = diradmfiles+STOPWORD_LIST;
+	Archivo repositorio;
+	repositorio.abrirEscritura(rep+".lsi");
+	repositorio.escribirLinea(filesList);
+	repositorio.escribirLinea(reducedmatrix);
+	repositorio.escribirLinea(termList);
+	repositorio.escribirLinea(stlist);
+
+	createDirectory(dirsorter);
+
+
 	cout<<"Parsing files.."<<endl;
-	parser.ProcessFiles(DIRECTORY, DIR_SORTER);
+
+	parser.ProcessFiles(dirsorter);
 
 
 	// Merge de los archivos auxiliares.
-	createDirectory(Xstr(DIR_MERGER));
-	createDirectory(Xstr(DIR_MERGE_OUTPUT));
-	Merger m;
+	createDirectory(dirmerger);
+	createDirectory(dirmergeoutput);
+	Merger merger;
 
 	//Etapa 1
 	//InputDir: es donde estan los archivos originales
-	m.setInputDir(DIR_SORTER);
+	merger.setInputDir(dirsorter);
 	//OutputFolder es a donde van los archivos mergeados en la primer etapa
-	//es una carpeta temporal interna al programa
-	m.setOutputFolderName(DIR_MERGER);
+	merger.setOutputFolderName(dirmerger);
 	//setMode necesita que se haya seteado el inputDir
-	m.setMode(STAGE);
+	merger.setMode(STAGE);
 	cout<<"Merging stage 1..";
-	m.merge();
+	merger.merge();
 	cout<<"Done"<<endl;
 	
 	//Etapa 2
 	//ahora la salida de la etapa anterior es la entrada para la etapa final
-	m.setInputDir(DIR_MERGER);
+	merger.setInputDir(merger.getOutputFolderName());
 	//indico el nombre del archivo final
 	//esto se tiene que setear solo antes de hacer el merge final
 	//ya que internamente se usa como outputFile las salidas intermedias de los merges
-	m.setOutputFileName(MERGE_FILE);
-	m.setMode(FINAL);
+	merger.setOutputFileName(mergefile);
+	merger.setMode(FINAL);
 	cout<<"Merging stage 2..";
-	m.merge();
+	merger.merge();
 	cout<<"Done"<<endl;
 
 
 	// Creacion de la matriz inicial.
-	createDirectory(Xstr(DIR_MATRIX));
+	createDirectory(dirmatrix);
 	Matrix matrix;
 	cout<<"Building initial matrix.."<<endl;
-	matrix.buildInitialMatrix(MERGE_FILE, INITIAL_MATRIX_FILE, parser.numFiles());
-	cout<<"Done"<<endl;
+	if(matrix.buildInitialMatrix(merger.getMergedFilename(), initmatrix, parser.numFiles(),termList, stlist)){
+		cout<<"Done"<<endl;
+	} else{
+		cerr<<"Errores al construir la matriz inicial"<<endl;
+	}
+
 	cout<<"Reduccion y descomposicion en valores singulares"<<endl;
-	if( matrix.SVD(INITIAL_MATRIX_FILE,DIR_MATRIX,50)==0){
+	if( matrix.SVD(initmatrix,reducedmatrix,rango)==0){
 		cout<<"Descomposition done"<<endl;
 	}
 	else{
-		cout<<"Some Errors ocurred during Descomposition"<<endl;
+		cerr<<"Some Errors ocurred during Descomposition"<<endl;
 	}
 
 	cout<<"Removing some temporary files..";
-	//solo borro el tempmerger como ejemplo, comentar si es necesario revisar los archivos
-	deleteDirectory(Xstr(DIR_MERGER));
+	//comentar si es necesario revisar los archivos
+//	deleteDirectory(dirmerger);
+//	deleteDirectory(dirsorter);
+//	deleteDirectory(dirmergeoutput);
+//	deleteDirectory(dirmatrix);
 	cout<<"Done."<<endl;
 
 

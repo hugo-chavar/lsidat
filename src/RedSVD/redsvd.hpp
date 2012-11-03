@@ -27,9 +27,6 @@
 #include <../Eigen/Eigenvalues>
 #include <../Eigen/Sparse>
 
-//#include </home/andy/Documents/eigen3/Eigen/Sparse>
-//#include </home/andy/Documents/eigen3/Eigen/Dense>
-//#include </home/andy/Documents/eigen3/Eigen/Eigenvalues>
 #include "util.hpp"
 
 namespace REDSVD {

@@ -19,7 +19,7 @@ using namespace std;
 class Archivo {
 private:
 	std::fstream elArchivo;
-	std::string nombre;
+	//std::string nombre;
 public:
 	Archivo(const std::string& path, bool & hayErrores);
 	//constructor sin parametros

@@ -6,9 +6,9 @@
  */
 
 #include "Merger.h"
-//#include "Texto.h"
 
 Merger::Merger() {
+	this->mode = NONE;
 }
 
 void Merger::setInputDir(string dir) {
@@ -29,30 +29,50 @@ void Merger::setOutputFolderName(string foldername) {
 	this->currentFileNumber = 0;
 }
 
-void Merger::setNextFileName(){
-	if (this->mode == STAGE){
+string Merger::getOutputFolderName() {
+	return this->outputFolderName;
+}
+
+string Merger::getMergedFilename() {
+	return this->outputFileName;
+}
+
+void Merger::setNextFileName() {
+	if (this->mode == STAGE) {
 		//si es FINAL debe estar seteado con setOutputFileName
-		//string aux = static_cast<ostringstream*>( &(ostringstream() << this->currentFileNumber) )->str();
 		string aux = toString(this->currentFileNumber);
-		this->outputFileName = this->outputFolderName + "/"+"etapa."+ pad_left_copy(aux,4,'0');;
+		this->outputFileName = this->outputFolderName + "/" + "etapa."
+				+ pad_left_copy(aux, 4, '0');
+		;
 		this->currentFileNumber++;
 	}
 }
 
-void Merger::setMode(mergeMode mode){
+void Merger::setMode(mergeMode mode) {
 	this->mode = mode;
-	Palabra p;
-	if (directories.count() < 5){
-		//this->mode = FINAL; //TODO ver como evitar un paso
-	}
-	if (this->mode == STAGE){
-		this->filesByStep = this->calculateFilesPerStage();
-	} else { // es FINAL
-		this->filesByStep = directories.count();
-	}
-	words.clear();
-	for (unsigned i = 0; i < this->filesByStep; i++) {
-		words.push_back(p);
+
+	if ((directories.count() < MIN_FILES_STAGE_MERGE)
+			&& (this->mode == STAGE)) {
+		//configuro de modo que evite el merge por etapa ya que hay pocos archivos
+		this->outputFolderName = this->inputDir;
+		this->mode = NONE;
+		cerr << "salteada la etapa!!!" << endl;
+	} else if ((directories.count() == 1) && (this->mode == FINAL)) {
+		//si el directorio solo tiene un archivo no se hace el merge
+		this->mode = NONE;
+		this->outputFileName = directories.nextFullPath();
+		cerr<<"saltiada la FINAL!! despues les explico que es esto si quieren."<<endl;
+	} else {
+		if (this->mode == STAGE) {
+			this->filesByStep = this->calculateFilesPerStage();
+		} else { // es FINAL
+			this->filesByStep = directories.count();
+		}
+		Palabra p;
+		words.clear();
+		for (unsigned i = 0; i < this->filesByStep; i++) {
+			words.push_back(p);
+		}
 	}
 }
 
@@ -86,7 +106,7 @@ void Merger::readFromFileNumber(unsigned nroArchivo) {
 void Merger::readMore() {
 	//en cada posicion donde WORDSREADED este en SET y el archivo sigue vivo
 	//se debe leer el archivo en esa posicion
-	for (unsigned i = 0; i < this->filesByStep; i++) { //TODO mejorar este for.. mismo problema q en inicializar
+	for (unsigned i = 0; i < this->filesByStep; i++) {
 		if ((wordsReaded.test(i)) && (openFiles.test(i))) {
 			readFromFileNumber(i);
 		}
@@ -177,8 +197,8 @@ void Merger::writeMinimum() {
 }
 
 void Merger::merge() {
-	unsigned etapa,cantmin;
-	etapa =1;
+	unsigned cantmin; //etapa,
+	//etapa = 1;
 	while (!endOfMerge()) {
 		setNextFileName();
 		this->outputFile.abrirEscritura(this->outputFileName);
@@ -195,7 +215,7 @@ void Merger::merge() {
 
 		}
 		this->outputFile.cerrar();
-		etapa++;
+		//etapa++;
 	}
 }
 
@@ -213,7 +233,7 @@ unsigned Merger::calculateFilesPerStage() {
 }
 
 bool Merger::endOfMerge() {
-	return !directories.hasNext();
+	return ((this->mode == NONE) || (!directories.hasNext()));
 }
 
 void Merger::closeAllFiles() {
