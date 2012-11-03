@@ -5,13 +5,8 @@
  *      Author: Yamila Glinsek
  */
 
-#include <iomanip>
 #include "Matrix.h"
-#include "RedSVD/redsvd.hpp"
-#include "RedSVD/redsvdFile.hpp"
 
-
-#define THRESHOLD_STOP_WORD 0.65
 
 Matrix::Matrix() {
 }
@@ -43,46 +38,53 @@ double Matrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq,
 }
 
 bool Matrix::buildInitialMatrix(string inputPath, string outputPath,
-		int numFiles) {
+		int numFiles, string terms, string stopwords) {
 	Archivo inputFile;
 	Archivo outputFile;
-	if (!inputFile.abrirLectura(inputPath)
-			or !outputFile.abrirEscritura(outputPath)) {
+
+	Archivo termList;
+	Archivo stopwordslist;
+	if (!inputFile.abrirLectura(inputPath) || !outputFile.abrirEscritura(outputPath)
+			|| !termList.abrirEscritura(terms)|| !stopwordslist.abrirEscritura(stopwords)) {
 		return false;
 	}
-	double ratio;
+
+	double ratio, gWeight,lWeight,weight;
+	int gFreq, doc, lFreq;
+	string line, lineToWrite, sDoc, sWeight;
+
 	while (!inputFile.eof()) {
-		string line = inputFile.leerLinea();
+		line = inputFile.leerLinea();
 		Palabra word;
 		word.crearDesdeString(line);
 		ratio = word.cantidad() / (double) numFiles;
 		if (ratio > THRESHOLD_STOP_WORD) {
 			//tratar las stop words, creando un archivo con la lista
-			cout << "Palabra \"" << word.getContenido()
-					<< "\" aparece en mas del "
-					<< toString(THRESHOLD_STOP_WORD * 100, 0) << "% ("
-					<< toString(ratio * 100, 2) << "%) de los docs" << endl;
+//			cout << "Palabra \"" << word.getContenido()
+//					<< "\" aparece en mas del "
+//					<< toString(THRESHOLD_STOP_WORD * 100, 0) << "% ("
+//					<< toString(ratio * 100, 2) << "%) de los docs" << endl;
+			stopwordslist.escribirLinea(word.getContenido());
 		} else {
 			//palabras que no son stop words
 			//TODO crear un archivo con la lista de palabras
 			list<InfoPalabra> wordInfo = word.getInformacion();
-			int gFreq = calculateGlobalFrequency(wordInfo);
-			double gWeight = calculateGlobalWeight(wordInfo, gFreq, numFiles);
-			string lineToWrite = "";
+			gFreq = calculateGlobalFrequency(wordInfo);
+			gWeight = calculateGlobalWeight(wordInfo, gFreq, numFiles);
+			lineToWrite = "";
 			while (!wordInfo.empty()) {
-				int doc = wordInfo.front().getDocumento();
-				int lFreq = wordInfo.front().getCantidad();
-				double lWeight = log(lFreq + 1);
-				double weight = lWeight * gWeight;
-				//string sDoc = static_cast<ostringstream*>( &(ostringstream() << doc) )->str();
-				string sDoc = toString(doc);
-				//string sWeight = static_cast<ostringstream*>( &(ostringstream()<< weight) )->str();
-				string sWeight = toString(weight, 4); //redondeo a 4 decimales
+				doc = wordInfo.front().getDocumento();
+				lFreq = wordInfo.front().getCantidad();
+				lWeight = log(lFreq + 1);
+				weight = lWeight * gWeight;
+				sDoc = toString(doc);
+				sWeight = toString(weight, 4); //redondeo a 4 decimales
 				lineToWrite += sDoc + ":" + sWeight + " ";
 				wordInfo.pop_front();
 			}
 			lineToWrite = lineToWrite.substr(0, lineToWrite.size() - 1);
 			outputFile.escribirLinea(lineToWrite);
+			termList.escribirLinea(word.getContenido());
 		}
 	}
 	return true;
@@ -90,7 +92,8 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath,
 
 int Matrix::SVD(string inputPath, string outputPath,int rank) {
 	try{
-	  cout<<endl<<endl<<"Empieza mi Prueba"<<endl;
+	  //cout<<endl<<endl<<"Empieza mi Prueba"<<endl;
+	  //cout<<"outputPath "<<outputPath<<endl;
 
 	  REDSVD::fileProcess<REDSVD::SMatrixXf, REDSVD::RedSVD>(inputPath,outputPath,rank);
 	  return 0;}

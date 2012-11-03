@@ -38,13 +38,10 @@ bool Parser::Process(Sorter* sorter, string filePath, int doc) {
 	return true;
 }
 
-bool Parser::ProcessFiles(string inputDirectory, string outputDirectory) {
+bool Parser::ProcessFiles(string outputDirectory) {
 	int doc = 0;
 	Sorter* sorter = new Sorter(outputDirectory);
-	DirList directories;
-	if (!directories.createFromDirectory(inputDirectory))
-		return false;
-	directories.writeToFile(inputDirectory+"/adm/fileList.txt");
+
 	while (directories.hasNext()) {
 		if (!Process(sorter, directories.nextFullPath(), doc))
 			return false;
@@ -54,6 +51,17 @@ bool Parser::ProcessFiles(string inputDirectory, string outputDirectory) {
 	sorter->terminar();
 	delete sorter;
 	return true;
+}
+
+bool Parser::setInputDirectory(string inputDirectory){
+	if (!directories.createFromDirectory(inputDirectory))
+		return false;
+
+	return true;
+}
+
+void Parser::setFilesProcessedPath(string filesProcessed){
+	directories.writeToFile(filesProcessed);
 }
 
 int Parser::numFiles() {

@@ -27,7 +27,7 @@ Archivo::operator=(const Archivo& a) {
 bool Archivo::abrirLectura(const std::string& path) {
 	//Intenta abrir el archivo en modo lectura
 	elArchivo.open(path.c_str(), std::fstream::in); //| std::fstream::out
-	nombre = "Lectura:" + path;
+	//nombre = "Lectura:" + path;
 	//cout << "Abriendo .." << nombre << endl;
 
 	if (!elArchivo.is_open()) {
@@ -43,7 +43,7 @@ bool Archivo::abrirLectura(const std::string& path) {
 bool Archivo::abrirEscritura(const std::string& path) {
 	//Intenta abrir el archivo en modo escritura.
 	elArchivo.open(path.c_str(), std::fstream::out);
-	nombre = "Escritura:" + path;
+	//nombre = "Escritura:" + path;
 
 	if (!elArchivo.is_open()) {
 		//Si no hubo exito en la apertura...
