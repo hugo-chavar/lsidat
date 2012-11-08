@@ -8,21 +8,13 @@
 #include <iostream>
 #include <list>
 #include <string.h>
-#include "InfoPalabra.h"
 #include "Parser.h"
 #include "Sorter.h"
 #include "Merger.h"
 #include "Archivo.h"
-#include "Matrix.h"
+#include "InitialMatrix.h"
 
-//#define DIRECTORY 				"/home/andy/Desktop/zzzz"//"/media/DATOS/Organizacion de Datos/Pruebas"
-//#define DIR_SORTER 				DIRECTORY"/tempsorter"
-//#define DIR_MERGER 				DIRECTORY"/tempmerger"
-//#define DIR_MERGE_OUTPUT 		DIRECTORY"/merge"
-//#define MERGE_FILE 				DIR_MERGE_OUTPUT"/merge.txt"
-//#define DIR_MATRIX				DIRECTORY"/matrix"
-//#define INITIAL_MATRIX_FILE		DIR_MATRIX"/initialMatrix.txt"
-//#define DIR_ADM_FILES	 		DIRECTORY"/adm"
+
 #define DIR_SORTER 				"/tempsorter"
 #define DIR_MERGER 				"/tempmerger"
 #define DIR_MERGE_OUTPUT 		"/merge"
@@ -30,7 +22,6 @@
 #define DIR_MATRIX				"/matrix"
 #define INITIAL_MATRIX_FILE		"/initialMatrix.txt"
 #define REDUCED_MATRIX			"/reduced"
-//#define DIR_ADM_FILES	 		"/adm"
 #define FILES_LIST		 		"/filesList.txt"
 #define TERM_LIST		 		"/termList.txt"
 #define STOPWORD_LIST		 	"/stopwordList.txt"
@@ -51,29 +42,6 @@ void deleteDirectory(string directory) {
 
 int main(int argc, char *argv[])
 {
-//	cmdline::optionparser a;
-//	a.add<string>("repositorio", 'r', "nombre de repositorio", true, "");
-//	a.add<string>("dir", 'd', "carpeta de documentos", true, "");
-//	a.add<int>("rango", 'k', "rango de la matriz reducida", false, 200, cmdline::range(1, 65535));
-//	a.add("help", 0, "muestra este mensaje");
-
-//	bool ok=a.parse(argc, argv);
-//
-//	if (argc==1 || a.exist("help")){
-//		cerr<<a.usage();
-//		return 0;
-//	}
-//
-//	if (!ok){
-//		cerr<<a.error()<<endl<<a.usage();
-//		return 0;
-//	}
-//
-//	string rep =a.get<string>("indice");
-//	string sourcefiles = a.get<string>("dir");
-	//int rango = a.get<int>("rango");
-
-	//cout<<"argc "<<argc<<endl;
 	if (argc != 4){
 		cerr<<"Cantidad de argumentos invalidos."<<endl;
 		return 0;
@@ -88,7 +56,6 @@ int main(int argc, char *argv[])
 		cerr<<"Valor de reduccion fuera de rango, ingrese entre 20 y 500"<<endl;
 		return 0;
 	}
-
 
 	string diradmfiles = rep;
 	string filesList = diradmfiles+FILES_LIST;
@@ -114,20 +81,13 @@ int main(int argc, char *argv[])
 
 	string termList = diradmfiles+TERM_LIST;
 	string stlist = diradmfiles+STOPWORD_LIST;
-	Archivo repositorio;
-	repositorio.abrirEscritura(rep+".lsi");
-	repositorio.escribirLinea(filesList);
-	repositorio.escribirLinea(reducedmatrix);
-	repositorio.escribirLinea(termList);
-	repositorio.escribirLinea(stlist);
+
 
 	createDirectory(dirsorter);
-
 
 	cout<<"Parsing files.."<<endl;
 
 	parser.ProcessFiles(dirsorter);
-
 
 	// Merge de los archivos auxiliares.
 	createDirectory(dirmerger);
@@ -160,7 +120,7 @@ int main(int argc, char *argv[])
 
 	// Creacion de la matriz inicial.
 	createDirectory(dirmatrix);
-	Matrix matrix;
+	InitialMatrix matrix;
 	cout<<"Building initial matrix.."<<endl;
 	if(matrix.buildInitialMatrix(merger.getMergedFilename(), initmatrix, parser.numFiles(),termList, stlist)){
 		cout<<"Done"<<endl;
@@ -182,6 +142,16 @@ int main(int argc, char *argv[])
 //	deleteDirectory(dirsorter);
 //	deleteDirectory(dirmergeoutput);
 //	deleteDirectory(dirmatrix);
+	cout<<"Done."<<endl;
+
+	cout<<"Saving repository..";
+	Archivo repositorio;
+	repositorio.abrirEscritura(rep+".lsi");
+	repositorio.escribirLinea(toString(matrix.rows())+" "+toString(parser.numFiles()));
+	repositorio.escribirLinea(filesList);
+	repositorio.escribirLinea(reducedmatrix);
+	repositorio.escribirLinea(termList);
+	repositorio.escribirLinea(stlist);
 	cout<<"Done."<<endl;
 
 

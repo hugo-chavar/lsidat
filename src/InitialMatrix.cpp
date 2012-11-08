@@ -5,13 +5,13 @@
  *      Author: Yamila Glinsek
  */
 
-#include "Matrix.h"
+#include "InitialMatrix.h"
 
 
-Matrix::Matrix() {
+InitialMatrix::InitialMatrix() {
 }
 
-int Matrix::calculateGlobalFrequency(list<InfoPalabra> wordInfo) {
+int InitialMatrix::calculateGlobalFrequency(list<InfoPalabra> wordInfo) {
 	list<InfoPalabra>::iterator iter = wordInfo.begin();
 	int gFreq = 0;
 	unsigned i;
@@ -22,7 +22,7 @@ int Matrix::calculateGlobalFrequency(list<InfoPalabra> wordInfo) {
 	return gFreq;
 }
 
-double Matrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq,
+double InitialMatrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq,
 		int numFiles) {
 	list<InfoPalabra>::iterator iter = wordInfo.begin();
 	double gWeight = 0;
@@ -37,21 +37,22 @@ double Matrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq,
 	return gWeight;
 }
 
-bool Matrix::buildInitialMatrix(string inputPath, string outputPath,
+bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 		int numFiles, string terms, string stopwords) {
 	Archivo inputFile;
 	Archivo outputFile;
 
-	Archivo termList;
-	Archivo stopwordslist;
+	TermFile termList;
+	TermFile stopwordslist;
 	if (!inputFile.abrirLectura(inputPath) || !outputFile.abrirEscritura(outputPath)
-			|| !termList.abrirEscritura(terms)|| !stopwordslist.abrirEscritura(stopwords)) {
+			|| !termList.crear(terms)|| !stopwordslist.crear(stopwords)) {
 		return false;
 	}
 
 	double ratio, gWeight,lWeight,weight;
 	int gFreq, doc, lFreq;
 	string line, lineToWrite, sDoc, sWeight;
+	this->_rows = 0;
 
 	while (!inputFile.eof()) {
 		line = inputFile.leerLinea();
@@ -64,7 +65,7 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath,
 //					<< "\" aparece en mas del "
 //					<< toString(THRESHOLD_STOP_WORD * 100, 0) << "% ("
 //					<< toString(ratio * 100, 2) << "%) de los docs" << endl;
-			stopwordslist.escribirLinea(word.getContenido());
+			stopwordslist.agregar(word.getContenido());
 		} else {
 			//palabras que no son stop words
 			//TODO crear un archivo con la lista de palabras
@@ -84,13 +85,14 @@ bool Matrix::buildInitialMatrix(string inputPath, string outputPath,
 			}
 			lineToWrite = lineToWrite.substr(0, lineToWrite.size() - 1);
 			outputFile.escribirLinea(lineToWrite);
-			termList.escribirLinea(word.getContenido());
+			termList.agregar(word.getContenido());
+			this->_rows++;
 		}
 	}
 	return true;
 }
 
-int Matrix::SVD(string inputPath, string outputPath,int rank) {
+int InitialMatrix::SVD(string inputPath, string outputPath,int rank) {
 	try{
 	  //cout<<endl<<endl<<"Empieza mi Prueba"<<endl;
 	  //cout<<"outputPath "<<outputPath<<endl;
@@ -103,5 +105,9 @@ int Matrix::SVD(string inputPath, string outputPath,int rank) {
 		return -1;
 }
 
-Matrix::~Matrix() {
+unsigned InitialMatrix::rows(){
+	return this->_rows;
+}
+
+InitialMatrix::~InitialMatrix() {
 }
