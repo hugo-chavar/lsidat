@@ -159,6 +159,10 @@ void Merger::joinWords(unsigned a, unsigned b) {
 	} else if ((words[b].maxDoc()) <= (words[a].minDoc())) {
 		min = b;
 		max = a;
+	} else {
+		min = 0;
+		max = 0;
+		cerr<<"Problemas en merger- joinwords"<<endl;
 	}
 
 	if ((words[min].maxDoc()) == (words[max].minDoc())) {
