@@ -68,7 +68,7 @@ void Token::constructTerms() {
 			}
 
 		}
-		aux = trim_copy(*iterador, " \'{}[]-+.*/?<>=^#&!_");
+		aux = trim_copy(aux, " \'{}[]-+.*/?<>=^#&!_");
 		if (aux == "") {
 			iterador = candidates.erase(iterador);
 		} else {
