@@ -6,6 +6,8 @@
  */
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include <string.h>
 #include <unistd.h>    /* for getopt */
 #include <list>
@@ -14,6 +16,8 @@
 #include "Texto.h"
 #include "Token.h"
 #include "Comparador.h"
+#include "Coseno.h"
+
 
 using namespace std;
 
@@ -112,22 +116,26 @@ int main(int argc, char *argv[]) {
 	}
 
 	cout<<"Este es el vector:"<<endl;
-	//TODO: Andy vos tendrias que partir de ese getVector y hacer la multiplicacion
-	//nota: este vector es bastante largo.. hay q comentar el cout si se esta probando otra cosa
-	// yo lo dejo como algo informativo de que mi parte funciona mas o menos bien. Hugo
 	cout<<"fil:"<<terms.getVector().rows()<<endl;
 	cout<<terms.getVector()<<endl;
 
+	//ranqueador
 	Comparador comp(repo+"/reduced.USinv",repo+"/reduced.V",terms.getVector());
 	unsigned doc=1;
-	VectorXf vector;
-	float coseno;
-	while(comp.leerVector(vector))
-	{
-		coseno=comp.ObtenerCoseno(vector);
-		cout<<"documento:"<<doc<<" coseno:"<<coseno<<endl;
+	VectorXf vector1;
+	vector<Coseno> heap;
+	while(comp.leerVector(vector1))
+		{
+		Coseno coseno(doc,comp.ObtenerCoseno(vector1));
+		heap.push_back(coseno);
 		doc++;
-	}
+		}
+	make_heap(heap.begin(),heap.end());
+	while(heap.size()!=0){
+			cout<<"Documento:"<<heap.front().getDocumento()<<" coseno:" <<heap.front().getCoseno()<<endl;
+			 pop_heap (heap.begin(),heap.end());
+			 heap.pop_back();
+		}
 
 	return 0;
 }
