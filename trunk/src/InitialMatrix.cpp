@@ -53,9 +53,9 @@ bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 	int gFreq, doc, lFreq;
 	string line, lineToWrite, sDoc, sWeight;
 	this->_rows = 0;
-
+	line = inputFile.leerLinea();
 	while (!inputFile.eof()) {
-		line = inputFile.leerLinea();
+
 		Palabra word;
 		word.crearDesdeString(line);
 		ratio = word.cantidad() / (double) numFiles;
@@ -88,7 +88,9 @@ bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 			termList.agregar(word.getContenido());
 			this->_rows++;
 		}
+		line = inputFile.leerLinea();
 	}
+	cout<<"filas"<<_rows<<endl;
 	return true;
 }
 
