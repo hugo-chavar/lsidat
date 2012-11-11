@@ -132,15 +132,10 @@ void readMatrix(const std::string& fn, MatrixXf& A){
 
 void writeMatrix(const string& fn, const REDSVD::RedSVD& A){
 
-	//TODO Las escribo para mostrar que funciona pero estas no las necesitamos
-
 	Eigen::MatrixXf USinv =A.matrixU()*A.singularValues().asDiagonal().inverse();
 
 	writeMatrix_(fn + ".USinv", USinv);
 	writeMatrix_(fn + ".V", A.matrixV());//Creo que conviene almacenar V mas que Vt
-
-	//Eigen::MatrixXf Vt= A.matrixV().transpose();
-	//writeMatrix_(fn + ".Vt", Vt);
 
 }
 
