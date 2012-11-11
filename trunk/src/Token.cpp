@@ -36,16 +36,16 @@ string Token::nextTerm() {
 	return sigte;
 }
 
-void Token::print(){
+void Token::print() {
 	iterador = candidates.begin();
-	_currentPosition=0;
-	while (hasNextTerm()){
+	_currentPosition = 0;
+	while (hasNextTerm()) {
 
-		cout<<nextTerm()<<" ";
+		cout << nextTerm() << " ";
 	}
-	cout<<endl;
+	cout << endl;
 	iterador = candidates.begin();
-	_currentPosition=0;
+	_currentPosition = 0;
 }
 
 void Token::constructTerms() {
@@ -68,10 +68,15 @@ void Token::constructTerms() {
 			}
 
 		}
-		stringToLower(aux);
-		stemOfPlural(aux);
-		*iterador = aux;
-		iterador++;
+		aux = trim_copy(*iterador, " \'{}[]-+.*/?<>=^#&!_");
+		if (aux == "") {
+			iterador = candidates.erase(iterador);
+		} else {
+			stringToLower(aux);
+			stemOfPlural(aux);
+			*iterador = aux;
+			iterador++;
+		}
 
 	}
 	iterador = candidates.begin();
@@ -79,7 +84,7 @@ void Token::constructTerms() {
 	_count = candidates.size();
 }
 
-void Token::sort(){
+void Token::sort() {
 	candidates.sort();
 	iterador = candidates.begin();
 }
