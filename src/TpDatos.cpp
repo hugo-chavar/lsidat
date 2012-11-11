@@ -13,6 +13,7 @@
 #include "TermFile.h"
 #include "Texto.h"
 #include "Token.h"
+#include "Comparador.h"
 
 using namespace std;
 
@@ -114,7 +115,19 @@ int main(int argc, char *argv[]) {
 	//TODO: Andy vos tendrias que partir de ese getVector y hacer la multiplicacion
 	//nota: este vector es bastante largo.. hay q comentar el cout si se esta probando otra cosa
 	// yo lo dejo como algo informativo de que mi parte funciona mas o menos bien. Hugo
+	cout<<"fil:"<<terms.getVector().rows()<<endl;
 	cout<<terms.getVector()<<endl;
+
+	Comparador comp(repo+"/reduced.USinv",repo+"/reduced.V",terms.getVector());
+	unsigned doc=1;
+	VectorXf vector;
+	float coseno;
+	while(comp.leerVector(vector))
+	{
+		coseno=comp.ObtenerCoseno(vector);
+		cout<<"documento:"<<doc<<" coseno:"<<coseno<<endl;
+		doc++;
+	}
 
 	return 0;
 }
