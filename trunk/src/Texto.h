@@ -13,6 +13,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdlib.h>
+#include <algorithm>
 
 struct split {
 	enum empties_t {
@@ -65,5 +66,13 @@ std::string toString(int n);
 std::string toString(unsigned n);
 
 std::string toString(double number, int decimals );
+
+char toLower(char in);
+
+void stringToLower(std::string& s);
+
+void stemOfPlural(std::string& s);
+
+void removeSymbols(std::string& s, const std::string& symbols);
 
 #endif /* TEXTO_H_ */

@@ -118,6 +118,11 @@ string Archivo::leerLinea() {
 	return s;
 }
 
+string Archivo::leerBloque() {
+	string s;
+	getline(elArchivo, s,'\0');
+	return s;
+}
 void Archivo::escribirLinea(const string& palabra) {
 	//long size=palabra.size();
 	if (palabra.size() > 0) {
