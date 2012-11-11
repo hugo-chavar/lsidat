@@ -28,9 +28,13 @@ private:
 public:
 	Token();
 	Token(string);
+	Token(list<string>&);
 	~Token();
+	void constructTerms();
+	void sort();
 	bool hasNextTerm();
 	string nextTerm();
+	void print();
 };
 
 #endif /* TOKEN_H_ */

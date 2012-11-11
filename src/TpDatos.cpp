@@ -12,6 +12,7 @@
 #include "Archivo.h"
 #include "TermFile.h"
 #include "Texto.h"
+#include "Token.h"
 
 using namespace std;
 
@@ -29,7 +30,6 @@ int main(int argc, char *argv[]) {
 
 	string repo;
 	list<string> q;
-	list<string>::iterator i;
 	q.clear();
 	while ((c = getopt(argc, argv, ":r:q:")) != -1) {
 
@@ -85,19 +85,22 @@ int main(int argc, char *argv[]) {
 			q.push_back(argv[optind++]);
 
 	}
+	Token consulta(q);
 	cout << "Query:" << endl;
-	q.sort();
-	i = q.begin();
+	consulta.sort();
 	string termino;
 	terms.iniciarVector(cantTerms);
+	//cout<<terms.getVector()<<endl;
+	consulta.print(); //
+	//return 0;
 	int pos;
-	while (q.size() > 0) {
-		termino = *i ;
+	while (consulta.hasNextTerm()) {
+		termino = consulta.nextTerm() ;
 		pos = terms.buscarTerm(termino);
-		cout<<termino;
+		cout<<termino<<endl;
 		if(pos==-1){
 			cout<<" no es termino";
-			pos= stw.buscarTerm(termino);
+			pos = stw.buscarTerm(termino);
 			if (pos>0){
 				cout<<", es stopword pos: "<<pos<<endl;
 			} else cout<<" ni stopword"<<endl;
@@ -105,9 +108,6 @@ int main(int argc, char *argv[]) {
 		{
 			cout<<" Es termino pos "<<pos<<endl;
 		}
-
-		q.pop_front();
-		i = q.begin();
 	}
 
 	cout<<"Este es el vector:"<<endl;
