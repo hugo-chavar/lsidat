@@ -38,13 +38,17 @@ int TermFile::buscarTerm(string buscado) {
 		//si el ultimo fue agregado me evito una comparacion
 		comp = comparar(buscado);
 	}
-	while (comp < 0) {
+	while ((comp < 0)&&(!t.eof())) {
 		actual = t.leerLinea();
 		pos++;
 		comp = comparar(buscado);
 	}
 	//si esta devuelve la posicion, sino devuelve -1
-	return (comp > 0 ? -1 : pos);
+	if (comp == 0)
+		return pos;
+	else
+		return -1;
+	//return (comp > 0 ? -1 : pos);
 
 }
 
