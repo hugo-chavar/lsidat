@@ -10,7 +10,7 @@ using namespace std;
 
 DirList::DirList() {
 	_count = 0;
-	_currentPosition=0;
+	_currentPosition = 0;
 
 }
 
@@ -32,7 +32,6 @@ bool DirList::createFromDirectory(string dir) {
 
 	while ((dirp = readdir(dp))) {
 		filepath = dir + "/" + dirp->d_name;
-
 
 		// Si hay directorios o cosas raras las ignora
 		if (stat(filepath.c_str(), &filestat))
@@ -58,13 +57,13 @@ bool DirList::createFromDirectory(string dir) {
 	iterador = files.begin();
 
 	closedir(dp);
-	cout << "Procesamiento exitoso de directorio " << dir <<"."<< endl;
-	cout << "Cantidad de archivos " << _count <<"."<< endl;
+	cout << "Procesamiento exitoso de directorio " << dir << "." << endl;
+	cout << "Cantidad de archivos " << _count << "." << endl;
 	return true;
 
 }
 
-string DirList::next(){
+string DirList::next() {
 	string sigte = *iterador;
 	iterador++;
 	_currentPosition++;
@@ -73,30 +72,30 @@ string DirList::next(){
 
 }
 
-string DirList::nextFullPath(){
-	string sigte = directory+"/"+(*iterador);
+string DirList::nextFullPath() {
+	string sigte = directory + "/" + (*iterador);
 	iterador++;
 	_currentPosition++;
 
 	return sigte;
 
 }
-bool DirList::hasNext(){
-	return (_currentPosition<_count);
+bool DirList::hasNext() {
+	return (_currentPosition < _count);
 }
 
-void DirList::clean(){
+void DirList::clean() {
 	files.clear();
 	_count = 0;
-	_currentPosition=0;
+	_currentPosition = 0;
 }
 
-bool DirList::seek(unsigned pos){
-	bool status = (pos<_count);
-	if(status){
-		_currentPosition=pos;
+bool DirList::seek(unsigned pos) {
+	bool status = (pos < _count);
+	if (status) {
+		_currentPosition = pos;
 		iterador = files.begin();
-		for (unsigned i=0;i<pos;i++){
+		for (unsigned i = 0; i < pos; i++) {
 			iterador++;
 		}
 	}
@@ -107,14 +106,14 @@ unsigned DirList::count() const {
 	return _count;
 }
 
-unsigned DirList::currentPosition(){
+unsigned DirList::currentPosition() {
 	return _currentPosition;
 }
 
-void DirList::writeToFile(string filepath){
+void DirList::writeToFile(string filepath) {
 	Archivo file;
 	file.abrirEscritura(filepath);
-	while (this->hasNext()){
+	while (this->hasNext()) {
 		file.escribirLinea(this->next());
 	}
 	seek(0);

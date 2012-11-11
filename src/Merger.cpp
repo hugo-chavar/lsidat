@@ -50,18 +50,15 @@ void Merger::setNextFileName() {
 
 void Merger::setMode(mergeMode mode) {
 	this->mode = mode;
-
 	if ((directories.count() < MIN_FILES_STAGE_MERGE)
 			&& (this->mode == STAGE)) {
 		//configuro de modo que evite el merge por etapa ya que hay pocos archivos
 		this->outputFolderName = this->inputDir;
 		this->mode = NONE;
-		cerr << "salteada la etapa!!!" << endl;
 	} else if ((directories.count() == 1) && (this->mode == FINAL)) {
 		//si el directorio solo tiene un archivo no se hace el merge
 		this->mode = NONE;
 		this->outputFileName = directories.nextFullPath();
-		cerr<<"saltiada la FINAL!! despues les explico que es esto si quieren."<<endl;
 	} else {
 		if (this->mode == STAGE) {
 			this->filesByStep = this->calculateFilesPerStage();

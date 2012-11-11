@@ -2,12 +2,11 @@
  * DirList.h
  *
  *  Created on: Sep 5, 2012
- *      Author: hugo
+ *      Author: Hugo Chavar
  */
 
 #ifndef DIRLIST_H_
 #define DIRLIST_H_
-
 
 #include <iostream>
 #include <dirent.h>
@@ -22,8 +21,8 @@ using namespace std;
 
 class DirList {
 private:
-	list <string> files;
-	list <string>::iterator iterador;
+	list<string> files;
+	list<string>::iterator iterador;
 	unsigned _count;
 	unsigned _currentPosition;
 	string directory;

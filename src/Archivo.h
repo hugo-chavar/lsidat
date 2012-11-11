@@ -36,6 +36,7 @@ public:
 	bool abrirLectura(const std::string& path);
 	bool abrirEscritura(const std::string& path);
 	std::string leerLinea();
+	std::string leerBloque();
 	void escribirLinea(const string& palabra);
 
 };
