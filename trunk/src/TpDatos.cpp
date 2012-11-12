@@ -119,9 +119,9 @@ int main(int argc, char *argv[]) {
 	cout<<"fil:"<<terms.getVector().rows()<<endl;
 	cout<<terms.getVector()<<endl;
 
-	//ranqueador
+	//TODO Ranqueador. Podria nuclearse en una clase
 	Comparador comp(repo+"/reduced.USinv",repo+"/reduced.V",terms.getVector());
-	unsigned doc=1;
+	unsigned doc=0;
 	VectorXf vector1;
 	vector<Coseno> heap;
 	while(comp.leerVector(vector1))
@@ -131,10 +131,23 @@ int main(int argc, char *argv[]) {
 		doc++;
 		}
 	make_heap(heap.begin(),heap.end());
+	ifstream fp_doc;
+	fp_doc.open((repo+"/filesList.txt").c_str(),std::fstream::in);
+	if (!fp_doc.is_open()){
+		cout<<"No se encontro el archivo:"<<repo+"/filesList.txt"<<endl;
+		return 0;
+	}
+	string s;
+	getline(fp_doc,s);
 	while(heap.size()!=0){
-			cout<<"Documento:"<<heap.front().getDocumento()<<" coseno:" <<heap.front().getCoseno()<<endl;
-			 pop_heap (heap.begin(),heap.end());
-			 heap.pop_back();
+		//TODO Por el momento lo hago asi.Funciona si todos los nombres de doc tienen el mismo largo.
+		//Se lee una linea,se mira su longitud y se multiplica el doc por esa long
+		//El problema es que al ser de texto sino hay que leer uno por una las lineas cada vez hasta llegar al doc indicado.
+		fp_doc.seekg(heap.front().getDocumento()*(s.size()+1),ios::beg);
+		getline(fp_doc,s);
+		cout<<"Documento:"<<heap.front().getDocumento()<<" Nombre:"<<s<<" coseno:" <<heap.front().getCoseno()<<endl;
+		pop_heap (heap.begin(),heap.end());
+		heap.pop_back();
 		}
 
 	return 0;
