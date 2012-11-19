@@ -1,9 +1,10 @@
 /*
  * DirList.cpp
  *
- *  Created on: Sep 5, 2012
+ *  Created on: 05/09/2012
  *      Author: Hugo Chavar
  */
+#include <algorithm>
 #include "DirList.h"
 
 using namespace std;
@@ -11,6 +12,7 @@ using namespace std;
 DirList::DirList() {
 	_count = 0;
 	_currentPosition = 0;
+	maxFileNameLength = 0;
 
 }
 
@@ -19,7 +21,6 @@ DirList::~DirList() {
 
 bool DirList::createFromDirectory(string dir) {
 	string filepath, filename;
-	//ifstream fin; por si necesito abrir los archivos
 	DIR *dp;
 	struct dirent *dirp;
 	struct stat filestat;
@@ -39,26 +40,18 @@ bool DirList::createFromDirectory(string dir) {
 		if (S_ISDIR( filestat.st_mode ))
 			continue;
 		filename = dirp->d_name;
+		if (maxFileNameLength < filename.length())
+			maxFileNameLength = filename.length();
 		files.push_back(filename);
 		_count++;
 
-		//por ahora solo muestro los nombres de archivos completos
-		//cout << filepath << endl;
-
-		//por si hace falta abrir los archivos dejo el codigo para hacerlo
-//		fin.open( filepath.c_str() );
-//		    if (fin >> num) //leo un caracter (en este caso un numero)
-//		      cout << filepath << ": " << num << endl;
-//		    fin.close();
 	}
-	//queda ordenado por nombre de archivo
 	files.sort();
-	//dejo apuntando al primero
 	iterador = files.begin();
 
 	closedir(dp);
-	cout << "Procesamiento exitoso de directorio " << dir << "." << endl;
-	cout << "Cantidad de archivos " << _count << "." << endl;
+	//cout << "Procesamiento exitoso de directorio " << dir << "." << endl;
+	//cout << "Cantidad de archivos " << _count << "." << endl;
 	return true;
 
 }
@@ -111,10 +104,22 @@ unsigned DirList::currentPosition() {
 }
 
 void DirList::writeToFile(string filepath) {
-	Archivo file;
-	file.abrirEscritura(filepath);
+	TermFile file;
+	file.crear(filepath);
+	/**
+	 * Modificacion al diseño:
+	 * Los nombres de los archivos se guardan como campos de longitud fija.
+	 * De esta manera una vez calculados los cosenos se accede directamente al nombre
+	 * indicando el numero de documento indicado por el numero de columna de la Matriz V de la reduccion,
+	 * evitando la no performante lectura secuencial.
+	 * El tamaño del campo es la maxima longitud de un nombre de archivo.
+	 * En este caso el espacio que se pierde al mantener esta estructura es muy baja,
+	 * en contraposicion a la velocidad ganada en las consultas.
+	 */
+
+	file.setTamanioCampo(maxFileNameLength);
 	while (this->hasNext()) {
-		file.escribirLinea(this->next());
+		file.agregar(this->next());
 	}
 	seek(0);
 }

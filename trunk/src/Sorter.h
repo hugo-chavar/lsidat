@@ -23,10 +23,12 @@ public:
 	~Sorter();
 	void agregarPalabra(string palabra,int doc);
 	void terminar();
+	unsigned getMaxLongPalabra();
 
 
 private:
 	unsigned archivosCreados;
+	unsigned maxLongitudPalabra;
 	Abb* arbol;
 	string outputDirectory;
 	bool arbolCompleto();

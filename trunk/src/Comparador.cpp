@@ -11,7 +11,7 @@ Comparador::Comparador(const string& fp_USinv,const string& fp_V,VectorXf consul
 
 		this->generarConsultaRed(fp_USinv,consulta);
 		if(!V.abrirLectura(fp_V))
-			cout<<"No se ha encontrado el archivo de la matriz V"<<endl;
+			cerr<<"No se ha encontrado el archivo de la matriz V"<<endl;
 
 }
 

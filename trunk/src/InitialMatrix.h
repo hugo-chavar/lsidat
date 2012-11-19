@@ -27,8 +27,8 @@ using namespace std;
 class InitialMatrix {
 public:
 	InitialMatrix();
-	bool buildInitialMatrix(string inputPath, string outputPath, int numFiles, string terms,string stopwords);
-	int SVD(string inputPath, string outputPath,int rank);
+	bool buildInitialMatrix(string inPath, string outPath, int numFiles, unsigned l, string terms,string stopwords);
+	int SVD(string inPath, string outPath,int rank);
 	unsigned rows();
 	virtual ~InitialMatrix();
 private:

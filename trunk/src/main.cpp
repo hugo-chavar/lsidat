@@ -1,8 +1,8 @@
 /*
  * main.cpp
  *
- *  Created on: Sep 7, 2012
- *      Author: andy
+ *  Created on: 07/09/2012
+ *      Author: Andres Sanabria
  */
 
 #include <iostream>
@@ -85,9 +85,10 @@ int main(int argc, char *argv[])
 
 	createDirectory(dirsorter);
 
-	cout<<"Parsing files.."<<endl;
+	cout<<"Realizando parseo de archivos.."<<flush;
 
 	parser.ProcessFiles(dirsorter);
+	cout<<"Listo."<<endl;
 
 	// Merge de los archivos auxiliares.
 	createDirectory(dirmerger);
@@ -101,9 +102,9 @@ int main(int argc, char *argv[])
 	merger.setOutputFolderName(dirmerger);
 	//setMode necesita que se haya seteado el inputDir
 	merger.setMode(STAGE);
-	cout<<"Merging stage 1..";
+	cout<<"Realizando merge etapa 1.."<<flush;
 	merger.merge();
-	cout<<"Done"<<endl;
+	cout<<"Listo."<<endl;
 	
 	//Etapa 2
 	//ahora la salida de la etapa anterior es la entrada para la etapa final
@@ -113,46 +114,43 @@ int main(int argc, char *argv[])
 	//ya que internamente se usa como outputFile las salidas intermedias de los merges
 	merger.setOutputFileName(mergefile);
 	merger.setMode(FINAL);
-	cout<<"Merging stage 2..";
+	cout<<"Realizando merge etapa 2.."<<flush;
 	merger.merge();
-	cout<<"Done"<<endl;
+	cout<<"Listo."<<endl;
 
-
-	// Creacion de la matriz inicial.
 	createDirectory(dirmatrix);
 	InitialMatrix matrix;
-	cout<<"Building initial matrix.."<<endl;
-	if(matrix.buildInitialMatrix(merger.getMergedFilename(), initmatrix, parser.numFiles(),termList, stlist)){
-		cout<<"Done"<<endl;
+	cout<<"Construyendo matriz inicial.."<<endl;
+	if(matrix.buildInitialMatrix(merger.getMergedFilename(), initmatrix, parser.filesCount(),parser.maxLengthWord(),termList, stlist)){
+		cout<<"Listo."<<endl;
 	} else{
-		cerr<<"Errores al construir la matriz inicial"<<endl;
+		cerr<<"Errores al construir la matriz inicial."<<endl;
 	}
 
-	cout<<"Reduccion y descomposicion en valores singulares"<<endl;
+	cout<<"Reduciendo dimensiones de la matriz.."<<endl;
 	if( matrix.SVD(initmatrix,reducedmatrix,rango)==0){
-		cout<<"Descomposition done"<<endl;
+		cout<<"Listo."<<endl;
 	}
 	else{
-		cerr<<"Some Errors ocurred during Descomposition"<<endl;
+		cerr<<"Errores al reducir la matriz."<<endl;
 	}
 
-	cout<<"Removing some temporary files..";
-	//comentar si es necesario revisar los archivos
+	cout<<"Eliminando archivos temporales.."<<flush;
 //	deleteDirectory(dirmerger);
 //	deleteDirectory(dirsorter);
 //	deleteDirectory(dirmergeoutput);
 //	deleteDirectory(dirmatrix);
-	cout<<"Done."<<endl;
+	cout<<"Listo."<<endl;
 
-	cout<<"Saving repository..";
+	cout<<"Guardando repositorio.."<<endl;
 	Archivo repositorio;
 	repositorio.abrirEscritura(rep+".lsi");
-	repositorio.escribirLinea(toString(matrix.rows())+" "+toString(parser.numFiles()));
+	repositorio.escribirLinea(toString(matrix.rows())+" "+toString(parser.filesCount()));
 	repositorio.escribirLinea(filesList);
 	repositorio.escribirLinea(reducedmatrix);
 	repositorio.escribirLinea(termList);
 	repositorio.escribirLinea(stlist);
-	cout<<"Done."<<endl;
+	cout<<"Repositorio \""<<rep<<"\" creado exitosamente."<<endl;
 
 
 	return 0;

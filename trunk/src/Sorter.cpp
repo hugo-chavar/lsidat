@@ -12,12 +12,12 @@ using namespace std;
 
 Sorter::Sorter(string outputDirectory) {
 	this->archivosCreados = 0;
+	this->maxLongitudPalabra = 0;
 	this->arbol = new Abb();
 	this->outputDirectory = outputDirectory;
 }
 
 Sorter::~Sorter() {
-	//delete this->arbol; lo puse en terminar()
 }
 
 void Sorter::agregarPalabra(string palabra, int doc) {
@@ -27,13 +27,13 @@ void Sorter::agregarPalabra(string palabra, int doc) {
 		this->arbol = new Abb();
 	}
 	this->arbol->agregarPalabra(palabra, doc);
-	//cout<<"Se agrego palabra: "<<palabra<<" doc: "<<doc<<endl;
+	if (this->maxLongitudPalabra < palabra.length())
+		this->maxLongitudPalabra =  palabra.length();
 }
 
 void Sorter::archivarArbol() {
 	this->archivosCreados++;
-	string aux = static_cast<ostringstream*>(&(ostringstream()
-			<< this->archivosCreados))->str();
+	string aux = toString(this->archivosCreados);
 	string nombreArchivo = outputDirectory + string("/particion.") + pad_left_copy(aux,6,'0');
 	this->arbol->escribirEnArchivo(nombreArchivo);
 }
@@ -49,3 +49,6 @@ void Sorter::terminar() {
 	}
 }
 
+unsigned Sorter::getMaxLongPalabra() {
+	return this->maxLongitudPalabra;
+}

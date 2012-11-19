@@ -13,6 +13,7 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -32,12 +33,14 @@ public:
 	bool leerCaracter(char &cadena);
 	void irAlPrincipio();
 	void irAlFinal();
+	void irAPos(unsigned);
 	void cerrar();
 	bool abrirLectura(const std::string& path);
 	bool abrirEscritura(const std::string& path);
 	std::string leerLinea();
 	std::string leerBloque();
 	void escribirLinea(const string& palabra);
+	void escribirCampoLongitudFija(const string& campo,unsigned tamanio);
 
 };
 

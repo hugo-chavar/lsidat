@@ -1,8 +1,8 @@
 /*
  * NodoArbol.h
  *
- *  Created on: Sep 14, 2012
- *      Author: andy
+ *  Created on: 14/09/2012
+ *      Author: Andres Sanabria
  */
 
 #ifndef NODOARBOL_H_

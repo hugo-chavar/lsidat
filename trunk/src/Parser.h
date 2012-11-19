@@ -25,9 +25,11 @@ public:
 	bool ProcessFiles( string outputDirectory);
 	bool setInputDirectory(string inputDirectory);
 	void setFilesProcessedPath(string filesProcessed);
-	int numFiles();
+	int filesCount();
+	unsigned maxLengthWord();
 private:
-	int cantArchivos;
+	int _filesCount;
+	unsigned _maxLengthWord;
 	bool Process(Sorter* sorter, string filePath, int doc);
 	DirList directories;
 };
