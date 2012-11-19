@@ -48,15 +48,24 @@ void Token::print() {
 	_currentPosition = 0;
 }
 
-bool Token::isNumber(string str) {
+number_type Token::isNumber(string str) {
 	bool is_number = true;
-	unsigned int i = 1;
+	bool is_float = false;
+	unsigned int i = 0;
 	while ((is_number) && (i<str.length())) {
+		if (str[i] == '.')
+			is_float = true;
 		if ((!isdigit(str[i])) && (str[i] != '.'))
 			is_number = false;
 		i++;
 	}
-	return is_number;
+	if ((i == 0) && (!is_number))
+		return NOT_A_NUMBER;
+	if ((i > 0) && (!is_number))
+		return ALPHANUMERIC;
+	if ((is_number) && (is_float))
+		return FLOAT;
+	return INTEGER;
 }
 
 string Token::removeCharacters(string str, string characters) {
@@ -96,7 +105,6 @@ void Token::constructTerms() {
 	iterador = candidates.begin();
 	while (iterador != candidates.end()) {
 		aux = trim_copy(*iterador, " \'{}[]-+.*/%$?<>=^#&!_");
-		bool is_number = false;
 		if ((!isdigit(aux[0])) && (aux[0] != '$')) { // hacer algo con los nros y los q empiezan en num luego
 			split(v, aux, separators);
 			if (v.size() > 1) {
@@ -112,7 +120,7 @@ void Token::constructTerms() {
 				split (v, aux, "&-_/"); // Separo en terminos diferentes.
 				if (v.size() > 1) {
 					if (v.size() == 2) // verifico que sean dos anios y completo el segundo.
-						if ((isNumber(v[0])) && (isNumber(v[1])) && (v[0].length() == 4))
+						if ((isNumber(v[0]) == INTEGER) && (isNumber(v[1]) == INTEGER) && (v[0].length() == 4))
 							if (v[1].length() == 2)
 								v[1] = completeYear(v);
 					aux = "";
@@ -121,21 +129,25 @@ void Token::constructTerms() {
 						candidates.push_back(v[i]);
 					}
 					aux = removeCharacters(aux, ".,"); // Elimino los separadores restantes.
+					if (isNumber(aux) != ALPHANUMERIC)
+						aux = "";
 				} else {
 					aux = removeCharacters(aux, ","); // Elimino el separador de miles.
-					if (isNumber(aux)) { // Redondeo el numero siempre para abajo.
+					if (isNumber(aux) == FLOAT) { // Redondeo el numero siempre para abajo.
 						double num = atof(aux.c_str());
 						num = (floor(num*100))/100;
 						aux = toString(num, 2);
 					}
+					else
+						aux = removeCharacters(aux, ".");
 				}
 			}
 		}
-		aux = trim_copy(aux, " \'{}[]-+.*/?<>=^#&!_");
+		aux = trim_copy(aux, " \'{}[]-+.*/?<>=^$%#&!_");
 		if (aux == "") {
 			iterador = candidates.erase(iterador);
 		} else {
-			if (!is_number) {
+			if ((isNumber(aux) == NOT_A_NUMBER) || (isNumber(aux) == ALPHANUMERIC)) {
 				stringToLower(aux);
 				stemOfPlural(aux);
 			}
