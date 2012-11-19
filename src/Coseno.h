@@ -1,8 +1,8 @@
 /*
  * Coseno.h
  *
- *  Created on: Nov 11, 2012
- *      Author: andy
+ *  Created on: 11/11/2012
+ *      Author: Andres Sanabria
  */
 
 #ifndef COSENO_H_

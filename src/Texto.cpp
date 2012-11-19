@@ -1,8 +1,8 @@
 /*
  * Texto.cpp
  *
- *  Created on: Sep 14, 2012
- *      Author: hugo
+ *  Created on: 14/09/2012
+ *      Author: Hugo Chavar
  */
 #include <iomanip>
 #include "Texto.h"
