@@ -12,6 +12,7 @@
 #include <list>
 #include <vector>
 #include "Texto.h"
+#include <math.h>
 
 #define MAX_TOKEN_LENGTH 60 //solo hay 3 palabras del idioma ingles con mas de 60 caracteres y no se usan
 using namespace std;
@@ -25,6 +26,9 @@ private:
 	list<string>::iterator iterador;
 	size_t _currentPosition;
 	size_t _count;
+	bool isNumber(string str);
+	string removeCharacters(string str, string characters);
+	string completeYear(vector<string> v);
 public:
 	Token();
 	Token(string);
