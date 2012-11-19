@@ -1,7 +1,7 @@
 /*
  * TermFile.cpp
  *
- *  Created on: Nov 7, 2012
+ *  Created on: 07/11/2012
  *      Author: Hugo Chavar
  */
 
@@ -14,13 +14,19 @@ TermFile::TermFile() {
 }
 
 TermFile::~TermFile() {
-//	if (crearVector){
-//		delete vector;
-//	}
 }
 
 bool TermFile::abrir(string path) {
-	return t.abrirLectura(path);
+	bool result = t.abrirLectura(path);
+	if (result){
+		pos = 1;
+		piso = 0;
+		string aux = t.leerLinea();
+		termactual = trim_copy(aux);
+		tamaniocampo = aux.length();
+		ultimoAgregado = false;
+	}
+	return result;
 }
 
 bool TermFile::crear(string path) {
@@ -28,18 +34,22 @@ bool TermFile::crear(string path) {
 }
 
 void TermFile::agregar(string term) {
-	t.escribirLinea(term);
+	t.escribirCampoLongitudFija(term, tamaniocampo);
 }
 
-int TermFile::buscarTerm(string buscado) {
+void TermFile::setTamanioCampo(unsigned tam) {
+	tamaniocampo = tam;
+}
+
+int TermFile::busquedaSecuencialTerm(string buscado) {
 	int comp = -1;
 
 	if ((pos > 0) && (!ultimoAgregado)) {
 		//si el ultimo fue agregado me evito una comparacion
 		comp = comparar(buscado);
 	}
-	while ((comp < 0)&&(!t.eof())) {
-		actual = t.leerLinea();
+	while ((comp < 0) && (!t.eof())) {
+		termactual = trim_copy(t.leerLinea());
 		pos++;
 		comp = comparar(buscado);
 	}
@@ -48,20 +58,67 @@ int TermFile::buscarTerm(string buscado) {
 		return pos;
 	else
 		return -1;
-	//return (comp > 0 ? -1 : pos);
+}
+/*
+ * Modificación al diseño
+ * Busqueda binaria sobre los terminos, aprovechando el ordenamiento dado para armar la matriz.
+ * Además aprovecha que los términos de la consulta están ordenados,
+ * entonces el piso de la busqueda de un termino se mantiene para la siguiente busqueda, ya que
+ * el siguiente termino sera por lo menos ese piso o mas grande en terminos del orden alfabetico.
+ */
+
+int TermFile::busquedaBinariaTerm(string buscado){
+	int techo,posactual,comp = -1;
+	bool encontrado = false;
+	techo = dimension -1;
+	//leer = false;
+
+
+//	if ((pos > 0) && (!ultimoAgregado)) {
+//		//si el ultimo fue agregado me evito una comparacion
+//		//si comp da negativo el termino buscado es menor al actual
+//		//si da positivo es mayor
+//		comp = comparar(buscado);
+//	}
+	while (!encontrado){
+		posactual = (piso + techo)/2;
+		//cout<<endl<<"Pos actual: "<<posactual<<endl;
+		termactual = getTerm(posactual);
+		//cout<<"Term leido: "<<termactual<<endl;
+		comp = comparar(buscado);
+		if (comp==0){
+			encontrado = true;
+			pos = posactual;
+		} else if (comp < 0) {
+			piso = posactual+1;
+			//leer = true;
+		} else {
+			techo = posactual -1;
+			pos = posactual; // me quedo parado en un registro mayor al term buscado
+			//leer = true;
+		}
+		if (piso > techo){
+			encontrado = true;
+			//leer = false;
+		}
+	}
+	//si esta devuelve la posicion, sino devuelve -1
+	if (comp == 0)
+		return pos;
+	else
+		return -1;
 
 }
 
-int TermFile::comparar(string unterm){
+int TermFile::comparar(string unterm) {
 	int comp;
-	comp = actual.compare(unterm);
+	comp = termactual.compare(unterm);
 	// flag q indica si el ultimo termino leido es tenido en cta en el vector
 	ultimoAgregado = false;
 	if (comp <= 0) { //si comp >0 no se el valor en el vector
 		//comp > 0 significa q el termino lo esta en la lista de terminos
-		//vector.conservativeResize(pos);
-		ultimoAgregado =true;
-		if ((crearVector)&&(comp == 0)) {
+		ultimoAgregado = true;
+		if ((crearVector) && (comp == 0)) {
 			vector[pos - 1] = 1;
 		}
 //			cout<<"comp ="<<comp<<endl;
@@ -73,15 +130,22 @@ int TermFile::comparar(string unterm){
 }
 
 void TermFile::iniciarVector(int filas) {
-	//vector = new VectorXf(filas);
+
 	crearVector = true;
 	dimension = filas;
 	vector.resize(dimension);
-	for(int i = 0; i<dimension;i++){
-		vector[i]=0;
+	for (int i = 0; i < dimension; i++) {
+		vector[i] = 0;
 	}
 }
 
-VectorXf TermFile::getVector(){
+VectorXf TermFile::getVector() {
 	return vector;
+}
+
+string TermFile::getTerm(unsigned termNumber){
+	t.irAPos((termNumber-1)*(tamaniocampo+1));
+
+	string term = trim_copy(t.leerLinea());
+	return term;
 }

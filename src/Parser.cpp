@@ -10,7 +10,7 @@
 #include "Token.h"
 
 Parser::Parser() {
-	cantArchivos = 0;
+	_filesCount = 0;
 }
 
 bool Parser::Process(Sorter* sorter, string filePath, int doc) {
@@ -21,6 +21,7 @@ bool Parser::Process(Sorter* sorter, string filePath, int doc) {
 	Archivo file;
 	unsigned i, pos, lngthbuff, lngthtoken;
 	if (!file.abrirLectura(filePath)) {
+		cerr<<"Se produjo un error al abrir el archivo: "<<filePath<<endl;
 		return false;
 	}
 	while (!file.eof()) {
@@ -40,12 +41,6 @@ bool Parser::Process(Sorter* sorter, string filePath, int doc) {
 
 			i = buffer.find_first_not_of(delimiters, pos);
 		}
-
-		//separadores & - _ /: . -- ver apostrofe  separar los ..  * entre palabras
-		//x entre numeros
-		//partir antes de sacar el plural
-//		war--prisoners
-//		war/prisoners/exchange
 	}
 
 	return true;
@@ -56,13 +51,20 @@ bool Parser::ProcessFiles(string outputDirectory) {
 	Sorter* sorter = new Sorter(outputDirectory);
 
 	while (directories.hasNext()) {
-		if (!Process(sorter, directories.nextFullPath(), doc))
+		if (!Process(sorter, directories.nextFullPath(), doc)){
+			delete sorter;
 			return false;
+		}
 		doc++;
 	}
-	cantArchivos = doc;
+	_filesCount = doc;
 	sorter->terminar();
-	delete sorter;
+	/*
+	 * Se almacena la longitud de la palabra mas larga, para luego setear el tamanio del campo
+	 * en el archivo de terminos de manera que tenga una longitud fija y minima.
+	 */
+	this->_maxLengthWord = sorter->getMaxLongPalabra();
+
 	return true;
 }
 
@@ -77,9 +79,14 @@ void Parser::setFilesProcessedPath(string filesProcessed) {
 	directories.writeToFile(filesProcessed);
 }
 
-int Parser::numFiles() {
-	return cantArchivos;
+int Parser::filesCount() {
+	return _filesCount;
+}
+
+unsigned Parser::maxLengthWord(){
+	return _maxLengthWord;
 }
 
 Parser::~Parser() {
+
 }

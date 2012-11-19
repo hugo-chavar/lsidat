@@ -1,7 +1,7 @@
 /*
  * DirList.h
  *
- *  Created on: Sep 5, 2012
+ *  Created on: 05/09/2012
  *      Author: Hugo Chavar
  */
 
@@ -16,6 +16,7 @@
 #include <string>
 #include <list>
 #include "Archivo.h"
+#include "TermFile.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ private:
 	list<string> files;
 	list<string>::iterator iterador;
 	unsigned _count;
+	unsigned maxFileNameLength;
 	unsigned _currentPosition;
 	string directory;
 public:

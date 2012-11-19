@@ -1,7 +1,7 @@
 /*
  * Merger.cpp
  *
- *  Created on: Sep 14, 2012
+ *  Created on: 14/09/2012
  *      Author: Hugo Chavar
  */
 

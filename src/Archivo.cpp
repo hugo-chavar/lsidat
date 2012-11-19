@@ -3,11 +3,6 @@
 
 using namespace std;
 
-/**
- * Pre: El string recibido debe ser un path valido.
- * Post: Abre el archivo indicado en modo lectura-escritura,
- * si no pudo abrirlo, devuelve indicando que hubo errores.
- */
 Archivo::Archivo(const std::string& path, bool & hayErrores) {
 	hayErrores = !this->abrirLectura(path);
 }
@@ -81,28 +76,25 @@ bool Archivo::leerCaracter(char &salida) {
 	return true;
 }
 
-/**
- * Pre:  El archivo debe estar abierto para lectura.
- * Post: Posiciona el cursor al comienzo del archivo.
- */
 void Archivo::irAlPrincipio() {
 	elArchivo.tellg();
 	elArchivo.clear();
 	elArchivo.seekg(0, ios::beg);
-	elArchivo.seekp(0, ios::beg);
+	//elArchivo.seekp(0, ios::beg);
 	elArchivo.tellg();
 }
 
-/**
- * Pre: El archivo debe estar abierto para lectura.
- * Post: Posiciona el cursor al final del archivo.
- */
 void Archivo::irAlFinal() {
 	elArchivo.tellg();
 	elArchivo.clear();
 	elArchivo.seekg(0, ios::end);
-	elArchivo.seekp(0, ios::end);
+	//elArchivo.seekp(0, ios::end);
 	elArchivo.tellg();
+}
+
+void Archivo::irAPos(unsigned pos){
+	elArchivo.seekg(pos, ios::beg);
+	//cout<<"a pos "<<elArchivo.tellg()<<" \n";
 }
 
 void Archivo::cerrar() {
@@ -123,6 +115,7 @@ string Archivo::leerBloque() {
 	getline(elArchivo, s,'\0');
 	return s;
 }
+
 void Archivo::escribirLinea(const string& palabra) {
 	//long size=palabra.size();
 	if (palabra.size() > 0) {
@@ -130,4 +123,10 @@ void Archivo::escribirLinea(const string& palabra) {
 		//cout << "escribiendo: " << palabra << endl;
 	}
 	//elArchivo.write(palabra.c_str(),size);
+}
+
+void Archivo::escribirCampoLongitudFija(const string& campo,unsigned tamanio) {
+	if (campo.size() > 0) {
+		elArchivo <<left<< std::setw(tamanio)<< campo << endl;
+	}
 }

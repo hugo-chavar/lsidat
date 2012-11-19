@@ -38,12 +38,14 @@ double InitialMatrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFre
 }
 
 bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
-		int numFiles, string terms, string stopwords) {
+		int numFiles, unsigned fieldLength, string terms, string stopwords) {
 	Archivo inputFile;
 	Archivo outputFile;
 
 	TermFile termList;
+	termList.setTamanioCampo(fieldLength);
 	TermFile stopwordslist;
+	stopwordslist.setTamanioCampo(fieldLength);
 	if (!inputFile.abrirLectura(inputPath) || !outputFile.abrirEscritura(outputPath)
 			|| !termList.crear(terms)|| !stopwordslist.crear(stopwords)) {
 		return false;
@@ -60,15 +62,12 @@ bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 		word.crearDesdeString(line);
 		ratio = word.cantidad() / (double) numFiles;
 		if (ratio > THRESHOLD_STOP_WORD) {
-			//tratar las stop words, creando un archivo con la lista
-//			cout << "Palabra \"" << word.getContenido()
-//					<< "\" aparece en mas del "
-//					<< toString(THRESHOLD_STOP_WORD * 100, 0) << "% ("
-//					<< toString(ratio * 100, 2) << "%) de los docs" << endl;
+			/** Modificacion al diseño
+			 *  Las palabras que aparecen en mas de cierto porcentaje de documentos
+			 *  son stopwords.
+			 */
 			stopwordslist.agregar(word.getContenido());
 		} else {
-			//palabras que no son stop words
-			//TODO crear un archivo con la lista de palabras
 			list<InfoPalabra> wordInfo = word.getInformacion();
 			gFreq = calculateGlobalFrequency(wordInfo);
 			gWeight = calculateGlobalWeight(wordInfo, gFreq, numFiles);
@@ -85,12 +84,16 @@ bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 			}
 			lineToWrite = lineToWrite.substr(0, lineToWrite.size() - 1);
 			outputFile.escribirLinea(lineToWrite);
+			/** Modificacion al diseño
+			 *  Los terminos son guardados como campos de longitud fija
+			 *  de esta manera las busquedas son binarias y no secuenciales.
+			 */
 			termList.agregar(word.getContenido());
 			this->_rows++;
 		}
 		line = inputFile.leerLinea();
 	}
-	cout<<"filas"<<_rows<<endl;
+	cout<<"Filas creadas: "<<_rows<<endl;
 	return true;
 }
 

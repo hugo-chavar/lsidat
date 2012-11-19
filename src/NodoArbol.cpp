@@ -1,8 +1,8 @@
 /*
  * NodoArbol.cpp
  *
- *  Created on: Sep 14, 2012
- *      Author: andy
+ *  Created on: 14/09/2012
+ *      Author: Andres Sanabria
  */
 
 #include "NodoArbol.h"

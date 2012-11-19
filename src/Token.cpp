@@ -1,7 +1,7 @@
 /*
  * Token.cpp
  *
- *  Created on: Nov 10, 2012
+ *  Created on: 10/11/2012
  *      Author: Hugo Chavar
  */
 
@@ -95,7 +95,7 @@ void Token::constructTerms() {
 
 	iterador = candidates.begin();
 	while (iterador != candidates.end()) {
-		aux = trim_copy(*iterador, " \'{}[]-+.*/?<>=^#&!_");
+		aux = trim_copy(*iterador, " \'{}[]-+.*/%$?<>=^#&!_");
 		bool is_number = false;
 		if ((!isdigit(aux[0])) && (aux[0] != '$')) { // hacer algo con los nros y los q empiezan en num luego
 			split(v, aux, separators);
