@@ -1,8 +1,8 @@
 /*
  * Comparador.cpp
  *
- *  Created on: Nov 8, 2012
- *      Author: andy
+ *  Created on: 08/11/2012
+ *      Author: Andres Sanabria
  */
 
 #include "Comparador.h"

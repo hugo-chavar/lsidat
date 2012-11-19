@@ -154,14 +154,6 @@ int main(int argc, char *argv[]) {
 		doc++;
 	}
 	//make_heap(heap.begin(),heap.end());
-//	Archivo a;
-//	a.abrirLectura(termsFile);
-//	a.irAPos(440);
-//	string b = a.leerLinea();
-//	cout<<"LINEA LEIDA: "<<b<<endl;
-//	a.irAPos(44*8);
-//	b = a.leerLinea();
-//	cout<<"LINEA LEIDA: "<<b<<endl;
 
 	TermFile docList;
 	if(!docList.abrir(repo+"/filesList.txt")){
@@ -178,13 +170,13 @@ int main(int argc, char *argv[]) {
 	string s;
 	//getline(fp_doc,s);
 	//while(heap.size()!=0){
-	for (int i=1;i<4;i++){
+	for (int i=0;i<8;i++){
 		//TODO Por el momento lo hago asi.Funciona si todos los nombres de doc tienen el mismo largo.
 		//Se lee una linea,se mira su longitud y se multiplica el doc por esa long
 		//El problema es que al ser de texto sino hay que leer uno por una las lineas cada vez hasta llegar al doc indicado.
 		//fp_doc.seekg(heap.front().getDocumento()*(s.size()+1),ios::beg);
 		//getline(fp_doc,s);
-		s= docList.getTerm(heap.front().getDocumento());
+		s= docList.getTerm(heap.front().getDocumento()+1);
 		cout<<"Documento:"<<heap.front().getDocumento()<<" Nombre:"<<s<<" coseno:" <<heap.front().getCoseno()<<endl;
 		pop_heap (heap.begin(),heap.end());
 		heap.pop_back();
