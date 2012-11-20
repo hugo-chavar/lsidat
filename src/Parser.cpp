@@ -17,7 +17,7 @@ bool Parser::Process(Sorter* sorter, string filePath, int doc) {
 	string buffer, word;
 	//considero delimitador: espacio, nueva linea, tab, punto y coma y parentesis
 	//la coma y el punto no van por el tema de los numeros
-	char delimiters[] = ", \n\r\t\f\v;()\":"; //no modificar
+	char delimiters[] = " \n\r\t\f\v;()\":"; //no modificar
 	Archivo file;
 	unsigned i, pos, lngthbuff, lngthtoken;
 	if (!file.abrirLectura(filePath)) {
