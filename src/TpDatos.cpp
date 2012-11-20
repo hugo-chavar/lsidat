@@ -82,6 +82,7 @@ int main(int argc, char *argv[]) {
 	TermFile terms, stw;
 	if (!terms.abrir(termsFile) || !stw.abrir(stopwordsFile)){
 		cerr<<"Error al abrir archivos de terms y stopwords."<<endl;
+		return 0;
 	}
 
 	if (optind < argc) {
@@ -170,7 +171,7 @@ int main(int argc, char *argv[]) {
 	string s;
 	//getline(fp_doc,s);
 	//while(heap.size()!=0){
-	for (int i=0;i<30;i++){
+	for (int i=0;i<6;i++){
 		//TODO Por el momento lo hago asi.Funciona si todos los nombres de doc tienen el mismo largo.
 		//Se lee una linea,se mira su longitud y se multiplica el doc por esa long
 		//El problema es que al ser de texto sino hay que leer uno por una las lineas cada vez hasta llegar al doc indicado.

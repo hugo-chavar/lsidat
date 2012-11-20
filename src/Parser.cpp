@@ -64,7 +64,7 @@ bool Parser::ProcessFiles(string outputDirectory) {
 	 * en el archivo de terminos de manera que tenga una longitud fija y minima.
 	 */
 	this->_maxLengthWord = sorter->getMaxLongPalabra();
-
+	delete sorter;
 	return true;
 }
 

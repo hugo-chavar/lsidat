@@ -126,7 +126,7 @@ void removeSymbols(std::string& s, const std::string& symbols) {
 	std::string aux;
 
 	size_t m, u, d = s.find_last_of(symbols);
-
+	m = std::string::npos;
 	while (d != std::string::npos) {
 		aux = s.substr(0, d);
 		u = aux.find_last_of(symbols);
