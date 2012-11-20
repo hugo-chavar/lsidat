@@ -105,7 +105,7 @@ void Token::constructTerms() {
 	iterador = candidates.begin();
 	while (iterador != candidates.end()) {
 		aux = trim_copy(*iterador, " \'{}[]-+.*/%$?<>=^#&!_");
-		if ((!isdigit(aux[0])) && (aux[0] != '$')) { // hacer algo con los nros y los q empiezan en num luego
+		if (!isdigit(aux[0]))  {   //&& (aux[0] != '$'))
 			split(v, aux, separators);
 			if (v.size() > 1) {
 				aux = "";
@@ -117,9 +117,13 @@ void Token::constructTerms() {
 			}
 		} else {
 			if ((isdigit(aux[0]))) {
-				split (v, aux, "&-_/"); // Separo en terminos diferentes.
+				split (v, aux, "&-_/");
 				if (v.size() > 1) {
-					if (v.size() == 2) // verifico que sean dos anios y completo el segundo.
+					if (v.size() == 2)
+						/*
+						 * Modificación al diseño
+						 * Se detectan rangos de años y se completa el valor que esta abreviado.
+						 */
 						if ((isNumber(v[0]) == INTEGER) && (isNumber(v[1]) == INTEGER) && (v[0].length() == 4))
 							if (v[1].length() == 2)
 								v[1] = completeYear(v);
@@ -135,7 +139,8 @@ void Token::constructTerms() {
 					aux = removeCharacters(aux, ","); // Elimino el separador de miles.
 					if (isNumber(aux) == FLOAT) { // Redondeo el numero siempre para abajo.
 						double num = atof(aux.c_str());
-						num = (floor(num*100))/100;
+						num = (round(num*100))/100;
+						//no me convencia el floor, buscando el nro 'e' no daba el resultado esperado
 						aux = toString(num, 2);
 					}
 					else
@@ -143,7 +148,7 @@ void Token::constructTerms() {
 				}
 			}
 		}
-		aux = trim_copy(aux, " \'{}[]-+.*/?<>=^$%#&!_");
+		aux = trim_copy(aux, " @\'{}[]-+.*/?<>=^$%#&!_");
 		if (aux == "") {
 			iterador = candidates.erase(iterador);
 		} else {
