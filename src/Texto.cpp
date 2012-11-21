@@ -140,3 +140,72 @@ void removeSymbols(std::string& s, const std::string& symbols) {
 		d = u;
 	}
 }
+
+std::string replaceMultiByteChars(std::string& cad, char replacement) {
+	/*	If you know that the data is UTF-8, then you just have to check the high bit:
+
+	 0xxxxxxx = single-byte ASCII character
+	 1xxxxxxx = part of multi-byte character
+	 Or, if you need to distinguish lead/trail bytes:
+
+	 10xxxxxx = 2nd, 3rd, or 4th byte of multi-byte character
+	 110xxxxx = 1st byte of 2-byte character
+	 1110xxxx = 1st byte of 3-byte character
+	 11110xxx = 1st byte of 4-byte character
+	 source: http://en.wikipedia.org/wiki/UTF-8 */
+	std::string aux, special,d;
+	unsigned j = 0;
+	aux = "";
+
+	while (j < cad.length()) {
+		char c = cad[j];
+		unsigned plus = 0;
+		if ((0x80 & c) != 0) { //es caracter multibyte, se lo trata
+			if (((0x10 & c) == 0) && ((0xE0 & c) == 0xE0)) { //caracter de 3 bytes
+				//caracter bastante raro.. Lo reemplazo con un single character
+				plus = 2;
+				//special = cad.substr(j, 3);
+				//cout << "3-byte char: " << special << endl;
+				c = replacement;
+			} else if (((0x20 & c) == 0) && ((0xC0 & c) == 0xC0)) { //caracter de 2 bytes
+				d = cad.substr(j, 2);
+				unsigned k = 0;
+				//cout << twoByteChars.length() << endl;
+				while ((twoByteChars.substr(k, 2).compare(d) != 0)
+						&& (k < twoByteChars.length())) {
+					k += 2;
+				}
+				if ((twoByteChars.substr(k, 2)).compare(d) == 0) {
+					c = replacementChars[k / 2];
+					plus = 1;
+				} else {
+					//caracter un poco raro.. Lo reemplazo con un single character
+					plus = 1;
+					c = replacement;
+					//special = cad.substr(j, 2);
+					//cout << "2-byte char: " << special << endl;
+				}
+			} else if (((0x20 & c) == 0) && ((0xF0 & c) == 0xF0)) { //caracter de 4 bytes
+				//caracter muy raro.. Lo reemplazo con un single character
+				plus = 3;
+				c = replacement;
+				//special = cad.substr(j, 4);
+				//cout << "4-byte char: " << special << endl;
+			} else {
+				//en este punto se detecta q no es un caracter lo q se leyo
+				//puede estar corrupto el texto
+				//se avanza hasta el siguiente caracter simple
+				plus = 4;
+				while ((0x80 & cad[j + plus]) != 0) {
+					plus++;
+				}
+			}
+		}
+		j += (plus + 1);
+		if (int(c) < 32)
+			c  = replacement;
+		aux += c;
+	}
+	return aux;
+
+}

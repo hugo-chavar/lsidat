@@ -17,9 +17,12 @@
 #define MAX_TOKEN_LENGTH 60 //solo hay 3 palabras del idioma ingles con mas de 60 caracteres y no se usan
 using namespace std;
 
+//const string delimiters = " \'{}[]+*?<>=^#!";
+//const string separators = "&-_/.,~|";
 const string delimiters = " \'{}[]+*?<>=^#!";
-const string separators = "&-_/.,~|";
-enum string_type {FLOAT, INTEGER, ALPHANUMERIC, NOT_A_NUMBER, TEXT, GARBAGE};
+const string separators_number = "&-_/~|";
+const string separators_text = separators_number+".,";
+enum string_type {FLOAT1, INTEGER1, ALPHANUMERIC1, NOT_A_NUMBER1, TEXT, GARBAGE};
 
 class Token {
 private:

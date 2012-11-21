@@ -21,6 +21,11 @@ struct split {
 	};
 };
 
+const std::string twoByteChars =
+				"áéíóúÁÉÍÓÚñÑäëïöüâêîôûÂÊÎÔÛÁÉÍÓÚÄËÏÖÜàèìòùÀÈÌÒÙÇçĉćĆĊċðÆæœãõÃĒĪŌŪŸÿžŽµåůāēīōūăĕĭŏŭąęįųĄĘŲ";
+const std::string replacementChars =
+				"aeiouaeiounnaeiouaeiouaeiouaeiouaeiouaeiouaeioucccccccoaaoaoaeiouyyzzuauaeiouaeiouaeiuaeu";
+
 template<typename Container>
 Container& split(Container& result, const typename Container::value_type& s,
 		const typename Container::value_type& delimiters,
@@ -74,5 +79,7 @@ void stringToLower(std::string& s);
 void stemOfPlural(std::string& s);
 
 void removeSymbols(std::string& s, const std::string& symbols);
+
+std::string replaceMultiByteChars(std::string& s, char replacement );
 
 #endif /* TEXTO_H_ */
