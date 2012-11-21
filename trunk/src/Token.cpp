@@ -48,29 +48,61 @@ void Token::print() {
 	_currentPosition = 0;
 }
 
-number_type Token::isNumber(string str) {
-	bool is_number = true;
+string_type Token::whatIsIt(string str) {
+	bool is_number = false;
 	bool is_float = false;
+	bool is_text = true;
+	bool is_garbage = false;
 	unsigned int i = 0;
-	while ((is_number) && (i<str.length())) {
-		if (str[i] == '.'){
-			if (!is_float)
-				is_float = true;
-			else //tiene mas de un '.'
+	int j = 0, k = 0, l = 0;
+	if (isdigit(str[0]))
+		is_number = true;
+	while ((i < str.length()) && (!is_garbage)) {
+		if (is_number) {
+			if (str[i] == '.'){
+				if (!is_float)
+					is_float = true;
+				else //tiene mas de un '.'
+					is_number = false;
+			}
+			if ((!isdigit(str[i])) && (str[i] != '.'))
 				is_number = false;
+			if ((!is_number) && ((!((str[i]>='A') && (str[i]<='Z'))) && (!((str[i]>='a') && (str[i]<='z')))))
+				is_garbage = true;
+			j++;
 		}
-
-		if ((!isdigit(str[i])) && (str[i] != '.'))
-			is_number = false;
+		else {
+			if ((!((str[i]>='A') && (str[i]<='Z'))) && (!((str[i]>='a') && (str[i]<='z')))) {
+				is_text = false;
+				if (isdigit(str[i]))
+					k++;
+			}
+			else {
+				if (!is_text)
+					is_garbage = true;
+				l++;
+			}
+		}
 		i++;
 	}
-	if ((i == 1) && (!is_number))
+	if (is_garbage)
+		return GARBAGE;
+	if ((j == 1) && (!is_number))
 		return NOT_A_NUMBER;
-	if ((i > 1) && (!is_number))
+	if ((j > 1) && (!is_number))
 		return ALPHANUMERIC;
 	if ((is_number) && (is_float))
 		return FLOAT;
-	return INTEGER;
+	if ((is_number) && (!is_float)) {
+		if (str.length() > 7)
+			return GARBAGE;
+		return INTEGER;
+	}
+	if (is_text)
+		return TEXT;
+	if ((l+k) == i)
+		return ALPHANUMERIC;
+	return GARBAGE;
 }
 
 string Token::removeCharacters(string str, string characters) {
@@ -120,6 +152,8 @@ void Token::constructTerms() {
 					t++;
 				}
 			}
+			if (whatIsIt(aux) == GARBAGE)
+				aux = "";
 		} else {
 			if ((isdigit(aux[0]))) {
 				split (v, aux, "&-_/");
@@ -129,7 +163,7 @@ void Token::constructTerms() {
 						 * Modificación al diseño
 						 * Se detectan rangos de años y se completa el valor que esta abreviado.
 						 */
-						if ((isNumber(v[0]) == INTEGER) && (isNumber(v[1]) == INTEGER) && (v[0].length() == 4))
+						if ((whatIsIt(v[0]) == INTEGER) && (whatIsIt(v[1]) == INTEGER) && (v[0].length() == 4))
 							if (v[1].length() == 2)
 								v[1] = completeYear(v);
 					aux = "";
@@ -138,18 +172,21 @@ void Token::constructTerms() {
 						candidates.push_back(v[i]);
 					}
 					aux = removeCharacters(aux, ".,"); // Elimino los separadores restantes.
-					if (isNumber(aux) != ALPHANUMERIC)
+					if (whatIsIt(aux) != ALPHANUMERIC)
 						aux = "";
 				} else {
 					aux = removeCharacters(aux, ","); // Elimino el separador de miles.
-					if (isNumber(aux) == FLOAT) { // Redondeo el numero siempre para abajo.
+					if (whatIsIt(aux) == FLOAT) { // Redondeo el numero siempre para abajo.
 						double num = atof(aux.c_str());
 						num = (round(num*100))/100;
 						//no me convencia el floor, buscando el nro 'e' no daba el resultado esperado
 						aux = toString(num, 2);
 					}
-					else
+					else {
+						if (whatIsIt(aux) == GARBAGE)
+							aux = "";
 						aux = removeCharacters(aux, ".");
+					}
 				}
 			}
 		}
@@ -157,7 +194,7 @@ void Token::constructTerms() {
 		if (aux == "") {
 			iterador = candidates.erase(iterador);
 		} else {
-			if ((isNumber(aux) == NOT_A_NUMBER) || (isNumber(aux) == ALPHANUMERIC)) {
+			if ((whatIsIt(aux) == NOT_A_NUMBER) || (whatIsIt(aux) == ALPHANUMERIC)) {
 				stringToLower(aux);
 				stemOfPlural(aux);
 			}
