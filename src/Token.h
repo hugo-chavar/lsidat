@@ -19,7 +19,7 @@ using namespace std;
 
 const string delimiters = " \'{}[]+*?<>=^#!";
 const string separators = "&-_/.,~|";
-enum number_type {FLOAT, INTEGER, ALPHANUMERIC, NOT_A_NUMBER};
+enum string_type {FLOAT, INTEGER, ALPHANUMERIC, NOT_A_NUMBER, TEXT, GARBAGE};
 
 class Token {
 private:
@@ -27,7 +27,7 @@ private:
 	list<string>::iterator iterador;
 	size_t _currentPosition;
 	size_t _count;
-	number_type isNumber(string str);
+	string_type whatIsIt(string str);
 	string removeCharacters(string str, string characters);
 	string completeYear(vector<string> v);
 public:
