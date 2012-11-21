@@ -18,7 +18,7 @@
 using namespace std;
 
 const string delimiters = " \'{}[]+*?<>=^#!";
-const string separators = "&-_/.,";
+const string separators = "&-_/.,~|";
 enum number_type {FLOAT, INTEGER, ALPHANUMERIC, NOT_A_NUMBER};
 
 class Token {

@@ -53,15 +53,20 @@ number_type Token::isNumber(string str) {
 	bool is_float = false;
 	unsigned int i = 0;
 	while ((is_number) && (i<str.length())) {
-		if (str[i] == '.')
-			is_float = true;
+		if (str[i] == '.'){
+			if (!is_float)
+				is_float = true;
+			else //tiene mas de un '.'
+				is_number = false;
+		}
+
 		if ((!isdigit(str[i])) && (str[i] != '.'))
 			is_number = false;
 		i++;
 	}
-	if ((i == 0) && (!is_number))
+	if ((i == 1) && (!is_number))
 		return NOT_A_NUMBER;
-	if ((i > 0) && (!is_number))
+	if ((i > 1) && (!is_number))
 		return ALPHANUMERIC;
 	if ((is_number) && (is_float))
 		return FLOAT;
