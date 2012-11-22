@@ -91,6 +91,7 @@ string_type Token::whatIsIt(string str) {
 		return GARBAGE;
 	if ((j == 1) && (!is_number))
 		return NOT_A_NUMBER1;
+
 	if ((j > 1) && (!is_number))
 		return ALPHANUMERIC1;
 	if ((is_number) && (is_float))
@@ -143,7 +144,7 @@ void Token::constructTerms() {
 
 	iterador = candidates.begin();
 	while (iterador != candidates.end()) {
-		aux = trim_copy(*iterador, " \'{}[]-+.*/%$?<>=^#&!_`");
+		aux = trim_copy(*iterador, " \'{}[]-+.,*/%$?<>=^#&!_`");
 		aux = replaceMultiByteChars(aux, '_');
 		if (!isdigit(aux[0])) { //&& (aux[0] != '$'))
 			split(v, aux, separators_text);
