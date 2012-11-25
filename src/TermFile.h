@@ -36,7 +36,7 @@ public:
 	void setTamanioCampo(unsigned);
 	int busquedaSecuencialTerm(string);
 	int busquedaBinariaTerm(string);
-	void iniciarVector(int);
+	void iniciarVector();
 
 	int comparar(string);
 	VectorXf getVector();

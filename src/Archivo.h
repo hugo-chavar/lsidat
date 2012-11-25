@@ -41,6 +41,7 @@ public:
 	std::string leerBloque();
 	void escribirLinea(const string& palabra);
 	void escribirCampoLongitudFija(const string& campo,unsigned tamanio);
+	int tamanio();
 
 };
 

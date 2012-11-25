@@ -19,11 +19,12 @@ TermFile::~TermFile() {
 bool TermFile::abrir(string path) {
 	bool result = t.abrirLectura(path);
 	if (result){
-		pos = 1;
+		pos = 0;
 		piso = 0;
 		string aux = t.leerLinea();
-		termactual = trim_copy(aux);
 		tamaniocampo = aux.length();
+		dimension=t.tamanio()/(tamaniocampo+1);
+		termactual = trim_copy(aux);
 		ultimoAgregado = false;
 	}
 	return result;
@@ -44,7 +45,7 @@ void TermFile::setTamanioCampo(unsigned tam) {
 int TermFile::busquedaSecuencialTerm(string buscado) {
 	int comp = -1;
 
-	if ((pos > 0) && (!ultimoAgregado)) {
+	if ((pos >= 0) && (!ultimoAgregado)) {
 		//si el ultimo fue agregado me evito una comparacion
 		comp = comparar(buscado);
 	}
@@ -68,9 +69,9 @@ int TermFile::busquedaSecuencialTerm(string buscado) {
  */
 
 int TermFile::busquedaBinariaTerm(string buscado){
-	int techo,posactual,comp = -1;
+	int techo,comp = -1; //,base=0
 	bool encontrado = false;
-	techo = dimension -1;
+	techo = dimension-1;
 	//leer = false;
 
 
@@ -81,23 +82,22 @@ int TermFile::busquedaBinariaTerm(string buscado){
 //		comp = comparar(buscado);
 //	}
 	while (!encontrado){
-		posactual = (piso + techo)/2;
+		pos = (piso + techo)/2; //base
 		//cout<<endl<<"Pos actual: "<<posactual<<endl;
-		termactual = getTerm(posactual);
+		termactual = getTerm(pos);
 		//cout<<"Term leido: "<<termactual<<endl;
 		comp = comparar(buscado);
 		if (comp==0){
 			encontrado = true;
-			pos = posactual;
 		} else if (comp < 0) {
-			piso = posactual+1;
+			piso = pos+1;
 			//leer = true;
 		} else {
-			techo = posactual -1;
-			pos = posactual; // me quedo parado en un registro mayor al term buscado
+			techo = pos -1;
+			//pos = posactual; me quedo parado en un registro mayor al term buscado. ANDY:No es necesario
 			//leer = true;
 		}
-		if (piso > techo){
+		if (piso > techo){ //base
 			encontrado = true;
 			//leer = false;
 		}
@@ -119,7 +119,7 @@ int TermFile::comparar(string unterm) {
 		//comp > 0 significa q el termino lo esta en la lista de terminos
 		ultimoAgregado = true;
 		if ((crearVector) && (comp == 0)) {
-			vector[pos - 1] = 1;
+			vector[pos] = 1;
 		}
 //			cout<<"comp ="<<comp<<endl;
 //			cout<<"vector["<<pos - 1<<"]="<<vector[pos - 1]<<endl;
@@ -129,10 +129,9 @@ int TermFile::comparar(string unterm) {
 	return comp;
 }
 
-void TermFile::iniciarVector(int filas) {
+void TermFile::iniciarVector() {
 
 	crearVector = true;
-	dimension = filas;
 	vector.resize(dimension);
 	for (int i = 0; i < dimension; i++) {
 		vector[i] = 0;
@@ -144,7 +143,7 @@ VectorXf TermFile::getVector() {
 }
 
 string TermFile::getTerm(unsigned termNumber){
-	t.irAPos((termNumber-1)*(tamaniocampo+1));
+	t.irAPos((termNumber)*(tamaniocampo+1));
 
 	string term = trim_copy(t.leerLinea());
 	return term;
