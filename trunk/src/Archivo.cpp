@@ -92,6 +92,12 @@ void Archivo::irAlFinal() {
 	elArchivo.tellg();
 }
 
+int Archivo::tamanio(){
+	elArchivo.seekg(0, ios::end);
+	int tam=elArchivo.tellg();
+	return tam;
+}
+
 void Archivo::irAPos(unsigned pos){
 	elArchivo.seekg(pos, ios::beg);
 	//cout<<"a pos "<<elArchivo.tellg()<<" \n";
