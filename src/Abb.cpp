@@ -92,6 +92,7 @@ void Abb::borrar(const string clave) {
 }
 
 void Abb::destruir() {
+	//TODO se estan haciendo muchas comparaciones para destruir, deberia ser mas simple
 	while (this->raiz)
 		this->borrar(this->raiz->getPalabra()->getContenido());
 }
