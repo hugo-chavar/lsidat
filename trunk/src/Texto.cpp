@@ -68,7 +68,6 @@ std::string toString(double number, int decimals) {
 	std::string s;
 	aux << std::setprecision(decimals) << std::fixed << number;
 	s = aux.str();
-	//aux = static_cast<std::ostringstream*>( &(std::ostringstream() << n) )->str();
 	return s;
 }
 
@@ -153,6 +152,7 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 	 1110xxxx = 1st byte of 3-byte character
 	 11110xxx = 1st byte of 4-byte character
 	 source: http://en.wikipedia.org/wiki/UTF-8 */
+	//std::string special;
 	std::string aux, special,d;
 	unsigned j = 0;
 	aux = "";
@@ -168,9 +168,10 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 				//cout << "3-byte char: " << special << endl;
 				c = replacement;
 			} else if (((0x20 & c) == 0) && ((0xC0 & c) == 0xC0)) { //caracter de 2 bytes
+				//en esta seccion caen los caracteres con tildes y letras griegas en gral
+				// se reemplazan por caracteres simples sin tildes
 				d = cad.substr(j, 2);
 				unsigned k = 0;
-				//cout << twoByteChars.length() << endl;
 				while ((twoByteChars.substr(k, 2).compare(d) != 0)
 						&& (k < twoByteChars.length())) {
 					k += 2;

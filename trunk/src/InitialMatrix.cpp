@@ -7,7 +7,6 @@
 
 #include "InitialMatrix.h"
 
-
 InitialMatrix::InitialMatrix() {
 }
 
@@ -22,8 +21,8 @@ int InitialMatrix::calculateGlobalFrequency(list<InfoPalabra> wordInfo) {
 	return gFreq;
 }
 
-double InitialMatrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq,
-		int numFiles) {
+double InitialMatrix::calculateGlobalWeight(list<InfoPalabra> wordInfo,
+		int gFreq, int numFiles) {
 	list<InfoPalabra>::iterator iter = wordInfo.begin();
 	double gWeight = 0;
 	unsigned i;
@@ -37,6 +36,17 @@ double InitialMatrix::calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFre
 	return gWeight;
 }
 
+double InitialMatrix::calculateThresholdStopWords(int n) {
+	/*
+	 * Calculo de una cota del porcentaje de apariciones de un termino dentro del dataset.
+	 * Si n es menor que 10 el umbral es mayor a 1 (100%), y esto equivale a no usar stopwords, y a medida
+	 * que n crece este porcentaje baja.
+	 * Para n muy grande el resultado se vuelve negativo, entonces se pone un piso del 40%
+	 */
+	double threshold = 1 - 0.05 * log(0.1 * n);
+	return max(threshold, 0.40);
+}
+
 bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 		int numFiles, unsigned fieldLength, string terms, string stopwords) {
 	Archivo inputFile;
@@ -46,26 +56,41 @@ bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 	termList.setTamanioCampo(fieldLength);
 	TermFile stopwordslist;
 	stopwordslist.setTamanioCampo(fieldLength);
-	if (!inputFile.abrirLectura(inputPath) || !outputFile.abrirEscritura(outputPath)
-			|| !termList.crear(terms)|| !stopwordslist.crear(stopwords)) {
+	if (!inputFile.abrirLectura(inputPath)
+			|| !outputFile.abrirEscritura(outputPath) || !termList.crear(terms)
+			|| !stopwordslist.crear(stopwords)) {
 		return false;
 	}
 
-	double ratio, gWeight,lWeight,weight;
+	double ratio, threshold_stop_word, gWeight, lWeight, weight;
 	int gFreq, doc, lFreq;
 	string line, lineToWrite, sDoc, sWeight;
 	this->_rows = 0;
+	/*
+	 * Se define un umbral para la aparicion de terminos con respecto a la cantidad
+	 * de documentos, si un termino aparece por encima de ese porcentaje es considerado stop-word.
+	 */
+
+	threshold_stop_word = calculateThresholdStopWords(numFiles);
+
 	line = inputFile.leerLinea();
 	while (!inputFile.eof()) {
 
 		Palabra word;
 		word.crearDesdeString(line);
 		ratio = word.cantidad() / (double) numFiles;
-		if (ratio > THRESHOLD_STOP_WORD) {
+		if (ratio > threshold_stop_word) {
 			/** Modificacion al diseño
 			 *  Las palabras que aparecen en mas de cierto porcentaje de documentos
-			 *  son stopwords.
+			 *  son stop-words. El porcentaje es funcion de la cantidad de documentos,
+			 *  con pocos documentos es cercano a 95% decreciendo asintoticamente a medida que
+			 *  aumenta la cantidad de documentos. Se agrega debido a que no hay un porcentaje que sea
+			 *  optimo para todas las cantidades de documentos, ya que 70% es muy bajo cuando se tiene
+			 *  alrededor de 50 documentos pero es alto cuando se tienen 5000 docs.
+			 *  Ademas las stop-words son guardadas como campos de longitud fija,
+			 *  de manera que se puedan hacer busquedas binarias.
 			 */
+			//cout<<"Stopword: "+word.getContenido()+" "<<toString(ratio,2)<<endl;
 			stopwordslist.agregar(word.getContenido());
 		} else {
 			list<InfoPalabra> wordInfo = word.getInformacion();
@@ -93,24 +118,22 @@ bool InitialMatrix::buildInitialMatrix(string inputPath, string outputPath,
 		}
 		line = inputFile.leerLinea();
 	}
-	cout<<"Filas creadas: "<<_rows<<endl;
+	cout << "Filas creadas: " << _rows << endl;
 	return true;
 }
 
-int InitialMatrix::SVD(string inputPath, string outputPath,int rank) {
-	try{
-	  //cout<<endl<<endl<<"Empieza mi Prueba"<<endl;
-	  //cout<<"outputPath "<<outputPath<<endl;
-
-	  REDSVD::fileProcess<REDSVD::SMatrixXf, REDSVD::RedSVD>(inputPath,outputPath,rank);
-	  return 0;}
-		catch (const string& error){
-		  cerr << "Error: " << error << endl;
-		  }
-		return -1;
+int InitialMatrix::SVD(string inputPath, string outputPath, int rank) {
+	try {
+		REDSVD::fileProcess<REDSVD::SMatrixXf, REDSVD::RedSVD>(inputPath,
+				outputPath, rank);
+		return 0;
+	} catch (const string& error) {
+		cerr << "Error: " << error << endl;
+	}
+	return -1;
 }
 
-unsigned InitialMatrix::rows(){
+unsigned InitialMatrix::rows() {
 	return this->_rows;
 }
 

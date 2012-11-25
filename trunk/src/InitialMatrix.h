@@ -8,7 +8,7 @@
 #ifndef INITIALMATRIX_H_
 #define INITIALMATRIX_H_
 
-#define THRESHOLD_STOP_WORD 0.65
+
 
 #include <iostream>
 #include <string>
@@ -35,6 +35,7 @@ private:
 	unsigned _rows;
 	int calculateGlobalFrequency(list<InfoPalabra> wordInfo);
 	double calculateGlobalWeight(list<InfoPalabra> wordInfo, int gFreq, int numFiles);
+	double calculateThresholdStopWords(int numFiles);
 };
 
 #endif /* INITIALMATRIX_H_ */

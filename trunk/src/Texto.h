@@ -22,9 +22,9 @@ struct split {
 };
 
 const std::string twoByteChars =
-				"áéíóúÁÉÍÓÚñÑäëïöüâêîôûÂÊÎÔÛÁÉÍÓÚÄËÏÖÜàèìòùÀÈÌÒÙÇçĉćĆĊċðÆæœãõÃĒĪŌŪŸÿžŽµåůāēīōūăĕĭŏŭąęįųĄĘŲ";
+				"áéíóúÁÉÍÓÚñÑäëïöüâêîôûÂÊÎÔÛÁÉÍÓÚÄËÏÖÜàèìòùÀÈÌÒÙÇçĉćĆĊċðÆæœãõÃĒĪŌŪŸÿýžŽµþåůāēīōūăĕĭŏŭąęįųĄĘŲ";
 const std::string replacementChars =
-				"aeiouaeiounnaeiouaeiouaeiouaeiouaeiouaeiouaeioucccccccoaaoaoaeiouyyzzuauaeiouaeiouaeiuaeu";
+				"aeiouaeiounnaeiouaeiouaeiouaeiouaeiouaeiouaeioucccccccoaaoaoaeiouyyyzzupauaeiouaeiouaeiuaeu";
 
 template<typename Container>
 Container& split(Container& result, const typename Container::value_type& s,
