@@ -1,8 +1,8 @@
 /*
  * Palabra.h
  *
- *  Created on: Sep 8, 2012
- *      Author: andy
+ *  Created on: 08/09/2012
+ *      Author: Andres Sanabria
  */
 
 #ifndef PALABRA_H_

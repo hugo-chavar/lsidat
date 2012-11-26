@@ -50,8 +50,7 @@ bool DirList::createFromDirectory(string dir) {
 	iterador = files.begin();
 
 	closedir(dp);
-	//cout << "Procesamiento exitoso de directorio " << dir << "." << endl;
-	//cout << "Cantidad de archivos " << _count << "." << endl;
+
 	return true;
 
 }

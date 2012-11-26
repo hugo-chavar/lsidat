@@ -20,17 +20,13 @@ using namespace std;
 class Archivo {
 private:
 	std::fstream elArchivo;
-	//std::string nombre;
 public:
 	Archivo(const std::string& path, bool & hayErrores);
-	//constructor sin parametros
 	Archivo();
-	//constructor de copia
 	Archivo(const Archivo&);
 	Archivo& operator=(const Archivo&);
 	~Archivo();
 	bool eof();
-	bool leerCaracter(char &cadena);
 	void irAlPrincipio();
 	void irAlFinal();
 	void irAPos(unsigned);
