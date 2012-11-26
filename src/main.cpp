@@ -52,8 +52,8 @@ int main(int argc, char *argv[])
 	sourcefiles = argv[3];
 	int rango = atoi(argv[2]);
 	rango = abs(rango);
-	if((rango < 20)||(rango>500)){
-		cerr<<"Valor de reduccion fuera de rango, ingrese entre 20 y 500"<<endl;
+	if((rango < 1)||(rango>500)){
+		cerr<<"Valor de reduccion fuera de rango, ingrese entre 1 y 500"<<endl;
 		return 0;
 	}
 
@@ -136,17 +136,15 @@ int main(int argc, char *argv[])
 	}
 
 	cout<<"Eliminando archivos temporales.."<<flush;
-//	deleteDirectory(dirmerger);
-//	deleteDirectory(dirsorter);
-//	deleteDirectory(dirmergeoutput);
-//	deleteDirectory(dirmatrix);
+	deleteDirectory(dirmerger);
+	deleteDirectory(dirsorter);
+	deleteDirectory(dirmergeoutput);
+	deleteDirectory(dirmatrix);
 	cout<<"Listo."<<endl;
 
 	cout<<"Guardando repositorio.."<<endl;
 	Archivo repositorio;
 	repositorio.abrirEscritura(rep+".lsi");
-	//sacar siguiente linea
-	//repositorio.escribirLinea(toString(matrix.rows())+" "+toString(parser.filesCount()));
 	repositorio.escribirLinea(filesList);
 	repositorio.escribirLinea(reducedmatrix);
 	repositorio.escribirLinea(termList);
