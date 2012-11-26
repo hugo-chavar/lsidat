@@ -182,7 +182,7 @@ int main(int argc, char *argv[]) {
 		}
 
 	} while (heap.size() != 0 && seguir == 's');
-	cout << "Consulta finalizada." << endl;
+	cout << "Consulta finalizada" << endl;
 	return 0;
 }
 
