@@ -49,7 +49,7 @@ void Token::print() {
 
 string_type Token::whatIsIt(string str) {
 	bool is_number = false, is_float = false, is_garbage = false, is_text = true;
-	size_t i = 0, j = 1;
+	size_t i = 0, j = 1, k = 0;
 	if (isdigit(str[0])) {
 		is_number = true;
 		is_text = false;
@@ -62,6 +62,8 @@ string_type Token::whatIsIt(string str) {
 				else // Tiene mas de un '.'
 					is_number = false;
 			}
+			if (is_float)
+				k++;
 			if ((!isdigit(str[i])) && (str[i] != '.'))
 				is_number = false;
 			if ((!is_number)
@@ -76,9 +78,9 @@ string_type Token::whatIsIt(string str) {
 		}
 		i++;
 	}
-	if ((!is_text) && (!is_number) && (((i-j) > MAX_NUM_LENGTH) || (j > MAX_WORD_LENGTH))) // No puede haber palabras alfanumericas con numeros de mas de MAX_NUM_LENGTH digitos.
+	if ((!is_text) && (!is_number) && (((i-j) > MAX_NUM_LENGTH) || (j >= MAX_ALPHANUM_WORD_LENGTH))) // No puede haber palabras alfanumericas con numeros de mas de MAX_NUM_LENGTH digitos.
 		is_garbage = true;
-	if ((is_text) && (i > MAX_WORD_LENGTH)) // No puede haber palabras con mas de MAX_WORD_LENGTH caracteres.
+	if ((is_text) && (i >= MAX_WORD_LENGTH)) // No puede haber palabras con mas de MAX_WORD_LENGTH caracteres.
 		is_garbage = true;
 	if (is_garbage)
 		return GARBAGE;
@@ -86,8 +88,12 @@ string_type Token::whatIsIt(string str) {
 		if (!is_number)
 			return ALPHANUMERIC1;
 		else {
-			if (is_float)
-				return FLOAT1;
+			if (is_float) {
+				if ((i-k) <= MAX_NUM_LENGTH)
+					return FLOAT1;
+				else
+					return GARBAGE;
+			}
 			else {
 				if (str.length() > MAX_NUM_LENGTH)
 					return GARBAGE;
@@ -149,8 +155,8 @@ string Token::caseNotDigit(string str) {
 		str = "";
 		while (t < v.size()) {
 			candidates.push_back(v[t]);
-			// if (v.size() == 2) //palabras compuestas ----> PUEDE HABER PALABRAS COMPUESTAS DE TRES PALABRAS
-			str += v[t];
+			if (v.size() <= 4)
+				str += v[t];
 			t++;
 		}
 	}
