@@ -15,9 +15,10 @@
 #include <cmath>
 //#include <math.h>
 
+#define MAX_ALPHANUM_WORD_LENGTH 53
 #define MAX_WORD_LENGTH 60 //solo hay 3 palabras del idioma ingles con mas de 60 caracteres y no se usan
 #define MAX_NUM_LENGTH 7
-#define MAX_TOKEN_LENGTH 67
+#define MAX_TOKEN_LENGTH 60
 using namespace std;
 
 //const string delimiters = " \'{}[]+*?<>=^#!";
