@@ -199,7 +199,6 @@ string Token::caseDigit(string str) {
 			}
 			str = removeCharacters(str, "."); // Caso de numero.palabra elimina el punto. Ej: "1.the"
 		}
-		//str = trim_left_copy(str,"0"); //elimimo ceros a la izquierda
 	}
 	return str;
 }
@@ -210,7 +209,7 @@ void Token::constructTerms() {
 	while (iterador != candidates.end()) {
 		aux = trim_copy(*iterador, " \'{}[]-+.,*/%$?<>=^#&!_`");
 		aux = replaceMultiByteChars(aux, '_');
-		if (!isdigit(aux[0])) //&& (aux[0] != '$')
+		if (!isdigit(aux[0]))
 			aux = caseNotDigit(aux);
 		else
 			if ((isdigit(aux[0])))

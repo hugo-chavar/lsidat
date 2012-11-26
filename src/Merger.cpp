@@ -198,8 +198,7 @@ void Merger::writeMinimum() {
 }
 
 void Merger::merge() {
-	unsigned cantmin; //etapa,
-	//etapa = 1;
+	unsigned cantmin;
 	while (!endOfMerge()) {
 		setNextFileName();
 		this->outputFile.abrirEscritura(this->outputFileName);
@@ -216,7 +215,6 @@ void Merger::merge() {
 
 		}
 		this->outputFile.cerrar();
-		//etapa++;
 	}
 }
 
@@ -227,7 +225,7 @@ bool Merger::endOfStage() {
 unsigned Merger::calculateFilesPerStage() {
 	unsigned i = 1;
 
-	while ((i * i) < directories.count()) { //
+	while ((i * i) < directories.count()) {
 		i++;
 	}
 	return i;

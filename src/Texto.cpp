@@ -24,7 +24,6 @@ std::string& trim(std::string& s, const std::string& delimiters) {
 std::string trim_right_copy(const std::string& s,
 		const std::string& delimiters) {
 	if (s.length() > 0) {
-		//size_t pos = s.find_last_not_of(delimiters);
 		return s.substr(0, s.find_last_not_of(delimiters) + 1);
 	}
 	return s;
@@ -168,8 +167,6 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 				plus = 2;
 				cont++;
 
-				//special = cad.substr(j, 3);
-				//cout << "3-byte char: " << special << endl;
 				c = replacement;
 			} else if (((0x20 & c) == 0) && ((0xC0 & c) == 0xC0)) { //caracter de 2 bytes
 				//en esta seccion caen los caracteres con tildes y letras griegas en gral
@@ -184,21 +181,15 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 				cont++;
 				if ((twoByteChars.substr(k, 2)).compare(d) == 0) {
 					c = replacementChars[k / 2];
-					//plus = 1;
 				} else {
 					//caracter un poco raro.. Lo reemplazo con un single character
-					//plus = 1;
 					c = replacement;
-					//special = cad.substr(j, 2);
-					//cout << "2-byte char: " << special << endl;
 				}
 			} else if (((0x20 & c) == 0) && ((0xF0 & c) == 0xF0)) { //caracter de 4 bytes
 				//caracter muy raro.. Lo reemplazo con un single character
 				plus = 3;
 				cont++;
 				c = replacement;
-				//special = cad.substr(j, 4);
-				//cout << "4-byte char: " << special << endl;
 			} else {
 				//en este punto se detecta q no es un caracter lo q se leyo
 				//puede estar corrupto el texto
