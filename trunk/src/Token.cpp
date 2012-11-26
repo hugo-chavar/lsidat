@@ -134,7 +134,7 @@ string Token::roundNumber(string str) {
 	int numRounded;
 	num = (round(num * 100)) / 100;
 	numRounded = round(num);
-	if ((num - numRounded) >= 0.01 )
+	if (abs(num - numRounded) >= 0.01 )
 		str = toString(num, 2);
 	else
 		str = toString(numRounded); //si es float y tiene .00 en decimales los saco
