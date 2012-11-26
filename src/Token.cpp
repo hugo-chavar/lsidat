@@ -193,7 +193,7 @@ string Token::caseDigit(string str) {
 			}
 			str = removeCharacters(str, "."); // Caso de numero.palabra elimina el punto. Ej: "1.the"
 		}
-		str = trim_left_copy(str,"0"); //elimimo ceros a la izquierda
+		//str = trim_left_copy(str,"0"); //elimimo ceros a la izquierda
 	}
 	return str;
 }

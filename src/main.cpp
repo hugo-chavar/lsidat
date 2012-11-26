@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
 	createDirectory(dirsorter);
 
-	cout<<"Realizando parseo de archivos.."<<flush;
+	cout<<"Realizando parseo de archivos.."<<endl;//flush;
 
 	parser.ProcessFiles(dirsorter);
 	cout<<"Listo."<<endl;
@@ -145,7 +145,8 @@ int main(int argc, char *argv[])
 	cout<<"Guardando repositorio.."<<endl;
 	Archivo repositorio;
 	repositorio.abrirEscritura(rep+".lsi");
-	repositorio.escribirLinea(toString(matrix.rows())+" "+toString(parser.filesCount()));
+	//sacar siguiente linea
+	//repositorio.escribirLinea(toString(matrix.rows())+" "+toString(parser.filesCount()));
 	repositorio.escribirLinea(filesList);
 	repositorio.escribirLinea(reducedmatrix);
 	repositorio.escribirLinea(termList);

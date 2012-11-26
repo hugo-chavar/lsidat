@@ -20,6 +20,7 @@
 
 
 using namespace std;
+const int SHOW = 10;
 
 void usage();
 
@@ -63,40 +64,43 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	if (optind < argc) {
+		while (optind < argc)
+			q.push_back(argv[optind++]);
+
+	}
+
 	Archivo admfiles;
-	if (!admfiles.abrirLectura(repo+".lsi")){
-		cerr<<"No existe repositorio: "<<repo<<endl;
+	if (!admfiles.abrirLectura(repo + ".lsi")) {
+		cerr << "No existe repositorio: " << repo << endl;
 		return 0;
 	}
-	string cantidades = admfiles.leerLinea();
-	vector<string> v;
-	split(v, cantidades, " ");
-	int cantTerms = atoi(v[0].c_str());
-	int cantDocs =  atoi(v[1].c_str());
-	cout<<"El repo tiene "<<cantTerms<<" terminos y "<<cantDocs<<" docs."<<endl;
+
+//	string cantidades = admfiles.leerLinea();
+//	vector<string> v;
+//	split(v, cantidades, " ");
+//	int cantTerms = atoi(v[0].c_str());
+//	int cantDocs =  atoi(v[1].c_str());
+//	cout<<"El repo tiene "<<cantTerms<<" terminos y "<<cantDocs<<" docs."<<endl;
+
 	string fileList = admfiles.leerLinea();
 	string matrices = admfiles.leerLinea();
 	string termsFile = admfiles.leerLinea();
 	string stopwordsFile = admfiles.leerLinea();
 
 	TermFile terms, stw, docList;
-	if (!terms.abrir(termsFile) || !stw.abrir(stopwordsFile)){
-		cerr<<"Error al abrir archivos de terms y stopwords."<<endl;
+	if (!terms.abrir(termsFile) || !stw.abrir(stopwordsFile)) {
+		cerr << "Error al abrir archivos de terms y stopwords." << endl;
 		return 0;
 	}
 
-	if(!docList.abrir(fileList)){ //repo+"/filesList.txt"
-		cerr<<"No se encontro el archivo:"<<fileList<<endl;
+	if (!docList.abrir(fileList)) { //repo+"/filesList.txt"
+		cerr << "No se encontro el archivo:" << fileList << endl;
 		return 0;
 	}
 
-	if (optind < argc) {
-		while (optind < argc)
-			q.push_back(argv[optind++]);
-
-	}
 	Token consulta(q);
-	cout << "Query:" << endl;
+	cout << "Ejecutando consulta.." << endl;
 	consulta.sort();
 	string termino;
 	terms.iniciarVector();
@@ -104,81 +108,81 @@ int main(int argc, char *argv[]) {
 	//consulta.print();
 	//return 0;
 	int pos;
-//	cout<<"Busqueda secuencial:"<<endl;
-//	while (consulta.hasNextTerm()) {
-//		termino = consulta.nextTerm() ;
-//		pos = terms.busquedaSecuencialTerm(termino);
-//		cout<<termino<<endl;
-//		if(pos==-1){
-//			cout<<" no es termino";
-//			pos = stw.busquedaSecuencialTerm(termino);
-//			if (pos>0){
-//				cout<<", es stopword pos: "<<pos<<endl;
-//			} else cout<<" ni stopword"<<endl;
-//		} else
-//		{
-//			cout<<" Es termino pos "<<pos<<endl;
-//		}
-//	}
-//	cout<<terms.getVector()<<endl;
-	//pruebas de la busqueda binaria
-	consulta.print();
-	cout<<"Busqueda binaria:"<<endl;
-	//stw.iniciarVector();
+
+
 	while (consulta.hasNextTerm()) {
-		termino = consulta.nextTerm() ;
-		pos = terms.busquedaBinariaTerm(termino);
-		cout<<termino<<endl;
-		if(pos==-1){
-			cout<<" no es termino";
-			pos = stw.busquedaBinariaTerm(termino);
-			if (pos!=-1){
-				cout<<", es stopword pos: "<<pos<<endl;
-			} else cout<<" ni stopword"<<endl;
-		} else
-		{
-			cout<<" Es termino pos "<<pos<<endl;
+		termino = consulta.nextTerm();
+		pos = stw.busquedaBinariaTerm(termino);
+		//cout<<termino<<endl;
+		if (pos == -1) {
+			//cout<<" no es stopword";
+			pos = terms.busquedaBinariaTerm(termino);
+//			if (pos!=-1){
+//				cout<<", es termino pos: "<<pos<<endl;
+//			} else cout<<" ni termino"<<endl;
 		}
+//		else
+//		{
+//			cout<<" Es stopword pos "<<pos<<endl;
+//		}
 	}
 
-
-
-	cout<<"Este es el vector:"<<endl;
-	cout<<"fil:"<<terms.getVector().rows()<<endl;
+	//cout<<"Este es el vector:"<<endl;
+	//cout<<"fil:"<<terms.getVector().rows()<<endl;
 	//cout<<terms.getVector()<<endl;
 
 	//TODO Ranqueador. Podria nuclearse en una clase
-	cout<<"Leyendo matriz. "<<flush;
-	Comparador comp(matrices+".USinv",matrices+".V",terms.getVector());
-	cout<<"Listo."<<endl;
+	//cout << "Leyendo matriz. " << flush;
+	Comparador comp(matrices + ".USinv", matrices + ".V", terms.getVector());
+	//cout << "Listo." << endl;
 	//Comparador comp(repo+"/reduced.USinv",repo+"/reduced.V",terms.getVector());
-	unsigned doc=0;
+	unsigned doc = 0;
 	VectorXf vector1;
 	vector<Coseno> heap;
-	make_heap(heap.begin(),heap.end());
-	cout<<"Calculando cosenos. "<<flush;
-	while(comp.leerVector(vector1))	{
+	make_heap(heap.begin(), heap.end());
+	//cout << "Calculando cosenos. " << flush;
+	while (comp.leerVector(vector1)) {
 		//cout<<"."<<flush;
 		//if ((doc % 100)==1)
-			//cout<<doc<<" "<<endl;
-		Coseno coseno(doc,comp.ObtenerCoseno(vector1));
+		//cout<<doc<<" "<<endl;
+		Coseno coseno(doc, comp.ObtenerCoseno(vector1));
 		heap.push_back(coseno);
-		push_heap (heap.begin(),heap.end());
+		push_heap(heap.begin(), heap.end());
 		doc++;
 	}
-	cout<<"Listo."<<endl;
-
+	//cout << "Listo." << endl;
 
 	string s;
-	//getline(fp_doc,s);
-	//while(heap.size()!=0){
-	for (int i=0;i<6;i++){
-		s= docList.getTerm(heap.front().getDocumento());//+1);
-		cout<<"Documento:"<<heap.front().getDocumento()<<" Nombre:"<<s<<" coseno:" <<heap.front().getCoseno()<<endl;
-		pop_heap (heap.begin(),heap.end());
-		heap.pop_back();
-	}
 
+//	for (int i=0;i<6;i++){
+//		s= docList.getTerm(heap.front().getDocumento());//+1);
+//		cout<<"Doc No.:"<<heap.front().getDocumento()<<" Nombre:"<<s<<" coseno:" <<heap.front().getCoseno()<<endl;
+//		pop_heap (heap.begin(),heap.end());
+//		heap.pop_back();
+//	}
+	char seguir;
+	cout << "Documentos ordenados por orden de relevancia:" << endl<<endl;
+
+	s = docList.getTerm(heap.front().getDocumento());
+	do {
+		int cont = SHOW;
+		while (heap.size() != 0 && cont > 0) {
+			s = docList.getTerm(heap.front().getDocumento());
+			//cout << "Documento:" << heap.front().getDocumento() << " Nombre:"<< s << " coseno:" << heap.front().getCoseno() << endl;
+			cout << s << endl;
+			pop_heap(heap.begin(), heap.end());
+			heap.pop_back();
+			cont--;
+		}
+		if (heap.size() > 0) {
+			cout << "Mostrar los siguientes "<<SHOW<<" documentos [s/n]: "
+					<< flush;
+			cin >> seguir;
+			seguir = tolower(seguir);
+		}
+
+	} while (heap.size() != 0 && seguir == 's');
+	cout << "Consulta finalizada." << endl;
 	return 0;
 }
 
