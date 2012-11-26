@@ -21,15 +21,16 @@ std::string& trim(std::string& s, const std::string& delimiters) {
 	return trim_left_inplace(trim_right_inplace(s, delimiters), delimiters);
 }
 
-inline std::string trim_right_copy(const std::string& s,
+std::string trim_right_copy(const std::string& s,
 		const std::string& delimiters) {
 	if (s.length() > 0) {
+		//size_t pos = s.find_last_not_of(delimiters);
 		return s.substr(0, s.find_last_not_of(delimiters) + 1);
 	}
 	return s;
 }
 
-inline std::string trim_left_copy(const std::string& s,
+std::string trim_left_copy(const std::string& s,
 		const std::string& delimiters) {
 	if (s.length() > 0) {
 		return s.substr(s.find_first_not_of(delimiters));
