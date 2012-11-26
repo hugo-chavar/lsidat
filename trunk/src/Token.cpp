@@ -40,7 +40,6 @@ void Token::print() {
 	iterador = candidates.begin();
 	_currentPosition = 0;
 	while (hasNextTerm()) {
-
 		cout << nextTerm() << " ";
 	}
 	cout << endl;
@@ -49,21 +48,18 @@ void Token::print() {
 }
 
 string_type Token::whatIsIt(string str) {
-	bool is_number = false;
-	bool is_float = false;
-	bool is_text = true;
-	bool is_garbage = false;
-	unsigned int i = 0;
-	int j = 0, k = 0, l = 0;
-	if (isdigit(str[0]))
+	bool is_number = false, is_float = false, is_garbage = false, is_text = true;
+	size_t i = 0, j = 1;
+	if (isdigit(str[0])) {
 		is_number = true;
+		is_text = false;
+	}
 	while ((i < str.length()) && (!is_garbage)) {
 		if (is_number) {
 			if (str[i] == '.') {
 				if (!is_float)
 					is_float = true;
-				else
-					//tiene mas de un '.'
+				else // Tiene mas de un '.'
 					is_number = false;
 			}
 			if ((!isdigit(str[i])) && (str[i] != '.'))
@@ -72,39 +68,35 @@ string_type Token::whatIsIt(string str) {
 					&& ((!((str[i] >= 'A') && (str[i] <= 'Z')))
 							&& (!((str[i] >= 'a') && (str[i] <= 'z')))))
 				is_garbage = true;
-			j++;
 		} else {
 			if ((!((str[i] >= 'A') && (str[i] <= 'Z')))
-					&& (!((str[i] >= 'a') && (str[i] <= 'z')))) {
-				is_text = false;
-				if (isdigit(str[i]))
-					k++;
-			} else {
-				if (!is_text)
-					is_garbage = true;
-				l++;
-			}
+					&& (!((str[i] >= 'a') && (str[i] <= 'z'))))
+				is_garbage = true;
+			j++;
 		}
 		i++;
 	}
+	if ((!is_text) && (!is_number) && (((i-j) > MAX_NUM_LENGTH) || (j > MAX_WORD_LENGTH))) // No puede haber palabras alfanumericas con numeros de mas de MAX_NUM_LENGTH digitos.
+		is_garbage = true;
+	if ((is_text) && (i > MAX_WORD_LENGTH)) // No puede haber palabras con mas de MAX_WORD_LENGTH caracteres.
+		is_garbage = true;
 	if (is_garbage)
 		return GARBAGE;
-	if ((j == 1) && (!is_number))
-		return NOT_A_NUMBER1;
-
-	if ((j > 1) && (!is_number))
-		return ALPHANUMERIC1;
-	if ((is_number) && (is_float))
-		return FLOAT1;
-	if ((is_number) && (!is_float)) {
-		if (str.length() > 7)
-			return GARBAGE;
-		return INTEGER1;
+	if (!is_text) {
+		if (!is_number)
+			return ALPHANUMERIC1;
+		else {
+			if (is_float)
+				return FLOAT1;
+			else {
+				if (str.length() > MAX_NUM_LENGTH)
+					return GARBAGE;
+				return INTEGER1;
+			}
+		}
 	}
-	if (is_text)
+	else
 		return TEXT;
-	if ((l + k) == i)
-		return ALPHANUMERIC1;
 	return GARBAGE;
 }
 
@@ -137,87 +129,92 @@ string Token::completeYear(vector<string> v) {
 	return str;
 }
 
+string Token::roundNumber(string str) {
+	double num = atof(str.c_str());
+	int numRounded;
+	num = (round(num * 100)) / 100;
+	numRounded = round(num);
+	if ((num - numRounded) >= 0.01 )
+		str = toString(num, 2);
+	else
+		str = toString(numRounded); //si es float y tiene .00 en decimales los saco
+	return str;
+}
+
+string Token::caseNotDigit(string str) {
+	vector<string> v;
+	size_t t = 0;
+	split(v, str, separators_text);
+	if (v.size() > 1) {
+		str = "";
+		while (t < v.size()) {
+			candidates.push_back(v[t]);
+			// if (v.size() == 2) //palabras compuestas ----> PUEDE HABER PALABRAS COMPUESTAS DE TRES PALABRAS
+			str += v[t];
+			t++;
+		}
+	}
+	str = trim_right_copy(str, numbers);
+	if (whatIsIt(str) == GARBAGE)
+		str = "";
+	return str;
+}
+
+string Token::caseDigit(string str) {
+	vector<string> v;
+	split(v, str, separators_number);
+	if (v.size() > 1) {
+		if (v.size() == 2)
+			if ((whatIsIt(v[0]) == INTEGER1)
+					&& (whatIsIt(v[1]) == INTEGER1)
+					&& (v[0].length() == 4))
+				if (v[1].length() == 2)
+					v[1] = completeYear(v);
+		str = "";
+		for (unsigned int i = 0; i < v.size(); i++) {
+			if (v.size() == 2) //palabras compuestas
+				str += v[i];
+			candidates.push_back(v[i]);
+		}
+		str = removeCharacters(str, ".,"); // Elimino los separadores restantes.
+		if (whatIsIt(str) != ALPHANUMERIC1)
+			str = "";
+	} else {
+		str = removeCharacters(str, ","); // Elimino el separador de miles.
+		string_type tipo = whatIsIt(str); //lo pongo para evaluar solo una vez
+		if (tipo == FLOAT1)
+			str = roundNumber(str);
+		else {
+			if (tipo == GARBAGE)
+				str = "";
+			else if (tipo == INTEGER1) {
+				int entero = atoi(str.c_str());
+				str = toString(entero);
+			}
+			str = removeCharacters(str, "."); // Caso de numero.palabra elimina el punto. Ej: "1.the"
+		}
+		str = trim_left_copy(str,"0"); //elimimo ceros a la izquierda
+	}
+	return str;
+}
+
 void Token::constructTerms() {
 	string aux;
-	size_t t = 0;
-	vector<string> v;
-
 	iterador = candidates.begin();
 	while (iterador != candidates.end()) {
 		aux = trim_copy(*iterador, " \'{}[]-+.,*/%$?<>=^#&!_`");
 		aux = replaceMultiByteChars(aux, '_');
-		if (!isdigit(aux[0])) { //&& (aux[0] != '$'))
-			split(v, aux, separators_text);
-			if (v.size() > 1) {
-				aux = "";
-				while (t < v.size()) {
-					candidates.push_back(v[t]);
-					if (v.size() == 2) //palabras compuestas
-						aux += v[t];
-					t++;
-				}
-			}
-			if (whatIsIt(aux) == GARBAGE)
-				aux = "";
-		} else {
-			if ((isdigit(aux[0]))) {
-				split(v, aux, separators_number);
-				if (v.size() > 1) {
-					if (v.size() == 2)
-						/*
-						 * Modificación al diseño
-						 * Se detectan rangos de años y se completa el valor que esta abreviado.
-						 */
-						if ((whatIsIt(v[0]) == INTEGER1)
-								&& (whatIsIt(v[1]) == INTEGER1)
-								&& (v[0].length() == 4))
-							if (v[1].length() == 2)
-								v[1] = completeYear(v);
-					aux = "";
-
-					for (unsigned int i = 0; i < v.size(); i++) {
-						if (v.size() == 2) //palabras compuestas
-							aux += v[i];
-						candidates.push_back(v[i]);
-					}
-					aux = removeCharacters(aux, ".,"); // Elimino los separadores restantes.
-					if (whatIsIt(aux) != ALPHANUMERIC1)
-						aux = "";
-				} else {
-					aux = removeCharacters(aux, ","); // Elimino el separador de miles.
-					string_type tipo = whatIsIt(aux); //lo pongo para evaluar solo una vez
-					if (tipo == FLOAT1) {
-						double num = atof(aux.c_str());
-						int numRounded;
-						num = (round(num * 100)) / 100;
-						numRounded = round(num);
-						if ((num - numRounded) >= 0.01 )
-							aux = toString(num, 2);
-						else
-							aux = toString(numRounded); //si es float y tiene .00 en decimales los saco
-					} else {
-						if (tipo == GARBAGE)
-							aux = "";
-						else if (tipo == INTEGER1){
-							int entero = atoi(aux.c_str());
-							aux = toString(entero);
-						}
-							//aux = trim_left_copy(aux,"0");//elimimo ceros a la izquierda
-
-						//TODO no entiendo para q esta la siguiente linea
-						//yami pone un comentario please
-						aux = removeCharacters(aux, ".");
-					}
-				}
-			}
-		}
+		if (!isdigit(aux[0])) //&& (aux[0] != '$')
+			aux = caseNotDigit(aux);
+		else
+			if ((isdigit(aux[0])))
+				aux = caseDigit(aux);
 		aux = trim_copy(aux, " @\'{}[]-+.*/?<>=^$%#&!_");
 		if (aux == "") {
 			iterador = candidates.erase(iterador);
 		} else {
 			string_type tipo = whatIsIt(aux);
-			if ((tipo == NOT_A_NUMBER1) || (tipo == ALPHANUMERIC1)
-					|| (tipo == TEXT)) {
+			if ((tipo == ALPHANUMERIC1)	|| (tipo == TEXT)) {
 				stringToLower(aux);
 				stemOfPlural(aux);
 			}
