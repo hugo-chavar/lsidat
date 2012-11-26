@@ -20,7 +20,6 @@ class Palabra {
 private:
 	string contenido;
 	list<InfoPalabra> informacion;
-	//unsigned cantidad;
 	void agregarNodo(unsigned doc, unsigned cantidad);
 	InfoPalabra* buscarDoc(unsigned doc);
 

@@ -38,13 +38,3 @@ Palabra* NodoArbol::getPalabra(){
 }
 
 
-//int NodoArbol::CompararCon(string clave){
-//	if ((this->dato->getContenido())<clave)
-//		return (-1);
-//	else if((this->dato->getContenido())==clave)
-//			return (0);
-//		else
-//			return (1);
-//}
-
-
