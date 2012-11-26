@@ -12,7 +12,8 @@
 #include <list>
 #include <vector>
 #include "Texto.h"
-#include <math.h>
+#include <cmath>
+//#include <math.h>
 
 #define MAX_WORD_LENGTH 60 //solo hay 3 palabras del idioma ingles con mas de 60 caracteres y no se usan
 #define MAX_NUM_LENGTH 7

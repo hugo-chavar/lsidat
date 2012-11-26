@@ -32,8 +32,9 @@ std::string trim_right_copy(const std::string& s,
 
 std::string trim_left_copy(const std::string& s,
 		const std::string& delimiters) {
-	if (s.length() > 0) {
-		return s.substr(s.find_first_not_of(delimiters));
+	size_t pos = s.find_first_not_of(delimiters);
+	if ((pos != std::string::npos)&&(s.length() > 0)) {
+		return s.substr(pos);
 	}
 	return s;
 }
@@ -155,7 +156,7 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 	 source: http://en.wikipedia.org/wiki/UTF-8 */
 	//std::string special;
 	std::string aux, special,d;
-	unsigned j = 0;
+	unsigned cont = 0,j = 0;
 	aux = "";
 
 	while (j < cad.length()) {
@@ -165,6 +166,8 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 			if (((0x10 & c) == 0) && ((0xE0 & c) == 0xE0)) { //caracter de 3 bytes
 				//caracter bastante raro.. Lo reemplazo con un single character
 				plus = 2;
+				cont++;
+
 				//special = cad.substr(j, 3);
 				//cout << "3-byte char: " << special << endl;
 				c = replacement;
@@ -177,12 +180,14 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 						&& (k < twoByteChars.length())) {
 					k += 2;
 				}
+				plus = 1;
+				cont++;
 				if ((twoByteChars.substr(k, 2)).compare(d) == 0) {
 					c = replacementChars[k / 2];
-					plus = 1;
+					//plus = 1;
 				} else {
 					//caracter un poco raro.. Lo reemplazo con un single character
-					plus = 1;
+					//plus = 1;
 					c = replacement;
 					//special = cad.substr(j, 2);
 					//cout << "2-byte char: " << special << endl;
@@ -190,6 +195,7 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 			} else if (((0x20 & c) == 0) && ((0xF0 & c) == 0xF0)) { //caracter de 4 bytes
 				//caracter muy raro.. Lo reemplazo con un single character
 				plus = 3;
+				cont++;
 				c = replacement;
 				//special = cad.substr(j, 4);
 				//cout << "4-byte char: " << special << endl;
@@ -198,11 +204,14 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 				//puede estar corrupto el texto
 				//se avanza hasta el siguiente caracter simple
 				plus = 4;
+				cont++;
 				while ((0x80 & cad[j + plus]) != 0) {
 					plus++;
 				}
 			}
 		}
+		if (cont > 3)//si tiene mas de 3 caracteres multibyte es basura
+			return "";
 		j += (plus + 1);
 		if (int(c) < 32)
 			c  = replacement;
