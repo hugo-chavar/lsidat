@@ -25,14 +25,7 @@ unsigned Abb::getCantidad() {
 void Abb::agregarPalabra(string palabra, unsigned documento) {
 	NodoArbol *nodo = this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	while (nodo && ((nodo->getPalabra()->compararCon(palabra)) != 0)) // Devuelve -1 si la clave del nodo es menor, 0 si son iguales y 1 si la clave es mayor.
-	{
-		nodo_padre = nodo;
-		if ((nodo->getPalabra()->compararCon(palabra)) > 0)
-			nodo = nodo->getIzquierdo();
-		else
-			nodo = nodo->getDerecho();
-	}
+	posicionarPunteros(palabra,nodo,nodo_padre);
 	if (!nodo) {
 		nodo = new NodoArbol(palabra);
 		nodo->getPalabra()->agregarAparicion(documento);
@@ -53,14 +46,8 @@ void Abb::agregarPalabra(string palabra, unsigned documento) {
 void Abb::borrar(const string clave) {
 	NodoArbol *nodo = this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	while (nodo && ((nodo->getPalabra()->compararCon(clave)) != 0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
-	{
-		nodo_padre = nodo;
-		if ((nodo->getPalabra()->compararCon(clave)) > 0)
-			nodo = nodo->getIzquierdo();
-		else
-			nodo = nodo->getDerecho();
-	}
+	posicionarPunteros(clave,nodo,nodo_padre);
+
 	NodoArbol *nodo_aux = NULL;
 	if ((!nodo->getDerecho()) && (nodo->getIzquierdo()))
 		nodo_aux = nodo->getIzquierdo();
@@ -110,4 +97,16 @@ void Abb::escribirEnOrden(NodoArbol* nodo, fstream& archivo) {
 	archivo << nodo->getPalabra()->imprimir() << endl;
 	if (nodo->getDerecho())
 		this->escribirEnOrden(nodo->getDerecho(), archivo);
+}
+
+void Abb::posicionarPunteros(const string clave,NodoArbol* &nodo,NodoArbol* &nodo_padre){
+
+	while (nodo && ((nodo->getPalabra()->compararCon(clave)) != 0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
+		{
+			nodo_padre = nodo;
+			if ((nodo->getPalabra()->compararCon(clave)) > 0)
+				nodo = nodo->getIzquierdo();
+			else
+				nodo = nodo->getDerecho();
+		}
 }

@@ -24,6 +24,7 @@ private:
 	unsigned cantidad;
 	void destruir();
 	void escribirEnOrden(NodoArbol* nodo,fstream & archivo);
+	void posicionarPunteros(const string clave,NodoArbol* &nodo,NodoArbol* & nodo_padre);
 };
 
 #endif /* ABB_H_ */
