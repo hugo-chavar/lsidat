@@ -25,7 +25,7 @@ unsigned Abb::getCantidad() {
 void Abb::agregarPalabra(string palabra, unsigned documento) {
 	NodoArbol *nodo = this->raiz;
 	NodoArbol *nodo_padre = NULL;
-	posicionarPunteros(palabra,nodo,nodo_padre);
+	posicionarPunteros(palabra, nodo, nodo_padre);
 	if (!nodo) {
 		nodo = new NodoArbol(palabra);
 		nodo->getPalabra()->agregarAparicion(documento);
@@ -43,16 +43,17 @@ void Abb::agregarPalabra(string palabra, unsigned documento) {
 	}
 }
 
-void Abb::posicionarPunteros(const string clave,NodoArbol* &nodo,NodoArbol* &nodo_padre){
+void Abb::posicionarPunteros(const string clave, NodoArbol* &nodo,
+		NodoArbol* &nodo_padre) {
 
 	while (nodo && ((nodo->getPalabra()->compararCon(clave)) != 0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
-		{
-			nodo_padre = nodo;
-			if ((nodo->getPalabra()->compararCon(clave)) > 0)
-				nodo = nodo->getIzquierdo();
-			else
-				nodo = nodo->getDerecho();
-		}
+	{
+		nodo_padre = nodo;
+		if ((nodo->getPalabra()->compararCon(clave)) > 0)
+			nodo = nodo->getIzquierdo();
+		else
+			nodo = nodo->getDerecho();
+	}
 }
 
 void Abb::destruir() {
@@ -61,16 +62,13 @@ void Abb::destruir() {
 
 }
 
-void Abb::destruir(NodoArbol * nodo)
-{
-if (nodo!=0)
-{
-destruir(nodo->getIzquierdo());
-destruir(nodo->getDerecho());
-delete nodo;
+void Abb::destruir(NodoArbol * nodo) {
+	if (nodo != 0) {
+		destruir(nodo->getIzquierdo());
+		destruir(nodo->getDerecho());
+		delete nodo;
+	}
 }
-}
-
 
 void Abb::escribirEnArchivo(const string& nombre) {
 	std::fstream archivo;

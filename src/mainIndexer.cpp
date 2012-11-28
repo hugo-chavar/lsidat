@@ -32,12 +32,14 @@ using namespace std;
 
 void createDirectory(string directory) {
 	string comando = "mkdir -p "+directory;
-	system(comando.c_str());
+	if (system(comando.c_str())==-1)
+			cerr<<"Error al crear directorio "<<directory<<endl;
 }
 
 void deleteDirectory(string directory) {
 	string comando = "rm -rf "+directory;
-	system(comando.c_str());
+	if (system(comando.c_str())==-1)
+		cerr<<"Error al eliminar directorio "<<directory<<endl;
 }
 
 int main(int argc, char *argv[])
@@ -85,7 +87,7 @@ int main(int argc, char *argv[])
 
 	createDirectory(dirsorter);
 
-	cout<<"Realizando parseo de archivos.."<<endl;//flush;
+	cout<<"Realizando parseo de archivos.."<<flush;
 
 	parser.ProcessFiles(dirsorter);
 	cout<<"Listo."<<endl;
@@ -110,8 +112,6 @@ int main(int argc, char *argv[])
 	//ahora la salida de la etapa anterior es la entrada para la etapa final
 	merger.setInputDir(merger.getOutputFolderName());
 	//indico el nombre del archivo final
-	//esto se tiene que setear solo antes de hacer el merge final
-	//ya que internamente se usa como outputFile las salidas intermedias de los merges
 	merger.setOutputFileName(mergefile);
 	merger.setMode(FINAL);
 	cout<<"Realizando merge etapa 2.."<<flush;

@@ -155,12 +155,13 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 	 source: http://en.wikipedia.org/wiki/UTF-8 */
 	//std::string special;
 	std::string aux, special,d;
-	unsigned cont = 0,j = 0;
+	unsigned plus,cont,j = 0;
 	aux = "";
 
 	while (j < cad.length()) {
 		char c = cad[j];
-		unsigned plus = 0;
+		plus = 0;
+		cont = 0;
 		if ((0x80 & c) != 0) { //es caracter multibyte, se lo trata
 			if (((0x10 & c) == 0) && ((0xE0 & c) == 0xE0)) { //caracter de 3 bytes
 				//caracter bastante raro.. Lo reemplazo con un single character
@@ -185,7 +186,8 @@ std::string replaceMultiByteChars(std::string& cad, char replacement) {
 					//caracter un poco raro.. Lo reemplazo con un single character
 					c = replacement;
 				}
-			} else if (((0x20 & c) == 0) && ((0xF0 & c) == 0xF0)) { //caracter de 4 bytes
+				//11110xxx = 1st byte of 4-byte character
+			} else if (((0x08 & c) == 0) && ((0xF0 & c) == 0xF0)) { //caracter de 4 bytes
 				//caracter muy raro.. Lo reemplazo con un single character
 				plus = 3;
 				cont++;
