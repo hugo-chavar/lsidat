@@ -43,46 +43,34 @@ void Abb::agregarPalabra(string palabra, unsigned documento) {
 	}
 }
 
-void Abb::borrar(const string clave) {
-	NodoArbol *nodo = this->raiz;
-	NodoArbol *nodo_padre = NULL;
-	posicionarPunteros(clave,nodo,nodo_padre);
+void Abb::posicionarPunteros(const string clave,NodoArbol* &nodo,NodoArbol* &nodo_padre){
 
-	NodoArbol *nodo_aux = NULL;
-	if ((!nodo->getDerecho()) && (nodo->getIzquierdo()))
-		nodo_aux = nodo->getIzquierdo();
-	else if (!nodo->getIzquierdo() && nodo->getDerecho())
-		nodo_aux = nodo->getDerecho();
-	else if (nodo->getIzquierdo() && nodo->getDerecho()) {
-		NodoArbol *padre_aux = NULL;
-		nodo_aux = nodo->getIzquierdo();
-		while (nodo_aux->getDerecho()) {
-			padre_aux = nodo_aux;
-			nodo_aux = nodo_aux->getDerecho();
+	while (nodo && ((nodo->getPalabra()->compararCon(clave)) != 0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
+		{
+			nodo_padre = nodo;
+			if ((nodo->getPalabra()->compararCon(clave)) > 0)
+				nodo = nodo->getIzquierdo();
+			else
+				nodo = nodo->getDerecho();
 		}
-		if (padre_aux) {
-			padre_aux->setDerecho(nodo_aux->getIzquierdo());
-			nodo_aux->setIzquierdo(nodo->getIzquierdo());
-		}
-		nodo_aux->setDerecho(nodo->getDerecho());
-	}
-	if (nodo_padre) {
-		if (nodo->getPalabra()->compararCon(
-				nodo_padre->getPalabra()->getContenido()) > 0)
-			nodo_padre->setDerecho(nodo_aux);
-		else
-			nodo_padre->setIzquierdo(nodo_aux);
-	} else
-		this->raiz = nodo_aux;
-	delete nodo;
-	this->cantidad--;
 }
 
 void Abb::destruir() {
-	//TODO se estan haciendo muchas comparaciones para destruir, deberia ser mas simple
-	while (this->raiz)
-		this->borrar(this->raiz->getPalabra()->getContenido());
+
+	destruir(this->raiz);
+
 }
+
+void Abb::destruir(NodoArbol * nodo)
+{
+if (nodo!=0)
+{
+destruir(nodo->getIzquierdo());
+destruir(nodo->getDerecho());
+delete nodo;
+}
+}
+
 
 void Abb::escribirEnArchivo(const string& nombre) {
 	std::fstream archivo;
@@ -97,16 +85,5 @@ void Abb::escribirEnOrden(NodoArbol* nodo, fstream& archivo) {
 	archivo << nodo->getPalabra()->imprimir() << endl;
 	if (nodo->getDerecho())
 		this->escribirEnOrden(nodo->getDerecho(), archivo);
-}
 
-void Abb::posicionarPunteros(const string clave,NodoArbol* &nodo,NodoArbol* &nodo_padre){
-
-	while (nodo && ((nodo->getPalabra()->compararCon(clave)) != 0)) // Devuelve -1 si la clave es menor, 0 si son iguales y 1 si la clave es mayor.
-		{
-			nodo_padre = nodo;
-			if ((nodo->getPalabra()->compararCon(clave)) > 0)
-				nodo = nodo->getIzquierdo();
-			else
-				nodo = nodo->getDerecho();
-		}
 }
