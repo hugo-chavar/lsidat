@@ -15,7 +15,6 @@ public:
 	Abb();
 	~Abb();
 	void agregarPalabra(string palabra,unsigned documento);
-	void borrar(const string clave);
 	void escribirEnArchivo(const string& nombre);
 	unsigned getCantidad();
 
@@ -24,6 +23,7 @@ private:
 	unsigned cantidad;
 	void destruir();
 	void escribirEnOrden(NodoArbol* nodo,fstream & archivo);
+	void destruir(NodoArbol * nodo);
 	void posicionarPunteros(const string clave,NodoArbol* &nodo,NodoArbol* & nodo_padre);
 };
 
